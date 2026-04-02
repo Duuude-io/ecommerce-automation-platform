@@ -1,4 +1,4 @@
-import {formatCurrency} from '../scripts/utils/money.js';
+import { formatCurrency } from '../scripts/utils/money.js';
 
 export function getProduct(productId) {
   let matchingProduct;
@@ -32,7 +32,7 @@ class Product {
   }
 
   getPrice() {
-    return`$${formatCurrency(this.priceCents)}`;  
+    return `$${formatCurrency(this.priceCents)}`;
   }
 
   extraInfoHTML() {
@@ -92,14 +92,14 @@ object3.method();
 export let products = [];
 
 export function loadProductsFetch() {
- const promise = fetch(
-  'https://supersimplebackend.dev/products'
+  const promise = fetch(
+    'http://127.0.0.1:8000/products'
   ).then((response) => {
     return response.json();
   }).then((productsData) => {
     products = productsData.map((productDetails) => {
       if (productDetails.type === 'clothing') {
-      return new clothing(productDetails); 
+        return new clothing(productDetails);
       }
       return new Product(productDetails);
     });
@@ -123,7 +123,7 @@ export function loadProducts(fun) {
   xhr.addEventListener('load', () => {
     products = JSON.parse(xhr.response).map((productDetails) => {
       if (productDetails.type === 'clothing') {
-      return new clothing(productDetails); 
+        return new clothing(productDetails);
       }
       return new Product(productDetails);
     });
