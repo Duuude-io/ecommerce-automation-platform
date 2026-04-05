@@ -40,7 +40,7 @@ class Product {
   }
 }
 
-class clothing extends Product {
+class Clothing extends Product {
   sizeChartLink;
 
   constructor(productDetails) {
@@ -49,9 +49,9 @@ class clothing extends Product {
   }
 
   extraInfoHTML() {
-    //super.extraInfoHTML();
+    // super.extraInfoHTML();
     return `
-      <a href="${this.sizeChartLink}" target= "_blank">
+      <a href="${this.sizeChartLink}" target="_blank">
         Size chart
       </a>
     `;
@@ -93,20 +93,20 @@ export let products = [];
 
 export function loadProductsFetch() {
   const promise = fetch(
-    'http://127.0.0.1:8000/products'
+    'https://supersimplebackend.dev/products'
   ).then((response) => {
     return response.json();
   }).then((productsData) => {
     products = productsData.map((productDetails) => {
       if (productDetails.type === 'clothing') {
-        return new clothing(productDetails);
+        return new Clothing(productDetails);
       }
       return new Product(productDetails);
     });
 
     console.log('load products');
-  }).catch(() => {
-    console.log('unexpected error. please try again later.');
+  }).catch((error) => {
+    console.log('Unexpected error. Please try again later.');
   });
 
   return promise;
@@ -123,7 +123,7 @@ export function loadProducts(fun) {
   xhr.addEventListener('load', () => {
     products = JSON.parse(xhr.response).map((productDetails) => {
       if (productDetails.type === 'clothing') {
-        return new clothing(productDetails);
+        return new Clothing(productDetails);
       }
       return new Product(productDetails);
     });
@@ -134,13 +134,12 @@ export function loadProducts(fun) {
   });
 
   xhr.addEventListener('error', (error) => {
-    console.log('unexpected error. please try again later.');
+    console.log('Unexpected error. Please try again later.');
   });
 
   xhr.open('GET', 'https://supersimplebackend.dev/products');
   xhr.send();
 }
-
 
 /*
 export const products = [
@@ -804,9 +803,8 @@ export const products = [
   }
 ].map((productDetails) => {
   if (productDetails.type === 'clothing') {
-   return new clothing(productDetails); 
+    return new Clothing(productDetails);
   }
   return new Product(productDetails);
 });
 */
-
