@@ -1,3 +1,5 @@
+import { validDeliveryOption } from './deliveryOptions.js';
+
 export let cart;
 
 loadFromStorage();
@@ -67,7 +69,30 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
     }
   });
 
+  if (!matchingItem) {
+    return;
+  }
+
+  if (!validDeliveryOption(deliveryOptionId)) {
+    return;
+  }
+
   matchingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToStorage();
+}
+
+// This code was copied from the solutions of exercises 14f - 14n.
+export function updateQuantity(productId, newQuantity) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.quantity = newQuantity;
 
   saveToStorage();
 }
@@ -82,4 +107,18 @@ export function loadCart(fun) {
 
   xhr.open('GET', 'https://supersimplebackend.dev/cart');
   xhr.send();
+}
+
+// Exercise 18
+export async function loadCartFetch() {
+  const response = await fetch('https://supersimplebackend.dev/cart');
+  const text = await response.text();
+  console.log(text);
+  return text;
+}
+
+// Extra feature: make the cart empty after creating an order.
+export function resetCart() {
+  cart = [];
+  saveToStorage();
 }
