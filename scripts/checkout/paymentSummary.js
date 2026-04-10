@@ -83,19 +83,17 @@ export function renderPaymentSummary() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            cart: cart
+            cart: cart.cartItems
           })
         });
 
         const order = await response.json();
         addOrder(order);
+        cart.resetCart();
 
       } catch (error) {
-        console.log('Unexpected erroe. Try again later.');
+        console.log('Unexpected error. Try again later.');
       }
-
-      // Extra feature: make the cart empty after creating an order.
-      resetCart();
 
       window.location.href = 'orders.html';
     });

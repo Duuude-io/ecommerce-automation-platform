@@ -1,6 +1,6 @@
 import { renderOrderSummary } from '../../scripts/checkout/orderSummary.js';
 import { cart } from '../../data/cart-class.js';
-import { loadFromStorage, cart } from '../../data/cart.js';
+//import { loadFromStorage, cart } from '../../data/cart.js';
 import { loadProducts, loadProductsFetch } from '../../data/products.js';
 
 describe('test suite: renderOrderSummary', () => {
@@ -14,7 +14,10 @@ describe('test suite: renderOrderSummary', () => {
   beforeEach(() => {
     spyOn(localStorage, 'setItem');
 
+    // Add the class js-return-to-home-link so the header script doesn't crash
     document.querySelector('.js-test-container').innerHTML = `
+      <div class="js-checkout-header"></div>
+      <div class="js-return-to-home-link"></div>
       <div class="js-order-summary"></div>
       <div class="js-payment-summary"></div>
     `;
@@ -88,9 +91,9 @@ describe('test suite: renderOrderSummary', () => {
       document.querySelector(`.js-delivery-option-input-${productId1}-3`).checked
     ).toEqual(true);
 
-    expect(cart.length).toEqual(2);
-    expect(cart[0].productId).toEqual(productId1);
-    expect(cart[0].deliveryOptionId).toEqual('3');
+    expect(cart.cartItems.length).toEqual(2);
+    expect(cart.cartItems[0].productId).toEqual(productId1);
+    expect(cart.cartItems[0].deliveryOptionId).toEqual('3');
 
     expect(
       document.querySelector('.js-payment-summary-shipping').innerText
