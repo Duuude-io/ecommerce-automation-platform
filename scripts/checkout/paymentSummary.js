@@ -76,6 +76,12 @@ export function renderPaymentSummary() {
 
   document.querySelector('.js-place-order')
     .addEventListener('click', async () => {
+      // 1. CHECK IF THE CART IS EMPTY
+      if (cart.cartItems.length === 0) {
+        alert('Your cart is empty! Add some items before placing an order.');
+        return;
+      }
+
       try {
         const response = await fetch('https://supersimplebackend.dev/orders', {
           method: 'POST',
@@ -89,6 +95,7 @@ export function renderPaymentSummary() {
 
         const order = await response.json();
         addOrder(order);
+
         cart.resetCart();
 
       } catch (error) {

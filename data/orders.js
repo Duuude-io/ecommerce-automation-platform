@@ -22,9 +22,11 @@ export function getOrder(orderId) {
 }
 
 export function cancelOrder(orderId) {
-  // 2. Update the 'orders' variable by filtering it
-  orders = orders.filter((order) => order.id !== orderId);
+  // Use a loose inequality and check for 'undefined' as a string
+  // to catch the broken "undefined" orders.
+  orders = orders.filter((order) => {
+    return order.id !== orderId && order.id !== undefined && order.id !== 'undefined';
+  });
 
-  // 3. Save the newly filtered array to localStorage
   saveToStorage();
 }

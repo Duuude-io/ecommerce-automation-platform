@@ -234,3 +234,81 @@
 .is-editing-quantity .update-quantity-link {
   display: none;
 }
+
+.empty-cart-animation {
+  /* 1. Manually set your sizes here */
+  width: 270px;
+  height: 270px;
+
+  /* 2. THE FIX: Forces the GIF to stay centered */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* 3. Stops the GIF from stretching if it's a different shape */
+  object-fit: contain;
+
+  /* 4. Spacing below the GIF */
+  margin-bottom: 15px;
+}
+
+.empty-cart-container {
+  /* Ensures the container itself centers its children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding-top: 0px;
+  padding-bottom: 15px;
+  background-color: white;
+  border: 1px solid rgb(213, 217, 217);
+  border-radius: 8px;
+  max-width: 300px;
+  margin: 40px auto;
+}
+
+.empty-cart-message {
+  font-weight: 700;
+  font-size: 18px;
+  color: rgb(33, 33, 33);
+  margin-top: 5px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.view-products-link {
+  /* 1. Resetting the link look */
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  text-align: center;
+  display: block;
+  margin-top: 3px;
+  width: 70%;
+  /* Or set a fixed width like 180px */
+  padding: 10px;
+
+  /* 3. Colors - Amazon Primary Yellow */
+  background-color: rgb(255, 216, 20);
+  border: 1px solid rgb(252, 210, 0);
+  border-radius: 8px;
+
+  /* 4. Effects */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  transition: background-color 0.2s;
+}
+
+.view-products-link:hover {
+  background-color: rgb(247, 202, 0);
+  border-color: rgb(242, 194, 0);
+}
+
+.view-products-link:active {
+  background-color: rgb(231, 189, 0);
+  box-shadow: none;
+  /* Gives a "pressed" feel */
+}
