@@ -1,5 +1,5 @@
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import { orders } from '../data/orders.js';
+import { orders, cancelOrder } from '../data/orders.js';
 import { cart } from '../data/cart-class.js';
 import { formatCurrency } from './utils/money.js';
 import { getProduct, loadProductsFetch } from '../data/products.js';
@@ -33,6 +33,9 @@ async function loadPage() {
           <div class="order-header-right-section">
             <div class="order-header-label">Order ID:</div>
             <div>${order.id}</div>
+          <button class="cancel-order-button button-secondary js-cancel-order" data-order-id="${order.id}">
+            Cancel Order
+          </button>
           </div>
         </div>
         <div class="order-details-grid">
@@ -46,6 +49,14 @@ async function loadPage() {
   if (ordersGrid) {
     ordersGrid.innerHTML = ordersHTML;
   }
+
+  document.querySelectorAll('.js-cancel-order').forEach((button) => {
+    button.addEventListener('click', () => {
+      const orderId = button.dataset.orderId;
+      cancelOrder(orderId);
+      window.location.reload();
+    });
+  });
 
   updateCartQuantity();
 }

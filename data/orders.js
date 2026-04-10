@@ -1,4 +1,4 @@
-export const orders = JSON.parse(localStorage.getItem('orders')) || [];
+export let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
 export function addOrder(order) {
   orders.unshift(order);
@@ -19,4 +19,12 @@ export function getOrder(orderId) {
   });
 
   return matchingOrder;
+}
+
+export function cancelOrder(orderId) {
+  // 2. Update the 'orders' variable by filtering it
+  orders = orders.filter((order) => order.id !== orderId);
+
+  // 3. Save the newly filtered array to localStorage
+  saveToStorage();
 }

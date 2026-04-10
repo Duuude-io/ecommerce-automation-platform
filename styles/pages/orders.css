@@ -4,11 +4,6 @@
   margin-bottom: 100px;
   padding-left: 20px;
   padding-right: 20px;
-
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
   margin-left: auto;
   margin-right: auto;
 }
@@ -25,14 +20,13 @@
   row-gap: 50px;
 }
 
+/* Updated to handle the button placement */
 .order-header {
   background-color: rgb(240, 242, 242);
   border: 1px solid rgb(213, 217, 217);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 20px 25px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -52,10 +46,38 @@
   margin-right: 45px;
 }
 
+/* Adjusted to stack the ID and Button */
 .order-header-right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   flex-shrink: 1;
 }
 
+/* THE BUTTON STYLING */
+.cancel-order-button {
+  width: 120px;
+  margin-top: 8px;
+  background-color: white;
+  border: 1px solid rgb(213, 217, 217);
+  border-radius: 8px;
+  padding: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  transition: background-color 0.2s;
+}
+
+.cancel-order-button:hover {
+  background-color: rgb(247, 250, 250);
+  border-color: rgb(173, 177, 177);
+}
+
+.cancel-order-button:active {
+  background-color: rgb(231, 235, 235);
+}
+
+/* RESPONSIVE HEADERS */
 @media (max-width: 575px) {
   .order-header {
     flex-direction: column;
@@ -80,8 +102,16 @@
   }
 
   .order-header-right-section {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: block;
+    /* Align left on mobile */
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .cancel-order-button {
+    width: 100%;
+    /* Full width for easier clicking on phones */
+    padding: 10px;
   }
 }
 
@@ -91,7 +121,6 @@
   border-top: none;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-
   display: grid;
   grid-template-columns: 110px 1fr 220px;
   column-gap: 35px;
@@ -140,7 +169,6 @@
   width: 140px;
   height: 36px;
   border-radius: 8px;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,11 +195,6 @@
   }
 
   .product-actions {
-    /* grid-column: 2 means this element will be placed
-       in column 2 in the grid. (Normally, the column that
-       an element is placed in is determined by the order
-       of the elements in the HTML. grid-column overrides
-       this default ordering). */
     grid-column: 2;
     margin-bottom: 30px;
   }
@@ -206,9 +229,6 @@
   }
 
   .product-actions {
-    /* grid-column: auto; undos grid-column: 2; from above.
-       This element will now be placed in its normal column
-       in the grid. */
     grid-column: auto;
     margin-bottom: 70px;
   }
