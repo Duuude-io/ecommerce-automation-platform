@@ -1,3 +1,4 @@
+import { cart } from '../data/cart-class.js';
 export let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
 export function addOrder(order) {

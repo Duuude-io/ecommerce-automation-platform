@@ -236,19 +236,15 @@
 }
 
 .empty-cart-animation {
-  /* 1. Manually set your sizes here */
   width: 270px;
   height: 270px;
 
-  /* 2. THE FIX: Forces the GIF to stay centered */
   display: block;
   margin-left: auto;
   margin-right: auto;
 
-  /* 3. Stops the GIF from stretching if it's a different shape */
   object-fit: contain;
 
-  /* 4. Spacing below the GIF */
   margin-bottom: 15px;
 }
 
@@ -288,10 +284,8 @@
   display: block;
   margin-top: 3px;
   width: 70%;
-  /* Or set a fixed width like 180px */
   padding: 10px;
 
-  /* 3. Colors - Amazon Primary Yellow */
   background-color: rgb(255, 216, 20);
   border: 1px solid rgb(252, 210, 0);
   border-radius: 8px;
@@ -310,5 +304,4 @@
 .view-products-link:active {
   background-color: rgb(231, 189, 0);
   box-shadow: none;
-  /* Gives a "pressed" feel */
 }

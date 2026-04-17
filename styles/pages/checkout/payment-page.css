@@ -1,0 +1,313 @@
+.main {
+  max-width: 1100px;
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+
+  margin-top: 5px;
+  margin-bottom: 10px;
+
+  /* margin-left: auto;
+     margin-right auto;
+     Is a trick for centering an element horizontally
+     without needing a container. */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-title {
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.billing-container {
+  background: white;
+  border: 0px solid #d5d9d9;
+  border-radius: 15px;
+  padding: 0px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.checkout-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: yellowgreen;
+  text-align: left;
+}
+
+.required-note {
+  font-size: 14px;
+  color: brown;
+  margin-bottom: 5px;
+}
+
+.billing-grid {
+  display: flex;
+  flex-direction: column;
+  /* Forces vertical stacking */
+  gap: 12px;
+  /* Space between each vertical block */
+  width: 90%;
+}
+
+.billing-grid .full {
+  grid-column: span 2;
+  display: grid;
+}
+
+.input-group {
+  position: relative;
+  display: block;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.input-group label {
+  position: absolute;
+  top: 18px;
+  left: 14px;
+  font-weight: 100;
+  font-size: 18px;
+  color: black;
+  pointer-events: none;
+  transition: all 0.2s ease;
+
+}
+
+.input-group input {
+  width: 100%;
+  padding: 20px 12px 6px 12px;
+  /* Extra top padding to make room for the label */
+  border: 1px solid #d5d9d9;
+  border-radius: 13px;
+  font-size: 14px;
+  background-color: whitesmoke;
+  color: #333;
+  outline: none;
+  display: block;
+  height: 30px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #007185;
+  box-shadow: 0 0 0 3px rgba(0, 113, 133, 0.2);
+}
+
+/* When the input is focused OR has text (not showing placeholder) */
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+  top: 6px;
+  /* Moves label to the top edge */
+  font-size: 11px;
+  /* Makes it smaller */
+  color: #007185;
+  /* Changes to your focus color */
+}
+
+.required-star {
+  color: #d32f2f;
+  margin-left: 3px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.state-select {
+  display: block;
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  /* Slightly taller for better click-ability */
+  border: 1px solid #d5d9d9;
+  border-radius: 13px;
+  font-size: 17px;
+  font-weight: 500;
+  background-color: whitesmoke;
+  color: #333;
+  cursor: pointer;
+  /* Removes default arrow in some browsers to allow custom styling */
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.state-select:focus {
+  outline: none;
+  border-color: #007185;
+  box-shadow: 0 0 0 3px rgba(0, 113, 133, 0.15);
+}
+
+.section-divider {
+  border: 0;
+  border-top: 0px solid #e5e7eb;
+  margin: 20px 0;
+}
+
+.payment-header {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.payment-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.js-secure-badge-container {
+  display: flex;
+  margin-bottom: 3px;
+  /* Prevents tiny gaps below the SVG */
+}
+
+/* The Method Container */
+.payment-methods-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+}
+
+/* Individual Payment Blocks */
+.payment-option-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  display: block;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* MINT MOBILE TRIGGER: Green border when selected */
+.payment-option-card:has(input:checked) {
+  border-color: #68c350;
+  /* Mint Green */
+  background-color: #fafff8;
+}
+
+.option-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.radio-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.method-label {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.payment-icons img,
+.paypal-icon {
+  height: 20px;
+}
+
+/* Compact Card Inputs */
+.card-input-fields {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 0px solid #e5e7eb;
+  display: none;
+  /* Hidden by default */
+}
+
+/* Show inputs only when Card is selected */
+.payment-option-card:has(input[value="card"]:checked) .card-input-fields {
+  display: block;
+}
+
+.compact-input {
+  height: 25px !important;
+  font-size: 14px !important;
+}
+
+.billing-grid.compact {
+  margin-top: 15px;
+  gap: 16px;
+}
+
+/* Mint Style Button */
+.complete-purchase-btn {
+  width: 100%;
+  background-color: #68c350;
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 50px;
+  /* Fully rounded */
+  font-weight: 900;
+  font-size: 16px;
+  margin-top: 25px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.complete-purchase-btn:hover {
+  background-color: #4da33a;
+}
+
+.payment-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .payment-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+.billing-column {
+  width: 100%;
+}
+
+.payment-column {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.js-order-summary {
+  max-width: 340px;
+  width: 100%;
+
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+
+  justify-self: end;
+  position: sticky;
+  top: 20px;
+}
+
+.js-order-summary img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}

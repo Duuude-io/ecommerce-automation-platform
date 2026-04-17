@@ -14,7 +14,7 @@ export function renderOrderSummary() {
     document.querySelector('.js-order-summary').innerHTML = `
       <div class="empty-cart-container">
         <img class="empty-cart-animation" src="images/empty-cart.gif" alt="Empty Cart Animation">
-      <div>Your Amazon cart is empty.</div>
+      <div>Duude.. Your cart is empty.</div>
       <a class="button-primary view-products-link" href="amazon.html" data-testid="view-products-link">
         View products
       </a>

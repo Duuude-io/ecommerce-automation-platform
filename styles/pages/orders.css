@@ -238,3 +238,26 @@
     padding: 12px;
   }
 }
+
+.empty-orders-container {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: white;
+  border: 1px solid rgb(213, 217, 217);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.empty-orders-message {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: rgb(33, 33, 33);
+}
+
+.view-products-link {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 40px;
+  font-size: 13px;
+}
