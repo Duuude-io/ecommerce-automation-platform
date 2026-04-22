@@ -1,6 +1,5 @@
 export function renderSecureBadge() {
   const badgeContainer = document.querySelector('.js-secure-badge-container');
-  console.log(badgeContainer);
 
   if (!badgeContainer) return;
 

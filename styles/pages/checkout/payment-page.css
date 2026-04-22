@@ -265,11 +265,8 @@
   padding: 15px;
   display: block;
   cursor: pointer;
-  border: #007185;
   padding-left: 36.5px;
   transition: all 0.2s ease;
-  border: 1px solid rgb(25, 121, 121);
-  border-radius: 20px;
 }
 
 /* MINT MOBILE TRIGGER: Green border when selected */
@@ -356,7 +353,8 @@
 
 .card-input-wrapper {
   position: relative;
-  width: 87%;
+  width: 85%;
+  padding-right: 23px;
 }
 
 .input-icon-left {
@@ -366,7 +364,6 @@
   transform: translateY(-50%);
   width: 28px;
   height: 30px;
-  pointer-events: none;
 
 }
 
@@ -437,6 +434,35 @@ select option {
   gap: 8px;
 }
 
+.secure-logo-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.secure-tooltip {
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: white;
+  color: black;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.secure-logo-wrapper:hover .secure-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
 .js-secure-logo svg {
   width: 40px;
   height: 26px;
@@ -446,26 +472,6 @@ select option {
 .billing-grid.compact {
   margin-top: 15px;
   gap: 16px;
-}
-
-/* Mint Style Button */
-.complete-purchase-btn {
-  width: 100%;
-  background-color: #68c350;
-  color: white;
-  border: none;
-  padding: 18px;
-  border-radius: 50px;
-  /* Fully rounded */
-  font-weight: 900;
-  font-size: 16px;
-  margin-top: 25px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.complete-purchase-btn:hover {
-  background-color: #4da33a;
 }
 
 .payment-page {
@@ -585,4 +591,16 @@ select option {
   padding-bottom: 10px;
   color: #007185;
   font-style: italic;
+}
+
+.complete-purchase-btn {
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 50px;
+  height: 60px;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 11px;
+  margin-bottom: 15px;
 }

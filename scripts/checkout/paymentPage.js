@@ -5,6 +5,7 @@ import { renderSecureBadge } from '../secureBadge.js';
 import { products, getProduct } from '../../data/products.js';
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
 import { renderSecureLogo } from '../secureLogo.js';
+import { attachEventListeners } from '../../data/orders.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -266,19 +267,30 @@ function renderPaymentMethods() {
               Your information is secure.
             </p>
 
-            <span class="js-secure-logo">
-              ${renderSecureLogo()}
+            <span class="secure-logo-wrapper">
+              <span class="js-secure-logo">
+                ${renderSecureLogo()}
+              </span>
+
+              <span class="secure-tooltip">
+                Payments are encrypted with SSL security.
+              </span>
             </span>
           </div>
         </div>
 
       </div>
 
-      <button class="complete-purchase-btn">COMPLETE PURCHASE</button>
+      <button class="complete-purchase-btn button-primary
+       js-complete-purchase-button">
+        COMPLETE PURCHASE
+      </button>
     </div>
   `;
 
   container.innerHTML = html;
+
+  attachEventListeners();
 
   renderSecureBadge();
 }
