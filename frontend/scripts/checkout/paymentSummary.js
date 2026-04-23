@@ -1,5 +1,5 @@
 import { cart } from '../../data/cart-class.js';
-import { getProduct } from '../../data/products.js';
+import { getProduct, products } from '../../data/products.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
 import { formatCurrency } from '../utils/money.js';
 import { addOrder } from '../../data/orders.js';
@@ -15,6 +15,11 @@ export function renderPaymentSummary() {
     cartQuantity += cartItem.quantity
 
     const product = getProduct(cartItem.productId);
+
+    if (!products) {
+      console.warn('product missing:', cartItem.productId);
+      return '';
+    }
     productPriceCents += product.priceCents * cartItem.quantity;
 
     const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);

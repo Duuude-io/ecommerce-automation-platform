@@ -8,20 +8,25 @@ import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../..
 import { renderSecureLogo } from '../secureLogo.js';
 import { attachEventListeners } from '../../data/orders.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', initPaymentPage);
 
+async function initPaymentPage() {
+
+  // laods product first
   await loadProductsFetch();
 
+  // then render UI
   renderCheckoutHeader();
   renderPaymentSummary(cart);
   renderBillingDetails();
   renderPaymentMethods();
 
+  //setup logic after html exists
   initPaymentLogic();
   renderYears();
   renderStateList();
   renderSecureBadge();
-});
+};
 
 export function renderBillingDetails() {
   const container = document.querySelector('.js-billing-container');

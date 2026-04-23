@@ -1,0 +1,19 @@
+[
+  {
+    "id": "4db4b92a-4016-46cd-8d00-40278f164a00",
+    "items": [
+      {
+        "productId": "19c6a64a-5463-4d45-9af8-e41140a4100c",
+        "quantity": 2
+      }
+    ],
+    "billingDetails": {
+      "fullName": "Test User",
+      "email": "test@email.com",
+      "address": "Main Street",
+      "city": "Abuja",
+      "state": "FCT"
+    },
+    "totalCents": 5000
+  }
+]
