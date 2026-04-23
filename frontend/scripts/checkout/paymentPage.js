@@ -3,11 +3,14 @@ import { renderCheckoutHeader } from './checkoutHeader.js';
 import { states } from '../../data/state.js';
 import { renderSecureBadge } from '../secureBadge.js';
 import { products, getProduct } from '../../data/products.js';
+import { loadProductsFetch } from '../../data/products.js';
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
 import { renderSecureLogo } from '../secureLogo.js';
 import { attachEventListeners } from '../../data/orders.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+
+  await loadProductsFetch();
 
   renderCheckoutHeader();
   renderPaymentSummary(cart);
@@ -16,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initPaymentLogic();
   renderYears();
-
   renderStateList();
   renderSecureBadge();
 });
