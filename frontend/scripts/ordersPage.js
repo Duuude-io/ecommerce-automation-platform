@@ -72,7 +72,10 @@ async function loadPage() {
 
       try {
         await cancelOrder(orderId);
-        window.location.reload();
+        await loadPage();
+
+        button.disabled = true;
+        button.textContent = 'Cancelling...';
 
       } catch (error) {
         console.error('cancel failed:', error)

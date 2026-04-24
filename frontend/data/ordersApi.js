@@ -1,4 +1,5 @@
 import { cart } from './cart-class.js'
+import { getDeliveryOption, calculateDeliveryDate } from './deliveryOptions.js';
 
 export async function createOrder(orderData) {
   const response = await fetch('http://127.0.0.1:8000/orders', {
@@ -24,7 +25,12 @@ export async function fetchOrders() {
 export function buildOrderData(cartItems, billingDetails, totalCents) {
   const items = cartItems.map(item => ({
     productId: item.productId,
-    quantity: item.quantity
+    quantity: item.quantity,
+    deliveryOptionId: item.deliveryOptionId,
+    estimatedDeliveryTime:
+      calculateDeliveryDate(
+        getDeliveryOption(item.deliveryOptionId)
+      )
   }));
 
   return {

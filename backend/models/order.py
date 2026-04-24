@@ -6,6 +6,8 @@ from typing import Optional
 class OrderItem(BaseModel):
     productId: str
     quantity: int
+    deliveryOptionId: str
+    estimatedDeliveryTime: str
 
 
 class BillingDetails(BaseModel):
@@ -24,3 +26,4 @@ class Order(BaseModel):
     items: List[OrderItem]
     billingDetails: BillingDetails
     totalCostCents: int
+    status: str = "processing"

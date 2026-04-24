@@ -396,6 +396,8 @@ function getBillingDetails() {
 
 async function handleCompletePurchase() {
 
+  console.log('cart items before order:', cart.cartItems)
+
   if (cart.cartItems.length === 0) {
     alert('Your cart is empty');
     return;

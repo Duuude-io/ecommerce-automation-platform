@@ -1,4 +1,4 @@
-import { getOrder } from '../data/orders.js';
+import { fetchOrders } from '../data/ordersApi.js';
 import { getProduct, loadProductsFetch } from '../data/products.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
@@ -9,13 +9,20 @@ async function loadPage() {
   const orderId = url.searchParams.get('orderId');
   const productId = url.searchParams.get('productId');
 
-  const order = getOrder(orderId);
+  const orders = await fetchOrders();
+
+  const order = orders.find(order => order.id === orderId);
   const product = getProduct(productId);
+
+  if (!order || !product) {
+    console.error('Order or product not found');
+    return;
+  }
 
   // Get additional details about the product like
   // the estimated delivery time.
   let productDetails;
-  order.products.forEach((details) => {
+  order.items.forEach((details) => {
     if (details.productId === product.id) {
       productDetails = details;
     }
