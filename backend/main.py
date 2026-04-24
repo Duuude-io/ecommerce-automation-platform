@@ -4,6 +4,7 @@ import json
 import uuid
 from pathlib import Path
 from models.order import Order
+from datetime import datetime
 
 app = FastAPI()
 
@@ -55,6 +56,8 @@ def create_order(order: Order):
 
     new_order = order.model_dump()
     new_order["id"] = str(uuid.uuid4())
+    new_order["orderTime"] = datetime.utcnow().isoformat()
+
     orders.append(new_order)
 
     save_orders(orders)
@@ -68,3 +71,18 @@ def create_order(order: Order):
 @app.get("/orders")
 def get_orders():
     return load_orders()
+
+
+@app.delete("/orders/{order_id}")
+def cancel_order(order_id: str):
+
+    orders = load_orders()
+
+    updated_orders = [
+        order for order in orders
+        if order["id"] != order_id
+    ]
+
+    save_orders(updated_orders)
+
+    return {"message": "Order cancelled successfully"}

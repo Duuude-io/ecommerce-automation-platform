@@ -2,11 +2,11 @@ import { cart } from '../../data/cart-class.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 import { states } from '../../data/state.js';
 import { renderSecureBadge } from '../secureBadge.js';
-import { products, getProduct } from '../../data/products.js';
-import { loadProductsFetch } from '../../data/products.js';
+import { products, getProduct, loadProductsFetch } from '../../data/products.js';
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
 import { renderSecureLogo } from '../secureLogo.js';
-import { attachEventListeners } from '../../data/orders.js';
+import { createOrder, buildOrderData } from '../../data/ordersApi.js';
+import { calculateCartTotal } from './paymentEvents.js';
 
 document.addEventListener('DOMContentLoaded', initPaymentPage);
 
@@ -22,6 +22,7 @@ async function initPaymentPage() {
   renderPaymentMethods();
 
   //setup logic after html exists
+  attachEventListeners();
   initPaymentLogic();
   renderYears();
   renderStateList();
@@ -297,8 +298,6 @@ function renderPaymentMethods() {
 
   container.innerHTML = html;
 
-  attachEventListeners();
-
   renderSecureBadge();
 }
 
@@ -326,12 +325,10 @@ function renderStateList() {
     return;
   }
 
-  // Debug: Let's see if the data actually arrived
   console.log("States array content:", states);
 
   let statesHTML = '<option value="" disabled selected hidden></option>';
 
-  // Check if states exists and has items
   if (states && states.length > 0) {
     states.forEach((state) => {
       statesHTML += `<option value="${state.abbrev}">${state.name}</option>`;
@@ -373,4 +370,58 @@ function initPaymentLogic() {
   });
 
   toggleCardForm();
+}
+
+function attachEventListeners() {
+  const button = document.querySelector('.js-complete-purchase-button');
+
+  if (!button) return;
+
+  button.addEventListener('click', handleCompletePurchase);
+}
+
+function getBillingDetails() {
+  return {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    apartment: document.getElementById('address2').value,
+    streetAddress: document.getElementById('address1').value,
+    city: document.getElementById('city').value,
+    state: document.getElementById('state').value,
+    zipCode: document.getElementById('zip').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value
+  };
+}
+
+async function handleCompletePurchase() {
+
+  if (cart.cartItems.length === 0) {
+    alert('Your cart is empty');
+    return;
+  }
+
+  try {
+    const billingDetails = getBillingDetails();
+
+    const orderData = buildOrderData(
+      cart.cartItems,
+      billingDetails,
+      calculateCartTotal()
+    );
+
+    console.log('sending order:', orderData)
+
+    const result = await createOrder(orderData);
+
+    console.log('Order created:', result);
+
+    cart.resetCart();
+
+    window.location.href = 'orders.html';
+
+  } catch (error) {
+    console.error('Order failed:', error);
+    alert('Something went wrong placing your order.');
+  }
 }

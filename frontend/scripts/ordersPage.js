@@ -1,15 +1,17 @@
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import { orders, cancelOrder } from '../data/orders.js';
+import { fetchOrders, cancelOrder } from '../data/ordersApi.js';
 import { cart } from '../data/cart-class.js';
 import { formatCurrency } from './utils/money.js';
 import { getProduct, loadProductsFetch } from '../data/products.js';
-window.testOrders = orders;
 
 async function loadPage() {
   console.log('1. Starting loadPage');
 
   await loadProductsFetch();
-  console.log('2. Orders array:', orders); // Is this [] or does it have data?
+
+  const orders = await fetchOrders();
+  window.testOrders = orders;
+  console.log('2. Orders from backend:', orders);
 
   let ordersHTML = '';
 
@@ -65,10 +67,16 @@ async function loadPage() {
   }
 
   document.querySelectorAll('.js-cancel-order').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const orderId = button.dataset.orderId;
-      cancelOrder(orderId);
-      window.location.reload();
+
+      try {
+        await cancelOrder(orderId);
+        window.location.reload();
+
+      } catch (error) {
+        console.error('cancel failed:', error)
+      }
     });
   });
 
@@ -91,9 +99,11 @@ async function loadPage() {
 
 function renderOrderItems(order) {
   let itemsHTML = '';
-  if (!order.products) return '';
-
-  order.products.forEach((productDetails) => {
+  if (!order.items) {
+    console.warn('Order has no items:', order);
+    return '';
+  }
+  order.items.forEach((productDetails) => {
     const product = getProduct(productDetails.productId);
     if (!product) return;
 
