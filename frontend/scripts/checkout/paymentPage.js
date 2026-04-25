@@ -396,6 +396,16 @@ function getBillingDetails() {
 
 async function handleCompletePurchase() {
 
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('Please create an account or login before placing an order.');
+
+    // redirect to login page
+    window.location.href = 'login.html';
+    return;
+  }
+
   console.log('cart items before order:', cart.cartItems)
 
   if (cart.cartItems.length === 0) {

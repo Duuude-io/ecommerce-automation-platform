@@ -5,6 +5,13 @@ import { formatCurrency } from './utils/money.js';
 import { getProduct, loadProductsFetch } from '../data/products.js';
 
 async function loadPage() {
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+
   console.log('1. Starting loadPage');
 
   await loadProductsFetch();
