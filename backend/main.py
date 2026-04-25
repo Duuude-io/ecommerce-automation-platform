@@ -13,7 +13,10 @@ from auth import get_current_user
 
 app = FastAPI()
 
-users = []
+
+BASE_DIR = Path(__file__).resolve().parent
+USERS_FILE = BASE_DIR / "users.json"
+ORDERS_FILE = BASE_DIR / "orders.json"
 
 # Allow frontend access
 app.add_middleware(
@@ -63,11 +66,6 @@ def login(data: LoginRequest):
         "token": token,
         "userId": user["id"]
     }
-
-
-BASE_DIR = Path(__file__).resolve().parent
-USERS_FILE = BASE_DIR / "users.json"
-ORDERS_FILE = BASE_DIR / "orders.json"
 
 
 def load_users():
