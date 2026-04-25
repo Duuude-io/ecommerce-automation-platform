@@ -2,19 +2,28 @@ import { cart } from './cart-class.js'
 import { getDeliveryOption, calculateDeliveryDate } from './deliveryOptions.js';
 
 export async function createOrder(orderData) {
+
+  const token = localStorage.getItem('token');
+  console.log("TOKEN SENT:", token);
+
   const response = await fetch('http://127.0.0.1:8000/orders', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(orderData)
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
+
+    console.log(data);
     throw new Error('Order creation failed');
   }
 
-  return response.json();
+  return data;
 }
 
 export async function fetchOrders() {

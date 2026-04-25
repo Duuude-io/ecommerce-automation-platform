@@ -23,6 +23,7 @@ class BillingDetails(BaseModel):
 
 
 class Order(BaseModel):
+    userId: Optional[str] = None
     items: List[OrderItem]
     billingDetails: BillingDetails
     totalCostCents: int
