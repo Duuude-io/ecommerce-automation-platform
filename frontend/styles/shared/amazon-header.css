@@ -6,7 +6,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 
   position: fixed;
   top: 0;
@@ -17,6 +17,7 @@
 
 .amazon-header-left-section {
   width: 180px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 800px) {
@@ -61,15 +62,17 @@
 
 .amazon-header-middle-section {
   flex: 1;
-  max-width: 850px;
+
   margin-left: 10px;
   margin-right: 10px;
   display: flex;
+  min-width: 0;
 }
 
 .search-bar {
   flex: 1;
-  width: 0;
+  width: 100%;
+  max-width: 1400px;
   font-size: 16px;
   height: 38px;
   padding-left: 15px;
@@ -97,10 +100,10 @@
 }
 
 .amazon-header-right-section {
-  width: 180px;
+
   flex-shrink: 0;
   display: flex;
-  justify-content: end;
+  align-items: center;
 }
 
 .orders-link {
@@ -143,7 +146,36 @@
   position: absolute;
   top: 4px;
   left: 22px;
-  
+
   width: 26px;
   text-align: center;
+}
+
+.account-menu {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  flex-shrink: 0;
+}
+
+.signout-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.account-link,
+.account-link:visited,
+.account-link:active,
+.account-link:hover {
+  color: white;
+  text-decoration: none
+}
+
+.account-link:hover {
+  border: 1px solid white;
+  padding: 5px;
 }

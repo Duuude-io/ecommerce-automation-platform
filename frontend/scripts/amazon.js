@@ -1,6 +1,9 @@
 import { cart } from '../data/cart-class.js';
 import { products, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { renderAccountHeader } from './shared/accountHeader.js';
+
+renderAccountHeader();
 
 loadProducts(renderProductsGrid);
 

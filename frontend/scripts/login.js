@@ -32,5 +32,5 @@ document.querySelector('#loginBtn')
     console.log("TOKEN SAVED:", localStorage.getItem('token'));
 
     alert("Login successful!");
-    window.location.href = "payment.html";
+    window.location.href = "paymentpage.html";
   });

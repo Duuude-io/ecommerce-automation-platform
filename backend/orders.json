@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "userId": "4ffd1cf0-49b4-4ddb-9d08-82878c4cc92f",
+    "items": [
+      {
+        "productId": "77919bbe-0e56-475b-adde-4f24dfed3a04",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, May 5"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 3599,
+    "status": "processing",
+    "id": "1440e3de-0aeb-43d2-ba03-eb5afa70037c",
+    "orderTime": "2026-04-26T00:35:08.246871"
+  }
+]
