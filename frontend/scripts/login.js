@@ -1,5 +1,5 @@
 console.log("Login js loaded")
-document.querySelector('#loginBtn')
+document.querySelector('.js-input-label')
   .addEventListener('click', async () => {
 
     const email = document.querySelector('#email').value;

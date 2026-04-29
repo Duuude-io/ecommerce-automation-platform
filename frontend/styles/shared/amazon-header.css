@@ -67,6 +67,7 @@
   margin-right: 10px;
   display: flex;
   min-width: 0;
+  border: 1px solid red;
 }
 
 .search-bar {
