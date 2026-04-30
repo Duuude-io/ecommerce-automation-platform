@@ -9,3 +9,7 @@ class User(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+
+class IdentifierRequest(BaseModel):
+    identifier: str

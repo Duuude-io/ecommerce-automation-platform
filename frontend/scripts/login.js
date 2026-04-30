@@ -1,36 +1,73 @@
-console.log("Login js loaded")
-document.querySelector('.js-input-label')
-  .addEventListener('click', async () => {
+console.log("Login js loaded");
 
-    const email = document.querySelector('#email').value;
-    const password = document.querySelector('#password').value;
+document.querySelector('.js-login-form')
+  .addEventListener('submit', async (event) => {
 
-    const response = await fetch('http://127.0.0.1:8000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    });
+    event.preventDefault();
 
-    const data = await response.json();
+    const identifier =
+      document.querySelector('#number-email').value.trim();
 
-    console.log("LOGIN RESPONSE:", data); // IMPORTANT DEBUG
+    try {
+      console.log("Sending to backend:", identifier);
 
-    if (!response.ok || !data.token) {
-      alert(data.error || "Login failed");
-      return;
+      // check user
+      const response = await fetch(
+        'http://127.0.0.1:8000/check-user',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ identifier })
+        }
+
+      );
+
+      console.log(JSON.stringify({ identifier }));
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || "Something went wrong");
+        return;
+      }
+
+      localStorage.setItem('identifier', identifier);
+
+      // EXISTING USER FLOW
+      if (data.userExists) {
+
+        // STEP 2: trigger OTP send
+        const otpResponse = await fetch(
+          'http://127.0.0.1:8000/send-otp',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ identifier })
+          }
+        );
+
+        const otpData = await otpResponse.json();
+
+        if (!otpResponse.ok) {
+          alert(otpData.error || "Failed to send OTP");
+          return;
+        }
+
+        // redirect to verification page
+        window.location.href = "userexistpage.html";
+
+      } else {
+        // NEW USER FLOW
+        window.location.href = "loginauth.html";
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Server connection failed");
     }
 
-    // SAVE TOKEN CORRECTLY
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userId', data.userId);
-
-    console.log("TOKEN SAVED:", localStorage.getItem('token'));
-
-    alert("Login successful!");
-    window.location.href = "paymentpage.html";
   });
