@@ -187,8 +187,21 @@
 
 .email-acc-create {
   font-size: 19px;
-  margin-bottom: 15px;
-  margin-top: 80px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.email-acc-create a {
+  font-size: 19px;
+  color: #025298;
+  text-decoration: none;
+}
+
+.email-acc-create a:hover {
+  text-decoration: underline;
+  color: #333;
 }
 
 .already-customer {

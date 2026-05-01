@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Create account</title>
+  <title>Verify email</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -35,7 +35,7 @@
 
       <div class="auth-verify-message">
         To verify your email, we've sent a One Time Password (OTP) to
-        <strong>uphands401@gmail.com</strong>
+        <strong class="js-user-identifier"></strong>
         <div class="auth-change-email">
           <a href="#">(Change)</a>
         </div>
@@ -45,18 +45,18 @@
         <div class="input-group">
           <label>Enter security code</label>
           <div class="create-input-wrapper">
-            <input type="password">
+            <input type="text" class="js-otp-input" maxlength="8">
           </div>
         </div>
       </form>
 
-      <button class="primary-button">
+      <button type="button" class="primary-button">
         Verify
       </button>
 
       <div class="resend-code">
         <div class="already-customer">
-          <a href="#">Resend code</a>
+          <a href="#" class="js-resend-otp">Resend code</a>
         </div>
       </div>
     </div>
@@ -76,6 +76,8 @@
       © 1996-2026, Amazon.com, Inc. or its affiliates
     </div>
   </footer>
+
+  <script type="module" src="scripts/emailVerify.js"></script>
 
 </body>
 

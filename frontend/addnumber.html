@@ -39,12 +39,12 @@
         </p>
       </div>
 
-      <form class="mobile-form">
+      <form class="mobile-form js-mobile-form">
         <div class="phone-row">
 
           <div class="country-field">
             <label>Country</label>
-            <select class="mobile-select">
+            <select class="mobile-select js-country-code">
               <option>US +1</option>
               <option>UK +44</option>
               <option>Nigeria +234</option>
@@ -54,7 +54,7 @@
           <!-- Mobile Number -->
           <div class="number-field">
             <label>Mobile number</label>
-            <input type="tel" class="mobile-input">
+            <input type="tel" class="mobile-input js-phone-input">
           </div>
 
         </div>
@@ -69,7 +69,7 @@
           may apply. Message frequency varies.
         </p>
 
-        <button class="primary-button">
+        <button type="submit" class="primary-button">
           Add mobile number
         </button>
 
@@ -94,6 +94,8 @@
     </div>
 
   </footer>
+
+  <script type="module" src="scripts/addNumber.js"></script>
 
 </body>
 

@@ -38,14 +38,14 @@
         <div class="input-group">
           <label>Enter mobile number or email</label>
           <div class="create-input-wrapper">
-            <input type="text">
+            <input type="text" class="js-email-phone">
           </div>
         </div>
 
         <div class="input-group">
           <label>Your name</label>
           <div class="create-input-wrapper">
-            <input type="text" placeholder="First and last name">
+            <input type="text" class="js-name" placeholder="First and last name">
           </div>
         </div>
 
@@ -53,7 +53,7 @@
         <div class="input-group">
           <label>Password (at least 6 characters)</label>
           <div class="create-input-wrapper">
-            <input type="password">
+            <input type="password" class="js-password">
           </div>
           <div class="info-message">
             <span class="info-icon">!</span>
@@ -64,11 +64,11 @@
         <div class="input-group">
           <label>Re-enter password</label>
           <div class="create-input-wrapper">
-            <input type="password">
+            <input type="password" class="js-confirm-password">
           </div>
         </div>
 
-        <button class="primary-button">Continue</button>
+        <button type="submit" class="primary-button">Continue</button>
 
       </form>
 
@@ -76,7 +76,7 @@
 
       <div class="already-customer">
         <div class="already-customer-2">Already a customer?</div>
-        <a href="#">Sign in instead</a>
+        <a href="#" class="js-signin-link">Sign in instead</a>
         </p>
 
         <p class="create-signin-info">
@@ -104,6 +104,8 @@
     </div>
 
   </footer>
+
+  <script type="module" src="scripts/userCreateAcct.js"></script>
 
 </body>
 

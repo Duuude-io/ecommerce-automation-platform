@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Create account</title>
+  <title>Looks like you're new</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,11 +32,19 @@
 
       <h1>Looks like you're new to Amazon</h1>
 
-      <p class="email-acc-create">
-        Let's create an account using your email
-      </p>
+      <div class="email-acc-create">
+        <p class="js-user-identifier"></p>
+        <a href="#" class="js-change-user">Change</a>
+      </div>
 
-      <button class="primary-button">
+      <div class="email-acc-create">
+        <p>Let's create an account using
+          <span class="js-identifier-type"></span>
+        </p>
+      </div>
+
+
+      <button type="submit" class="primary-button">
         Proceed to create an account
       </button>
 
@@ -44,7 +52,7 @@
 
       <div class="already-customer">
         <div class="already-customer-2">Already a customer?</div>
-        <a href="#"> Sign in with another email or mobile</a>
+        <a href="#" class="js-change-user"> Sign in with another email or mobile</a>
       </div>
 
     </div>
@@ -64,6 +72,8 @@
       © 1996-2026, Amazon.com, Inc. or its affiliates
     </div>
   </footer>
+
+  <script type="module" src="scripts/newUserLogin.js"></script>
 
 </body>
 

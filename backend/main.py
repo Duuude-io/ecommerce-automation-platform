@@ -10,7 +10,7 @@ import json
 import uuid
 from pathlib import Path
 from models.order import Order
-from models.user import User, LoginRequest, IdentifierRequest
+from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, IdentifierRequest
 from auth import verify_password, create_token, hash_password
 from datetime import datetime
 from auth import get_current_user
@@ -18,6 +18,8 @@ from auth import get_current_user
 app = FastAPI()
 
 otp_store = {}
+
+OTP_EXPIRY = 300  # 5 minutes
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -40,27 +42,47 @@ app.add_middleware(
 @app.post("/signup")
 def signup(user: User):
 
-    users = load_users()  # load existing users
+    identifier = normalize_identifier(user.identifier)
+
+    users = load_users()
+
+    # prevent duplicate account
+    existing = next(
+        (u for u in users if u.get("identifier") == identifier),
+        None
+    )
+
+    if existing:
+        return {"success": False, "message": "User already exists"}
 
     new_user = {
         "id": str(uuid.uuid4()),
-        "email": user.email,
-        "password": hash_password(user.password)
+        "identifier": identifier,
+        "password": hash_password(user.password),
+        "verified": False
     }
 
     users.append(new_user)
+    save_users(users)
 
-    save_users(users)  # save users to file
-
-    return {"message": "User created"}
+    return {
+        "success": True,
+        "message": "User created",
+        "identifier": identifier
+    }
 
 
 @app.post("/login")
 def login(data: LoginRequest):
 
+    identifier = normalize_identifier(data.identifier)
+
     users = load_users()
 
-    user = next((u for u in users if u["email"] == data.email), None)
+    user = next(
+        (u for u in users if u.get("identifier") == identifier),
+        None
+    )
 
     if not user:
         return {"error": "User not found"}
@@ -92,27 +114,27 @@ def save_users(users):
 @app.post("/check-user")
 def check_user(data: IdentifierRequest):
 
+    identifier = data.identifier.strip().lower()
     users = load_users()
 
-    # check BOTH email or phone
     user = next(
         (
             u for u in users
-            if u.get("email") == data.identifier
-            or u.get("phone") == data.identifier
+            if u.get("identifier") == identifier
         ),
         None
     )
 
     return {
-        "userExists": True if user else False
+        "userExists": user is not None
     }
 
 
 @app.post("/send-otp")
-async def send_otp(data: IdentifierRequest):
+async def send_otp(data: OTPRequest):
 
-    identifier = data.identifier
+    identifier = normalize_identifier(data.identifier)
+
     otp = str(random.randint(100000, 999999))
 
     otp_store[identifier] = {
@@ -120,40 +142,85 @@ async def send_otp(data: IdentifierRequest):
         "created_at": time.time()
     }
 
-    # DEV MODE: console output only
-    print(f"🔥 OTP for {identifier}: {otp}")
+    # console output only
+    print(f" OTP for {identifier}: {otp}")
 
-    return {"message": "OTP generated (check server console)"}
+    return {
+        "success": True,
+        "message": "OTP generated"}
+
+
+def normalize_identifier(identifier: str):
+    return identifier.strip().lower()
 
 
 @app.post("/verify-otp")
-def verify_otp(data: dict):
+def verify_otp(data: VerifyOTPRequest):
 
-    identifier = data["identifier"]
-    otp = data["otp"]
+    identifier = normalize_identifier(data.identifier)
+    otp = data.otp.strip()
 
-    if otp_store.get(identifier) != otp:
-        return {"success": False}
+    stored = otp_store.get(identifier)
 
-    # OTP is correct → now issue JWT like normal login
+    if not stored:
+        return {"success": False, "message": "OTP not found"}
+
+    if stored["otp"] != otp:
+        return {"success": False, "message": "Invalid OTP"}
+
+    if time.time() - stored["created_at"] > OTP_EXPIRY:
+        del otp_store[identifier]
+        return {"success": False, "message": "OTP expired"}
+
     users = load_users()
 
     user = next(
-        (u for u in users if u["email"] ==
-         identifier or u["phone"] == identifier),
+        (
+            u for u in users
+            if u.get("identifier") == identifier
+            or u.get("phone") == identifier
+        ),
         None
     )
-
     if not user:
-        return {"success": False}
+        return {"success": False, "message": "User not found"}
+
+    user["verified"] = True
+    save_users(users)
 
     token = create_token(user["id"])
+
+    del otp_store[identifier]
 
     return {
         "success": True,
         "token": token,
         "userId": user["id"]
     }
+
+
+@app.post("/add-phone")
+def add_phone(data: dict):
+
+    identifier = normalize_identifier(data["identifier"])
+    phone = normalize_identifier(data["phone"])
+
+    users = load_users()
+
+    user = next(
+        (u for u in users if u.get("identifier") ==
+         identifier or u.get("phone") == identifier),
+        None
+    )
+
+    if not user:
+        return {"error": "User not found"}
+
+    user["phone"] = phone
+
+    save_users(users)
+
+    return {"message": "Phone added"}
 
 
 @app.get("/")

@@ -35,7 +35,7 @@
 
       <div class="otp-wrapper">
         <p class="otp-number">
-          +2348051583807
+          <span class="js-phone-number"></span>
           <a href="#">Change</a>
         </p>
 
@@ -50,11 +50,11 @@
         <div class="input-group">
           <label>Enter security code</label>
           <div class="create-input-wrapper">
-            <input type="password">
+            <input type="text" class="js-otp-input" maxlength="6" inputmode="numeric" autocomplete="one-time-code" />
           </div>
         </div>
 
-        <button class="primary-button">
+        <button type="submit" class="primary-button">
           Create your Amazon account
         </button>
 
@@ -88,6 +88,8 @@
       © 1996-2026, Amazon.com, Inc. or its affiliates
     </div>
   </footer>
+
+  <script type="module" src="scripts/numberVerify.js"></script>
 
 </body>
 

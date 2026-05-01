@@ -1,7 +1,183 @@
 [
   {
-    "id": "4ffd1cf0-49b4-4ddb-9d08-82878c4cc92f",
-    "email": "uphands401@gmail.com",
-    "password": "$2b$12$Jm2OlQ2SB7h1Sg/Xnej6huJdNNRPj9tUa00sBDxrBJygcUtKPaUXO"
+    "id": "uuid",
+    "email": "test@gmail.com",
+    "phone": "+2348...",
+    "password": "...",
+    "verified_email": false,
+    "verified_phone": false
+  },
+  {
+    "id": "23770d84-c9d7-4c48-8272-3a795162b03c",
+    "identifier": "08051583807",
+    "password": "$2b$12$dWXpgPdGYL/cOH/uxR.sZOAacyYuQNdsk95XAOJjDHTgiDh4MgVqK",
+    "verified": true
+  },
+  {
+    "id": "119b9456-630a-4445-8952-da16f9a94af0",
+    "identifier": "uphands401@gmail.com",
+    "password": "$2b$12$.XuXcR9ymgzKoQ1RqnTJyO2AIrP0e7xhgg5cp8BRPzWRHR4HRY3CO",
+    "verified": true,
+    "phone": "+23408140935783"
+  },
+  {
+    "id": "415d740e-e784-4e80-905d-241deb3a4ba6",
+    "identifier": "08140935783",
+    "password": "$2b$12$m.KvcLWpOP2aHfYi99oEaOkXMTP/9yZhDifVa2cbuByT5PA/ql.FK",
+    "verified": true
+  },
+  {
+    "id": "6e076db6-bfdb-4942-ab81-9a024c3bed56",
+    "identifier": "08140935777",
+    "password": "$2b$12$KsccnIEnkJ20GHmaDy3MxeRow9CmZ/0pZM8nhz2Bz8rQLSjREc.rq",
+    "verified": false
+  },
+  {
+    "id": "6cf267c1-b24b-4e7d-be7a-d6010a2d7e70",
+    "identifier": "08140935775",
+    "password": "$2b$12$.pM0g0Fkf/uUauxBrbR87uzPO7xW.7bvfRdHebaa6F3xFptgF5L0.",
+    "verified": true
+  },
+  {
+    "id": "46ab5173-4f4b-4bea-b4dc-f166510ce606",
+    "identifier": "08140935776",
+    "password": "$2b$12$fM2x2v0buH8x/7degP8opuvtHtKuTKSoi.wVIxnSPi4SdkcFdOiq6",
+    "verified": true
+  },
+  {
+    "id": "54f992d2-cb96-413d-837e-3bff8915afe9",
+    "identifier": "uphands4901@gmail.com",
+    "password": "$2b$12$OH15jdBg56Pa8a7LuwcTz.kluO59KU2WArYdCJDcGh8D9rkWfXlIi",
+    "verified": false
+  },
+  {
+    "id": "02fe687d-c96f-42fc-bb3b-cef04ac58871",
+    "identifier": "uphands40901@gmail.com",
+    "password": "$2b$12$dxoGWPJYfxxS33Z5jk8GOuqyPcFGfGU1ftwcOo.6wGO8815w94VUa",
+    "verified": true
+  },
+  {
+    "id": "7bef67b8-bbce-470d-9ad6-8a99c74aeb51",
+    "identifier": "uphands40701@gmail.com",
+    "password": "$2b$12$h6PEPKiRrHP31Dbo7OsBDeT4LVf5ZetGE5kwiTRjWLOAO4T0mQbIi",
+    "verified": true,
+    "phone": "+2348065765432"
+  },
+  {
+    "id": "73b045da-d5a1-4f84-9d65-34540a810c69",
+    "identifier": "uphands4070@gmail.com",
+    "password": "$2b$12$BrBpBUAQJobzU44xN.B1U.zKz4Hq6Iv6sgkglWrBu.DUtqUIRmg7G",
+    "verified": true,
+    "phone": "+2348098799054"
+  },
+  {
+    "id": "2e47f821-ab84-4084-95f4-ac5acbf83a5e",
+    "identifier": "uphand401@gmail.com",
+    "password": "$2b$12$Th/eZsplml9aU2zqpTZVtO8hIDONyrJOnjD/loO8BOC9llDRNHKtS",
+    "verified": true
+  },
+  {
+    "id": "fe5e099a-ae99-4519-8230-7935f8f85619",
+    "email": "uphands@gmail.com",
+    "phone": null,
+    "password": "$2b$12$//tI2QceRbAcIDTwY7PmPOXxwDDKi4Q8mu5c0HklaMOTH0171FARe",
+    "verified": false
+  },
+  {
+    "id": "f4448f78-2420-49cb-b7d4-c1c23a4569ff",
+    "email": "uphand@gmail.com",
+    "phone": null,
+    "password": "$2b$12$G9/3FlU9lQqARnsa3jQWyuLLAT/GqgY9o1pHb9zvQjaHvwYS.B9y2",
+    "verified": false
+  },
+  {
+    "id": "13fef06f-e6f4-4d2d-8061-4885605f3a3d",
+    "identifier": "uphands@gmail.com",
+    "password": "$2b$12$uafAQuGIDek4N5O63ugl2e9pJNn97MuoJw6OZ9NJUfkEmX7i.cgSy",
+    "verified": true
+  },
+  {
+    "id": "47c41387-fedb-4107-88cb-aa70ce3afd89",
+    "identifier": "uphands40991@gmail.com",
+    "password": "$2b$12$jWveIuh5nF5UjHNeaRFYBebCk/E5P4jUA1tUDJB9eyNPpzMTCp7Ri",
+    "verified": false
+  },
+  {
+    "id": "53a285ed-8fef-4629-a3ed-1271b0eedbe3",
+    "identifier": "08051583809",
+    "password": "$2b$12$hm3lC/qjwRxpynv749guDOWhFd7rOzZD1HJSSL2c8nagLZ/1mm5yK",
+    "verified": false
+  },
+  {
+    "id": "72789f15-f8ea-454d-a105-d9b24be2a32e",
+    "identifier": "08051583800",
+    "password": "$2b$12$vnGWQYg3cB4oGkqSww0HRu416vp5HON0xnWYQlM9CeaIzp.faIob6",
+    "verified": false
+  },
+  {
+    "id": "f5b16e62-ceb0-43ef-a021-6bb9053925f3",
+    "identifier": "08051583804",
+    "password": "$2b$12$xBBOPn2Qs34yUfrbCf0NyeMwaawL9EpdTu3L7UYCu5v6KXhrNKYQa",
+    "verified": true
+  },
+  {
+    "id": "60bbe4d0-1c43-455e-a70e-47da2db02741",
+    "identifier": "uphands6401@gmail.com",
+    "password": "$2b$12$1LPp4ep5XKJutfydAnxT7Oz4TUZ66AbA5wvrlXIePKitXiqiJOvQq",
+    "verified": true
+  },
+  {
+    "id": "a4d87667-40d6-43dd-af91-4fd4ccc8bddf",
+    "identifier": "uphands3401@gmail.com",
+    "password": "$2b$12$TMv3dVLwsHHaa3kLGvXT4.BY7gr.FbI3KoAHiJO3gMZExlXkRstQK",
+    "verified": true
+  },
+  {
+    "id": "f15bcfc0-d9c6-4ae1-9cce-432e0f25a06f",
+    "identifier": "uphands409091@gmail.com",
+    "password": "$2b$12$cBLeYgll6vxwN05H8eTlzehcnlxN2CJUTh2beA53.ozTb1gVmNFKu",
+    "verified": true,
+    "phone": "+2348092347546"
+  },
+  {
+    "id": "5feba6ee-049d-4582-8a7c-ca0f3ffe3a9b",
+    "identifier": "uphand9s@gmail.com",
+    "password": "$2b$12$fMyioWeWfC7vxSoyiK4sn.DgYKLzvbYdbr2bY2byjC26wGpA6l4rW",
+    "verified": true,
+    "phone": "+2349076508099"
+  },
+  {
+    "id": "870edbbb-fe5c-4d1d-88dc-44444d56dd34",
+    "identifier": "08140935787",
+    "password": "$2b$12$4wReCA5uqDVkF61N1Bpp5ufxFAXDgZtcKYvJC4gdERGXUWBgKXlqe",
+    "verified": true
+  },
+  {
+    "id": "7103345d-7cd2-4eaf-b5ec-fb5070b39c73",
+    "identifier": "uhfgt@gmail.com",
+    "password": "$2b$12$JCE6elPyz28G6dEy9xd.2uMyqrbRSiX22lyy1JK6DxSoqp5XKB1yi",
+    "verified": true,
+    "phone": "+23408140935783"
+  },
+  {
+    "id": "c3cca18d-f0ca-4944-aaf1-066da9dbed0d",
+    "identifier": "uphands01@gmail.com",
+    "password": "$2b$12$eXu55dLEMQiPtua15hgFceq8sDmEcJYgw3ofnXH0THUvP7n64yvhW",
+    "verified": true,
+    "phone": "+23408051583807"
+  },
+  {
+    "id": "c9590bf3-8f3e-4bb4-b805-e447029d1b5f",
+    "identifier": "uphands1@gmail.com",
+    "password": "$2b$12$zRsTRmhCXfeVtlEMoEJKQ.fmZiSWRoLV4pwKacKHQP9Kx3GGr3O1C",
+    "verified": true,
+    "phone": "+23408012345678"
+  },
+  {
+    "id": "29373f47-4e2a-47b8-8802-b96313794dea",
+    "identifier": "uphands12@gmail.com",
+    "password": "$2b$12$XsuptqBQi3HyG9hs750Uoetdwo8B1kX/0ngzhuPcl622t7mUc5292",
+    "verified": true,
+    "phone": "+23409012345678"
   }
 ]

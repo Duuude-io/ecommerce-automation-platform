@@ -1,15 +1,26 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+from uuid import UUID
 
 
 class User(BaseModel):
-    email: str
+    id: UUID
+    email: EmailStr
+    phone: str
     password: str
+    verified_email: bool = False
+    verified_phone: bool = False
+    name: str | None = None
 
 
 class LoginRequest(BaseModel):
-    email: str
+    identifier: str   # email OR phone
     password: str
 
 
-class IdentifierRequest(BaseModel):
+class OTPRequest(BaseModel):
+    identifier: str   # email OR phone
+
+
+class VerifyOTPRequest(BaseModel):
     identifier: str
+    otp: str
