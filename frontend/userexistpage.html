@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Create account</title>
+  <title>Use exist page</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -38,31 +38,9 @@
           +2348051583807
           <a href="#">Change</a>
         </p>
-
-        <p class="otp-info">
-          We've sent a One Time Password (OTP) to your phone number.
-          Please enter it below.
-        </p>
-
       </div>
 
       <form class="create-form">
-        <div class="input-group">
-          <label>Enter OTP</label>
-          <div class="create-input-wrapper">
-            <input type="password">
-          </div>
-        </div>
-
-        <div class="resend-code">
-          <div class="already-customer">
-            <a href="#">Resend code</a>
-          </div>
-        </div>
-
-        <div class="divider-word">
-          <label> OR</label>
-        </div>
 
         <div class="enter-password">
           <div class="input-group">
@@ -80,10 +58,16 @@
       </form>
 
       <p class="create-signin-info">
-        By creating an account, you agree to Amazon's
+        By Secure Log In, you agree to Amazon's
         <a href="#">Conditions of Use</a> and
         <a href="#">Privacy Notice</a>.
       </p>
+
+      <div class="skip-verification">
+        <a href="#" class="js-otp-login">
+          Use OTP Instead ... >>>
+        </a>
+      </div>
 
     </div>
 
@@ -102,6 +86,8 @@
       © 1996-2026, Amazon.com, Inc. or its affiliates
     </div>
   </footer>
+
+  <script type="module" src="scripts/userExistPage.js"></script>
 
 </body>
 

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Verify email</title>
+  <title>Create account</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,35 +31,45 @@
 
     <div class="auth-card">
 
-      <h2>Verify email address</h2>
+      <div class="otp-wrapper">
+        <p class="otp-number">
+          +2348051583807
+          <a href="#">Change</a>
+        </p>
 
-      <div class="auth-verify-message">
-        To verify your email, we've sent a One Time Password (OTP) to
-        <strong class="js-user-identifier"></strong>
-        <div class="auth-change-email">
-          <a href="#">(Change)</a>
-        </div>
+        <p class="otp-info">
+          We've sent a One Time Password (OTP) to your phone number.
+          Please enter it below.
+        </p>
+
       </div>
 
       <form class="create-form">
         <div class="input-group">
-          <label>Enter security code</label>
+          <label>Enter OTP</label>
+
           <div class="create-input-wrapper">
-            <input type="text" class="js-otp-input" maxlength="8">
+            <input type="password" class="otp-user-input js-otp-user-input" placeholder="-_-_-_-_-_">
           </div>
         </div>
 
-        <button type="button" class="primary-button">
-          Verify
+        <button class="primary-button">
+          Log In
         </button>
-
       </form>
+
+      <p class="create-signin-info">
+        By Secure Log In, you agree to Amazon's
+        <a href="#">Conditions of Use</a> and
+        <a href="#">Privacy Notice</a>.
+      </p>
 
       <div class="resend-code">
         <div class="already-customer">
-          <a href="#" class="js-resend-otp">Resend code</a>
+          <a href="#">Resend code</a>
         </div>
       </div>
+
     </div>
 
   </main>
@@ -78,7 +88,7 @@
     </div>
   </footer>
 
-  <script type="module" src="scripts/emailVerify.js"></script>
+  <script type="module" src="scripts/otpUserLogin.js"></script>
 
 </body>
 

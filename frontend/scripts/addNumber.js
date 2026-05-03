@@ -30,13 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const checkData = await checkRes.json();
 
       if (checkData.userExists) {
-        alert("User already exists. Please login instead.");
-        window.location.href = "login.html";
+        alert("This number is already linked to an account. Please login or use another number.");
+
         return;
       }
 
       // 2. SAVE PHONE TO USER
-      await fetch("http://127.0.0.1:8000/add-phone", {
+      const addRes = await fetch("http://127.0.0.1:8000/add-phone", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -45,14 +45,29 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       });
 
+      const addData = await addRes.json();
+
+      if (!addRes.ok || addData.error) {
+        alert(addData.error || "Failed to add phone");
+        return;
+      }
+
       // 3. SEND OTP
-      await fetch("http://127.0.0.1:8000/send-otp", {
+      const otpRes = await fetch("http://127.0.0.1:8000/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          identifier: fullPhone
+          identifier: fullPhone,
+          purpose: "add_phone"
         })
       });
+
+      const otpData = await otpRes.json();
+
+      if (!otpRes.ok || !otpData.success) {
+        alert("Failed to send OTP");
+        return;
+      }
 
       // 4. UPDATE STATE
       localStorage.setItem("identifier", fullPhone);
@@ -68,4 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
+});
+
+const skipLink = document.querySelector(".js-skip-verification");
+
+skipLink?.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  window.location.href = "amazon.html";
 });

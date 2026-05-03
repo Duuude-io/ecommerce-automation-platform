@@ -1,88 +1,101 @@
+console.log("Email verify page loaded");
+
 document.addEventListener("DOMContentLoaded", () => {
+
   const identifier = localStorage.getItem("identifier");
+
   const label = document.querySelector(".js-user-identifier");
+  const form = document.querySelector(".create-form");
   const button = document.querySelector(".primary-button");
   const resendLink = document.querySelector(".js-resend-otp");
 
-  if (label && identifier) {
-    label.textContent = `${identifier}`;
+
+  if (!identifier) {
+    window.location.replace("login.html");
+    return;
   }
 
-  if (button) {
-    button.addEventListener("click", async () => {
-      const otp = document.querySelector(".js-otp-input").value.trim();
+  if (label) {
+    label.textContent = identifier;
+  }
 
-      if (!identifier) {
-        alert("Session expired. Please start again.");
-        window.location.href = "login.html";
-        return;
-      }
 
-      if (!otp) {
-        alert("Enter OTP");
-        return;
-      }
+  async function verifyOTP() {
 
-      try {
-        console.log("identifier:", identifier);
-        console.log("otp:", otp);
+    const otp =
+      document.querySelector(".js-otp-input").value.trim();
 
-        const res = await fetch("http://127.0.0.1:8000/verify-otp", {
+    if (!otp) {
+      alert("Enter OTP");
+      return;
+    }
+
+    try {
+
+      const res = await fetch(
+        "http://127.0.0.1:8000/verify-otp",
+        {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            identifier: identifier.trim(),
-            otp: otp.trim()
+            identifier,
+            otp
           })
-        });
-
-        const data = await res.json();
-        console.log("verify response:", data);
-
-        if (!data.success) {
-          alert(data.message || "Invalid OTP");
-          return;
         }
+      );
 
-        window.location.href = "addnumber.html";
-      } catch (err) {
-        console.error(err);
-        alert("Server error");
-      }
-    });
-  }
+      const data = await res.json();
+      console.log("verify response:", data);
 
-  if (resendLink) {
-    resendLink.addEventListener("click", async (e) => {
-      e.preventDefault();
-
-      if (!identifier) {
-        alert("Session expired. Please start again.");
-        window.location.href = "login.html";
+      if (!data.success) {
+        alert(data.message || "Invalid OTP");
         return;
       }
 
-      try {
-        resendLink.textContent = "Sending...";
-        resendLink.style.pointerEvents = "none";
+      localStorage.setItem("verificationStatus", "half");
 
-        await fetch("http://127.0.0.1:8000/send-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identifier: identifier.trim() })
-        });
+      window.location.replace("accsuccess.html");
 
-        resendLink.textContent = "Code sent ✔";
-
-        setTimeout(() => {
-          resendLink.textContent = "Resend code";
-          resendLink.style.pointerEvents = "auto";
-        }, 5000);
-      } catch (err) {
-        console.error(err);
-        resendLink.textContent = "Resend code";
-        resendLink.style.pointerEvents = "auto";
-      }
-    });
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    }
   }
+
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    verifyOTP();
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    verifyOTP();
+  });
+
+
+  resendLink?.addEventListener("click", async (e) => {
+
+    e.preventDefault();
+
+    resendLink.textContent = "Sending...";
+    resendLink.style.pointerEvents = "none";
+
+    await fetch(
+      "http://127.0.0.1:8000/send-otp",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier })
+      }
+    );
+
+    resendLink.textContent = "Code sent ✔";
+
+    setTimeout(() => {
+      resendLink.textContent = "Resend code";
+      resendLink.style.pointerEvents = "auto";
+    }, 5000);
+
+  });
+
 });
