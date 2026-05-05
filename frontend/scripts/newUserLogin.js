@@ -1,39 +1,37 @@
-console.log("New user page loaded");
+console.log("New user login page loaded");
 
-document.addEventListener("DOMContentLoaded", init);
+const identifier = localStorage.getItem("identifier");
 
-function init() {
+if (!identifier) {
+  window.location.href = "login.html";
+}
 
-  const identifier = localStorage.getItem("identifier");
+// display identifier
+document.querySelector(".js-user-identifier").textContent = identifier;
 
-  // show identifier
-  const userEl = document.querySelector(".js-user-identifier");
-  if (userEl && identifier) {
-    userEl.textContent = identifier;
+// detect type (optional UI helper)
+const typeEl = document.querySelector(".js-identifier-type");
+
+if (typeEl) {
+  if (identifier.includes("@")) {
+    typeEl.textContent = "email";
+  } else {
+    typeEl.textContent = "mobile number";
   }
+}
 
-  // create account button
-  const btn = document.querySelector(".primary-button");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      window.location.replace("createaccount.html");
-    });
-  }
-
-  // identifier type
-  const typeEl = document.querySelector(".js-identifier-type");
-  if (identifier && typeEl) {
-    const isEmail = identifier.includes("@");
-    typeEl.textContent = isEmail ? "your email" : "your number";
-  }
-
-  // change user
-  document.querySelectorAll(".js-change-user").forEach(link => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("identifier");
-      window.location.replace("login.html");
-    });
+// continue button
+document.querySelector(".primary-button")
+  .addEventListener("click", () => {
+    window.location.href = "createaccount.html";
   });
 
-}
+// change user
+document.querySelectorAll(".js-change-user")
+  .forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("identifier");
+      window.location.href = "login.html";
+    });
+  });

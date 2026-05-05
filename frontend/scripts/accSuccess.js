@@ -1,28 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const continueBtn = document.querySelector(".primary-button");
+  const nextStep = localStorage.getItem("nextStep");
 
-  const authType = localStorage.getItem("authType");
-  const identifier = localStorage.getItem("identifier");
+  console.log("NEXT STEP:", nextStep);
 
-  // safety guard
-  if (!authType || !identifier) {
-    window.location.replace("login.html");
+  if (!continueBtn || !nextStep) {
+    console.error("Button not found");
     return;
   }
 
   continueBtn.addEventListener("click", () => {
 
-    // USER VERIFIED WITH EMAIL FIRST
-    if (authType === "email") {
-      window.location.href = "addnumber.html";
-      return;
+    if (nextStep === "add_email") {
+      window.location.href = "addemail.html";
     }
 
-    // USER VERIFIED WITH PHONE FIRST
-    if (authType === "phone") {
-      window.location.href = "addemail.html";
-      return;
+    else if (nextStep === "add_phone") {
+      window.location.href = "addnumber.html";
+    }
+
+    else {
+      window.location.href = "amazon.html";
     }
 
   });

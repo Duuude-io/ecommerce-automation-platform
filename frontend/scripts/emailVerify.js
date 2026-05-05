@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     label.textContent = identifier;
   }
 
-
   async function verifyOTP() {
 
     const otp =
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            identifier,
+            userId: localStorage.getItem("userId"),
             otp
           })
         }
@@ -47,12 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       console.log("verify response:", data);
 
-      if (!data.success) {
+      if (!res.ok || !data.success) {
         alert(data.message || "Invalid OTP");
         return;
       }
 
-      localStorage.setItem("verificationStatus", "half");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("nextStep", data.nextStep);
 
       window.location.replace("accsuccess.html");
 

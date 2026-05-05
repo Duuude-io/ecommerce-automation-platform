@@ -36,11 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 2. SAVE PHONE TO USER
+      const token = localStorage.getItem("token");
+
       const addRes = await fetch("http://127.0.0.1:8000/add-phone", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
-          identifier,
           phone: fullPhone
         })
       });

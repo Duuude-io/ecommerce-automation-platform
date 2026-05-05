@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.querySelector(".js-email-form");
-  const emailInput = document.querySelector(".js-email-input").value.trim();
+  const skipLink = document.querySelector(".js-skip-verification");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    const email = document.querySelector(".js-email-input").value.trim();
 
     const identifier = localStorage.getItem("identifier");
 
@@ -15,23 +17,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
 
-      await fetch("http://127.0.0.1:8000/add-email", {
+      const addRes = await fetch("http://127.0.0.1:8000/add-email", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
-          identifier,
           email
         })
       });
 
-      const data = await res.json();
+      const addData = await addRes.json();
 
-      if (!res.ok || data.error) {
-        alert(data.error || "Failed");
+      if (!addRes.ok || addData.error) {
+        alert(addData.error || "Failed to add email");
         return;
       }
 
-      await fetch("http://127.0.0.1:8000/send-otp", {
+      const otpRes = await fetch("http://127.0.0.1:8000/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -39,6 +43,13 @@ document.addEventListener("DOMContentLoaded", () => {
           purpose: "add_email"
         })
       });
+
+      const otpData = await otpRes.json();
+
+      if (!otpRes.ok || !otpData.success) {
+        alert("Failed to send OTP");
+        return;
+      }
 
       localStorage.setItem("identifier", email);
       localStorage.setItem("authType", "email");
@@ -49,16 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       alert("Server error");
     }
-
   });
 
-});
 
-const skipLink = document.querySelector(".js-skip-verification");
+  skipLink?.addEventListener("click", (e) => {
+    e.preventDefault();
 
-skipLink?.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  // user stays HALF VERIFIED
-  window.location.href = "amazon.html";
+    // user stays HALF VERIFIED
+    window.location.href = "amazon.html";
+  });
 });

@@ -1,6 +1,8 @@
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime
+from fastapi import Header
+from fastapi import HTTPException
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -24,9 +26,18 @@ def create_token(user_id):
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def get_current_user(token: str):
+def get_current_user(authorization: str = Header(None)):
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Missing token")
+
+    token = authorization.replace("Bearer ", "")
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload["user_id"]
+
+        return {
+            "id": payload["user_id"]
+        }
+
     except JWTError:
-        return None
+        raise HTTPException(status_code=401, detail="Invalid token")

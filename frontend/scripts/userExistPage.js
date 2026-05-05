@@ -60,9 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* =====================
-       OTP LOGIN
-  ====================== */
 
   otpLoginLink.addEventListener("click", async (e) => {
     e.preventDefault();

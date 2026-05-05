@@ -1,33 +1,29 @@
+import { routeUser } from "./authRouter.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-
-  const identifier = localStorage.getItem("identifier");
-
-  document.querySelector(".js-phone-number").textContent = identifier;
 
   const form = document.querySelector(".create-form");
 
-  if (!form) return;
-
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // MUST always stop refresh
+    e.preventDefault();
+
+    console.log("FORM SUBMITTED");
 
     const otpInput = document.querySelector(".js-otp-input");
-
-    if (!otpInput) return;
-
     const otp = otpInput.value.trim();
+    const userId = localStorage.getItem("userId");
 
-    console.log("identifier:", identifier);
+    console.log("userId:", userId);
     console.log("otp:", otp);
 
-    if (!identifier) {
-      alert("Session expired. Please restart.");
-      window.location.replace = "login.html";
+    if (!userId) {
+      alert("Session expired");
+      window.location.href = "login.html";
       return;
     }
 
     if (!otp || otp.length !== 6) {
-      alert("Enter 6-digit code");
+      alert("Enter 6-digit OTP");
       return;
     }
 
@@ -36,8 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          identifier: identifier.trim(),
-          otp: otp.trim()
+          userId,
+          otp,
+          purpose: "signup"
         })
       });
 
@@ -50,14 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // IMPORTANT: prevents “blink / back behavior”
-      window.location.replace("accsuccess.html");
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId || userId);
+        localStorage.setItem("nextStep", data.nextStep || "done");
+
+        await routeUser();
+      }
 
     } catch (err) {
-      console.error(err);
+      console.error("ERROR:", err);
       alert("Server error");
     }
-
   });
-
 });
