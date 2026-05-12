@@ -13,10 +13,21 @@ async function loadPage() {
   }
 
   console.log('1. Starting loadPage');
-
   await loadProductsFetch();
 
   const orders = await fetchOrders();
+
+  // Check if orders is an array. 
+  if (!Array.isArray(orders)) {
+    console.error('Failed to load orders or unauthorized:', orders);
+
+    // If unauthorized, send them to login
+    if (orders.detail === "Missing token" || orders.detail === "Invalid token") {
+      window.location.href = 'login.html';
+    }
+    return;
+  }
+
   window.testOrders = orders;
   console.log('2. Orders from backend:', orders);
 

@@ -1,8 +1,8 @@
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime
-from fastapi import Header
-from fastapi import HTTPException
+from fastapi import Header, HTTPException
+from utils.storage import load_users
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -34,10 +34,15 @@ def get_current_user(authorization: str = Header(None)):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload["user_id"]
 
-        return {
-            "id": payload["user_id"]
-        }
+        users = load_users()
+        user = next((u for u in users if u["id"] == user_id), None)
+
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+
+        return user   # RETURN FULL USER OBJECT
 
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")

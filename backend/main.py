@@ -7,6 +7,8 @@ from sms_service import send_sms_otp
 from email_service import send_email_otp
 import time
 from auth_states import AuthState
+from fastapi import HTTPException
+from utils.storage import load_users, save_users
 
 import json
 import uuid
@@ -242,25 +244,6 @@ def login(data: LoginRequest):
         "userId": user["id"],
         "next_page": user["auth_state"]
     }
-
-
-def load_users():
-    if not USERS_FILE.exists():
-        return []
-
-    with USERS_FILE.open("r") as file:
-        users = json.load(file)
-
-    # BACKWARD COMPATIBILITY FIX
-    for user in users:
-        user.setdefault("auth_state", AuthState.CREATE_ACCOUNT.value)
-
-    return users
-
-
-def save_users(users):
-    with USERS_FILE.open("w") as file:
-        json.dump(users, file, indent=2)
 
 
 def normalize_identifier(identifier: str):
@@ -657,10 +640,16 @@ def create_order(order: Order, current_user=Depends(get_current_user)):
     user_id = current_user["id"]
 
     if not user_id:
-        return {"error": "Unauthorized"}
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
-    if not current_user["verified_email"] or not current_user["verified_phone"]:
-        return {"error": "Complete verification before ordering"}
+    verified_email = current_user.get("verified_email", False)
+    verified_phone = current_user.get("verified_phone", False)
+
+    if not verified_email or not verified_phone:
+        raise HTTPException(
+            status_code=403,
+            detail="User must verify phone and email before ordering"
+        )
 
     orders = load_orders()
 

@@ -27,8 +27,16 @@ export async function createOrder(orderData) {
 }
 
 export async function fetchOrders() {
-  const response = await fetch('http://127.0.0.1:8000/orders');
-  return response.json();
+  const token = localStorage.getItem('token'); // Get the token
+
+  const response = await fetch('http://127.0.0.1:8000/orders', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return await response.json();
 }
 
 export function buildOrderData(cartItems, billingDetails, totalCents) {
@@ -50,12 +58,14 @@ export function buildOrderData(cartItems, billingDetails, totalCents) {
 }
 
 export async function cancelOrder(orderId) {
-  const response = await fetch(
-    `http://127.0.0.1:8000/orders/${orderId}`,
-    {
-      method: 'DELETE'
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(`http://127.0.0.1:8000/orders/${orderId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
     }
-  );
+  });
 
   if (!response.ok) {
     throw new Error('Failed to cancel order');

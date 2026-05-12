@@ -377,7 +377,9 @@ function attachEventListeners() {
 
   if (!button) return;
 
-  button.addEventListener('click', handleCompletePurchase);
+  button.addEventListener('click', (event) => {
+    handleCompletePurchase(event);
+  });
 }
 
 function getBillingDetails() {
@@ -394,7 +396,10 @@ function getBillingDetails() {
   };
 }
 
-async function handleCompletePurchase() {
+async function handleCompletePurchase(event) {
+  if (event) {
+    event.preventDefault();
+  }
 
   const token = localStorage.getItem('token');
 
@@ -428,9 +433,9 @@ async function handleCompletePurchase() {
 
     console.log('Order created:', result);
 
-    cart.resetCart();
-
     window.location.href = 'orders.html';
+
+    cart.resetCart();
 
   } catch (error) {
     console.error('Order failed:', error);

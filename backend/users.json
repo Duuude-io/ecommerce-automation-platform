@@ -994,5 +994,35 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "b036a6fb-fd9f-41ba-9c09-78f76b86655b",
+    "email": "uphan222401@gmail.com",
+    "phone": "+23409123323322",
+    "password": "$2b$12$H63PwgnxYckXxHfNihx5ceS.EIcNMJ6U9WIAJNDG4jeuII9272n6e",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "2a11f589-beda-40cd-a45a-5c46b1bc23e9",
+    "email": "gwagon@gmail.com",
+    "phone": "08051583005",
+    "password": "$2b$12$J16PtdK22CRbMPMyxVKelOgpcsuO2KRHcvLNa9QtWi5wzyP6OF.ju",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "05e49636-d12c-4117-9c4b-be9a7024ee6a",
+    "email": "upha8890nds401@gmail.com",
+    "phone": "+23490976443210",
+    "password": "$2b$12$o64Sq88T5RwdEchkWqUTou1v2JOL65MBSkVw2jgV6CTHw9aReJfKm",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

@@ -9,20 +9,22 @@ export function initAuthGuard(pageName) {
   const routes = getAuthRoutes();
 
   // allow auth flow pages
-  const authPages = [
-    "login-page",
-    "create-account-page",
-    "login-auth-page",
-    "email-verify-page",
-    "number-verify-page",
-    "user-exist-page",
-    "acc-success-page",
-    "otp-user-login-page",
-    "add-email-page",
-    "add-number-page"
-  ];
+  const currentFile = window.location.pathname.split("/").pop() || "amazon.html";
 
-  if (authPages.includes(pageName)) return;
+  if (session && session.step) {
+
+    const expectedFile = routes[session.step];
+
+    if (expectedFile && expectedFile !== currentFile) {
+
+      console.warn(
+        "Wrong page for auth state → redirecting"
+      );
+
+      location.replace(expectedFile);
+      return;
+    }
+  }
 
   // protect amazon homepage
   if (pageName === "amazon-page") {

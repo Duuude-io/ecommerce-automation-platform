@@ -1,3 +1,4 @@
 {
-  "files.enableTrash": true
+  "files.enableTrash": true,
+  "python-envs.defaultEnvManager": "ms-python.python:system"
 }
