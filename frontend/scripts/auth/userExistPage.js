@@ -1,6 +1,16 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { verifyOtp } from "./otpService.js";
+import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { auth } from "./authStore.js";
+import { authContext } from "./authContext.js";
 
-  const identifier = localStorage.getItem("identifier");
+console.log("User Exist Page loaded");
+
+function initUserExistPage() {
+
+  const page = document.querySelector(".user-exist-page");
+  if (!page) return;
+
+  const identifier = authContext.getIdentifier();
 
   if (!identifier) {
     window.location.replace("login.html");
@@ -8,21 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // show identifier
-  document.querySelector(".otp-number").innerHTML =
+  page.querySelector(".otp-number").innerHTML =
     `${identifier} <a href="login.html">Change</a>`;
 
-  const form = document.querySelector(".create-form");
-  const otpLoginLink = document.querySelector(".js-otp-login");
-
-  /* =====================
-     PASSWORD LOGIN
-  ====================== */
+  const form = page.querySelector(".create-form");
+  const otpLoginLink = page.querySelector(".js-otp-login");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const password =
-      document.querySelector("input[type='password']").value;
+    const password = page.querySelector("input[type='password']").value;
 
     if (!password) {
       alert("Enter password");
@@ -50,9 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      localStorage.setItem("token", data.token);
+      auth.login({
+        token: data.token,
+        userId: data.userId
+      });
 
-      window.location.replace("index.html");
+      setAuthState(AuthState.AUTHENTICATED);
+      goToNextAuthStep();
 
     } catch (err) {
       console.error(err);
@@ -76,7 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
-    window.location.href = "otpuserlogin.html";
+    setAuthState(AuthState.LOGIN_OTP);
+    goToNextAuthStep();
   });
+}
 
-});
+initUserExistPage();

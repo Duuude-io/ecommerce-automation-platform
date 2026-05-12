@@ -1,10 +1,13 @@
+import { auth } from "../auth/authStore.js"
+import { clearAuthState } from "../auth/authFlow.js"
+
 export function renderAccountHeader() {
+
   const container = document.querySelector('.js-account-section');
   if (!container) return;
 
-  const token = localStorage.getItem('token');
-
-  if (!token) {
+  /* NOT LOGGED IN */
+  if (!auth.isLoggedIn()) {
     container.innerHTML = `
       <a href="login.html" class="header-link account-link">
         <span>Sign in</span>
@@ -14,6 +17,7 @@ export function renderAccountHeader() {
     return;
   }
 
+  /* LOGGED IN */
   container.innerHTML = `
     <div class="account-menu">
       <span>Hello, User</span>
@@ -23,14 +27,18 @@ export function renderAccountHeader() {
     </div>
   `;
 
-  document
+  container
     .querySelector('.js-signout-btn')
     .addEventListener('click', signOut);
 }
 
+/* CENTRALIZED LOGOUT */
 function signOut() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
 
-  window.location.href = 'login.html';
+  auth.logout();        // removes token + userId
+  clearAuthState();     // clears auth flow
+
+  localStorage.removeItem("identifier");
+
+  window.location.replace("login.html");
 }

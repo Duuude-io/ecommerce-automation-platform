@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="styles/pages/login.css">
 </head>
 
-<body>
+<body class="number-verify-page">
 
   <!-- Header -->
   <header class="signin-header">
@@ -36,7 +36,7 @@
       <div class="otp-wrapper">
         <p class="otp-number">
           <span class="js-phone-number"></span>
-          <a href="#">Change</a>
+          <a href="#" class="js-change-user">Change</a>
         </p>
 
         <p class="otp-info">
@@ -46,16 +46,15 @@
 
       </div>
 
-      <form class="create-form" onsubmit="return false;">
+      <form class="create-form js-phone-create-form">
         <div class="input-group">
           <label>Enter security code</label>
           <div class="create-input-wrapper">
-            <input type="text" placeholder="-_-_-_-_-_-_" class="js-otp-input" maxlength="6" inputmode="numeric"
-              autocomplete="one-time-code" />
+            <input type="text" placeholder="-_-_-_-_-_-_" class="js-otp-input" maxlength="8">
           </div>
         </div>
 
-        <button type="submit" class="primary-button">
+        <button type="submit" class="primary-button js-otp-phone-submit">
           Verify your account
         </button>
 
@@ -69,7 +68,7 @@
 
       <div class="resend-code">
         <div class="already-customer">
-          <a href="#">Resend code</a>
+          <a href="#" class="js-resend-otp">Resend code</a>
         </div>
       </div>
     </div>
@@ -90,7 +89,9 @@
     </div>
   </footer>
 
-  <script type="module" src="scripts/numberVerify.js"></script>
+
+  <script type="module" src="scripts/auth/authGuard.js"></script>
+  <script type="module" src="scripts/auth/numberVerify.js"></script>
 
 </body>
 

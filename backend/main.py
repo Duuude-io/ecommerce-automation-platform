@@ -19,8 +19,6 @@ from auth import get_current_user
 
 app = FastAPI()
 
-otp_store = {}
-
 signup_sessions = {}
 
 OTP_EXPIRY = 300  # 5 minutes
@@ -42,37 +40,166 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+OTP_FILE = BASE_DIR / "otp_store.json"
+
+
+def load_otps():
+    if not OTP_FILE.exists():
+        return {}
+    with OTP_FILE.open("r") as f:
+        return json.load(f)
+
+
+def save_otps(data):
+    with OTP_FILE.open("w") as f:
+        json.dump(data, f, indent=2)
+
+
+def cleanup_expired_otps(otps):
+    now = time.time()
+
+    expired_keys = [
+        key for key, value in otps.items()
+        if now - value["created_at"] > OTP_EXPIRY
+    ]
+
+    for key in expired_keys:
+        otps.pop(key, None)
+
+
+def cleanup_expired_sessions():
+    current_time = time.time()
+    # 48 hours = 172,800 seconds
+    expiry_limit = 172800
+
+    #  list of keys to delete
+    to_delete = [
+        uid for uid, session in signup_sessions.items()
+        if current_time - session.get("created_at", 0) > expiry_limit
+    ]
+
+    for uid in to_delete:
+        del signup_sessions[uid]
+        print(f"Purged expired session: {uid}")
+
+
+def generate_and_save_otp(user_id, identifier, purpose):
+    otps = load_otps()
+    cleanup_expired_otps(otps)
+
+    key = f"{user_id}_{purpose}"
+    otp = str(random.randint(100000, 999999))
+
+    otps[key] = {
+        "otp": otp,
+        "purpose": purpose,
+        "target": identifier,
+        "created_at": time.time()
+    }
+
+    save_otps(otps)
+
+    print(
+        f"OTP DEBUG | user_id={user_id} | target={identifier} |purpose = {purpose} | otp={otp}")
+    return otp
+
+
+def is_identifier_taken(identifier: str, users, signup_sessions, exclude_user_id=None):
+    identifier = normalize_identifier(identifier)
+
+    # check existing users
+    for u in users:
+        if u["id"] == exclude_user_id:
+            continue
+
+        if u.get("email") == identifier or u.get("phone") == identifier:
+            return True
+
+    # check pending sessions
+    for sid, s in signup_sessions.items():
+        if sid == exclude_user_id:
+            continue
+
+        if s.get("email") == identifier or s.get("phone") == identifier:
+            return True
+
+        # also check pending fields if you use them
+        if s.get("pending_email") == identifier or s.get("pending_phone") == identifier:
+            return True
+
+    return False
+
+
+def assert_identifier_available(identifier: str, user_id: str | None = None):
+    """
+    Ensures an email or phone is NOT used anywhere
+    except by the current user.
+    """
+
+    identifier = normalize_identifier(identifier)
+
+    users = load_users()
+
+    if is_identifier_taken(
+        identifier,
+        users,
+        signup_sessions,
+        exclude_user_id=user_id
+    ):
+        raise ValueError("Identifier already in use")
+
+    return identifier
+
 
 @app.post("/signup")
 def signup(data: SignupRequest):
-
-    user_id = str(uuid4())
+    cleanup_expired_sessions()
 
     identifier = normalize_identifier(data.identifier)
 
     users = load_users()
 
     # block existing users
-    for u in users:
-        if u["email"] == identifier or u["phone"] == identifier:
-            return {"success": False, "message": "User already exists"}
 
-    for s in signup_sessions.values():
+    try:
+        identifier = assert_identifier_available(data.identifier)
+    except ValueError as e:
+        return {"success": False, "message": str(e)}
+
+    for sid, s in signup_sessions.items():
         if s.get("email") == identifier or s.get("phone") == identifier:
-            return {"success": False, "message": "Signup already in progress"}
+
+            # Fresh otpcode
+            generate_and_save_otp(sid, identifier, "signup")
+
+            return {
+                "success": True,
+                "resume": True,
+                "message": "signup_in_progress",
+                "userId": sid,  # their ID back
+                "nextStep": s["auth_state"],  # where they were
+                "authType": "email" if s.get("email") else "phone"
+            }
+
+    user_id = str(uuid4())
+
+    purpose = "signup"
+    auth_state = (
+        "verify_signup_email"
+        if "@" in identifier
+        else "verify_signup_phone"
+    )
 
     signup_sessions[user_id] = {
         "email": identifier if "@" in identifier else None,
         "phone": identifier if "@" not in identifier else None,
         "name": data.name,
         "password": hash_password(data.password),
-        "auth_state": (
-            AuthState.VERIFY_EMAIL.value
-            if "@" in identifier
-            else AuthState.VERIFY_PHONE.value
-        ),
+        "auth_state": auth_state,
         "created_at": time.time()
     }
+
+    generate_and_save_otp(user_id, identifier, purpose)
 
     return {
         "success": True,
@@ -101,13 +228,19 @@ def login(data: LoginRequest):
     if not verify_password(data.password, user["password"]):
         return {"error": "Invalid password"}
 
+    if not user.get("verified_email") and not user.get("verified_phone"):
+        return {
+            "error": "Complete verification before login",
+            "next_page": user["auth_state"]
+        }
+
     token = create_token(user["id"])
 
     return {
         "message": "Login successful",
         "token": token,
         "userId": user["id"],
-        "next_step": user["auth_state"]
+        "next_page": user["auth_state"]
     }
 
 
@@ -160,12 +293,14 @@ def check_user(data: IdentifierRequest):
 
 
 @app.post("/send-otp")
-async def send_otp(data: OTPRequest):
+async def handle_send_otp(data: OTPRequest):
 
     user_id = data.userId
     identifier = normalize_identifier(data.identifier)
 
-    user = next((u for u in load_users() if u["id"] == user_id), None)
+    users = load_users()
+
+    user = next((u for u in users if u["id"] == user_id), None)
     signup = signup_sessions.get(user_id)
 
     if not user and not signup:
@@ -177,30 +312,28 @@ async def send_otp(data: OTPRequest):
             return {"error": "Signup session expired"}
 
     if user:
-        if data.purpose == "add_email" and user["verified_email"]:
+        if data.purpose == "add_email":
+            identifier = user.get("pending_email")
+        elif data.purpose == "add_phone":
+            identifier = user.get("pending_phone")
+        else:
+            identifier = user.get("email") or user.get("phone")
+        if not identifier:
+            return {"error": "No pending identifier"}
+
+    try:
+        assert_identifier_available(identifier, user_id)
+    except ValueError as e:
+        return {"error": str(e)}
+
+    if user:
+        if data.purpose == "add_email" and user.get("verified_email"):
             return {"error": "Email already verified"}
 
-        if data.purpose == "add_phone" and user["verified_phone"]:
+        if data.purpose == "add_phone" and user.get("verified_phone"):
             return {"error": "Phone already verified"}
 
-    key = f"{user_id}_{data.purpose}"
-
-    otp_store.pop(key, None)
-
-    otp = str(random.randint(100000, 999999))
-
-    otp_store[key] = {
-        "otp": otp,
-        "purpose": data.purpose,
-        "target": identifier,
-        "created_at": time.time()
-    }
-
-    # console output only
-    print(f"OTP DEBUG | user_id={user_id} | target={identifier} | otp={otp}")
-
-    print("OTP STORE:", otp_store)
-    print("VERIFY REQUEST USER_ID:", user_id)
+    generate_and_save_otp(user_id, identifier, data.purpose)
 
     return {
         "success": True,
@@ -210,11 +343,17 @@ async def send_otp(data: OTPRequest):
 @app.post("/verify-otp")
 def verify_otp(data: VerifyOTPRequest):
 
+    otps = load_otps()
+
     user_id = data.userId
     otp = data.otp.strip()
 
     key = f"{user_id}_{data.purpose}"
-    stored = otp_store.get(key)
+
+    print("KEY EXPECTED:", key)
+    print("OTP STORE KEYS:", otps.keys())
+
+    stored = otps.get(key)
 
     if not stored:
         return {"success": False, "message": "OTP not found"}
@@ -223,7 +362,8 @@ def verify_otp(data: VerifyOTPRequest):
         return {"success": False, "message": "Invalid OTP"}
 
     if time.time() - stored["created_at"] > OTP_EXPIRY:
-        del otp_store[key]
+        otps.pop(key, None)
+        save_otps(otps)
 
         return {"success": False, "message": "OTP expired"}
 
@@ -260,21 +400,33 @@ def verify_otp(data: VerifyOTPRequest):
             "auth_state": signup["auth_state"]
         }
 
+        if any(u["id"] == user_id for u in users):
+            return {"success": False, "message": "Duplicate user id"}
+
         users.append(new_user)
         save_users(users)
 
         signup_sessions.pop(user_id, None)
 
-        del otp_store[key]
+        otps.pop(key, None)
+        save_otps(otps)
 
         token = create_token(user_id)
+
+        fully_verified = new_user["verified_email"] and new_user["verified_phone"]
 
         return {
             "success": True,
             "token": token,
             "userId": user_id,
-            "fullyVerified": new_user["verified_email"] and new_user["verified_phone"],
-            "next_step": new_user["auth_state"]
+            "fullyVerified": fully_verified,
+            "userData": {
+                "email": new_user["email"],
+                "phone": new_user["phone"],
+                "fullyVerified": fully_verified
+            },
+            "next_step": new_user["auth_state"],
+            "next_page": "accverified.html" if fully_verified else "accsuccess.html"
         }
 
     # ADD EMAIL / PHONE FLOW
@@ -284,10 +436,34 @@ def verify_otp(data: VerifyOTPRequest):
         return {"success": False, "message": "User not found"}
 
     if purpose == "add_email":
-        user["email"] = user.pop("pending_email", None)
+        pending_email = user.get("pending_email")
+
+        if not pending_email:
+            return {"success": False, "message": "No pending email"}
+
+        try:
+            assert_identifier_available(pending_email, user_id)
+        except ValueError:
+            return {"success": False, "message": "Email already used"}
+
+        user["email"] = pending_email
         user["verified_email"] = True
-    if "pending_phone" not in user:
-        return {"success": False, "message": "No pending phone"}
+        user.pop("pending_email", None)
+
+    if purpose == "add_phone":
+        pending_phone = user.get("pending_phone")
+
+        if not pending_phone:
+            return {"success": False, "message": "No pending phone"}
+
+        try:
+            assert_identifier_available(pending_phone, user_id)
+        except ValueError:
+            return {"success": False, "message": "Phone already used"}
+
+        user["phone"] = pending_phone
+        user["verified_phone"] = True
+        user.pop("pending_phone", None)
 
     if user["verified_email"] and user["verified_phone"]:
         user["auth_state"] = AuthState.AUTHENTICATED.value
@@ -297,12 +473,21 @@ def verify_otp(data: VerifyOTPRequest):
         user["auth_state"] = AuthState.ADD_EMAIL_OPTIONAL.value
 
     save_users(users)
-    del otp_store[key]
+    otps.pop(key, None)
+    save_otps(otps)
 
     return {
         "success": True,
+        "token": create_token(user_id),
+        "userId": user_id,
         "fullyVerified": user["verified_email"] and user["verified_phone"],
-        "next_step": user["auth_state"]
+        "userData": {
+            "email": user.get("email"),
+            "phone": user.get("phone"),
+            "fullyVerified": user["verified_email"] and user["verified_phone"]
+        },
+        "next_step": user["auth_state"],
+        "next_page": "accverified.html" if user["verified_email"] and user["verified_phone"] else "accsuccess.html"
     }
 
 
@@ -313,13 +498,16 @@ def verify_login_otp(data: VerifyOTPRequest):
     otp = data.otp.strip()
 
     key = f"{user_id}_{data.purpose}"
-    stored = otp_store.get(key)
+
+    otps = load_otps()
+    stored = otps.get(key)
 
     if not stored or stored["otp"] != otp:
         return {"success": False, "message": "Invalid OTP"}
 
     if time.time() - stored["created_at"] > OTP_EXPIRY:
-        otp_store.pop(key, None)
+        otps.pop(key, None)
+        save_otps(otps)
         return {"success": False, "message": "OTP expired"}
 
     users = load_users()
@@ -329,14 +517,16 @@ def verify_login_otp(data: VerifyOTPRequest):
     if not user:
         return {"success": False, "message": "User not found"}
 
-    del otp_store[key]
+    otps.pop(key, None)
+    save_otps(otps)
 
     return {
         "success": True,
         "token": create_token(user_id),
         "userId": user_id,
         "verifiedEmail": user["verified_email"],
-        "verifiedPhone": user["verified_phone"]
+        "verifiedPhone": user["verified_phone"],
+        "next_page": "accsuccess.html"
     }
 
 
@@ -345,16 +535,20 @@ def session_status(current_user=Depends(get_current_user)):
 
     users = load_users()
 
-    user = next(
-        (u for u in users if u["id"] == current_user["id"]),
-        None
-    )
+    user = next((u for u in users if u["id"] == current_user["id"]), None)
 
     if not user:
-        return {"next_step": "LOGIN"}
+        return {"next_page": "login.html"}
 
     return {
-        "next_step": user.get("auth_state", "LOGIN")
+        "next_page": {
+            "CREATE_ACCOUNT": "createaccount.html",
+            "VERIFY_EMAIL": "emailverify.html",
+            "VERIFY_PHONE": "numberverify.html",
+            "ADD_EMAIL_OPTIONAL": "addemail.html",
+            "ADD_PHONE_OPTIONAL": "addnumber.html",
+            "AUTHENTICATED": "accsuccess.html"
+        }.get(user.get("auth_state", "CREATE_ACCOUNT"), "login.html")
     }
 
 
@@ -365,9 +559,14 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
     users = load_users()
 
     # prevent duplicate phone
-    for u in users:
-        if u.get("phone") == phone:
-            return {"error": "Phone already used"}
+
+    try:
+        phone = assert_identifier_available(
+            data["phone"],
+            current_user["id"]
+        )
+    except ValueError as e:
+        return {"error": str(e)}
 
     user = next((u for u in users if u["id"] == current_user["id"]), None)
 
@@ -394,9 +593,13 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
     users = load_users()
 
     # prevent duplicate email
-    for u in users:
-        if u.get("email") == email:
-            return {"error": "Email already used"}
+    try:
+        email = assert_identifier_available(
+            data["email"],
+            current_user["id"]
+        )
+    except ValueError as e:
+        return {"error": str(e)}
 
     user = next((u for u in users if u["id"] == current_user["id"]), None)
 
@@ -486,13 +689,16 @@ def get_orders(current_user=Depends(get_current_user)):
 
 
 @app.delete("/orders/{order_id}")
-def cancel_order(order_id: str):
+def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
     orders = load_orders()
 
     updated_orders = [
         order for order in orders
-        if order["id"] != order_id
+        if not (
+            order["id"] == order_id
+            and order["userId"] == current_user["id"]
+        )
     ]
 
     save_orders(updated_orders)

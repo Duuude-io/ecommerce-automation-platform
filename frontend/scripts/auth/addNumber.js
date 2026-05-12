@@ -1,14 +1,30 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { auth } from "./authStore.js";
+import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { authContext } from "./authContext.js";
+import { resumeAuthFlow } from "./resumeAuth.js";
+import { initAuthGuard } from "./authGuard.js";
 
-  const form = document.querySelector(".js-mobile-form");
+console.log("Add Number loaded");
+
+initAuthGuard("add-number-page");
+resumeAuthFlow();
+
+function initAddNumber() {
+
+  const page = document.querySelector(".add-number-page");
+  if (!page) return;
+
+
+  const form = page.querySelector(".js-mobile-form");
+  const skipLink = document.querySelector(".js-skip-verification");
+
+  if (!form) return;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const country = document.querySelector(".js-country-code").value;
-    const phone = document.querySelector(".js-phone-input").value.trim();
-
-    const identifier = localStorage.getItem("identifier");
+    const country = page.querySelector(".js-country-code").value;
+    const phone = page.querySelector(".js-phone-input").value.trim();
 
     if (!phone) {
       alert("Enter mobile number");
@@ -36,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 2. SAVE PHONE TO USER
-      const token = localStorage.getItem("token");
+      const token = auth.getToken();
 
       const addRes = await fetch("http://127.0.0.1:8000/add-phone", {
         method: "POST",
@@ -61,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          userId: auth.getUserId(),
           identifier: fullPhone,
           purpose: "add_phone"
         })
@@ -74,11 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 4. UPDATE STATE
-      localStorage.setItem("identifier", fullPhone);
-      localStorage.setItem("authType", "phone");
+      authContext.setIdentifier(fullPhone);
 
       // 5. REDIRECT
-      window.location.href = "numberverify.html";
+      setAuthState(AuthState.VERIFY_ADD_PHONE);
+      goToNextAuthStep();
 
     } catch (err) {
       console.error(err);
@@ -87,12 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-});
+  if (skipLink) {
+    skipLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "amazon.html";
+    });
+  }
+}
 
-const skipLink = document.querySelector(".js-skip-verification");
-
-skipLink?.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  window.location.href = "amazon.html";
-});
+initAddNumber();

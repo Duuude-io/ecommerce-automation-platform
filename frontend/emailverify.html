@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="styles/pages/login.css">
 </head>
 
-<body>
+<body class="email-verify-page">
 
   <!-- Header -->
   <header class="signin-header">
@@ -37,11 +37,11 @@
         To verify your email, we've sent a One Time Password (OTP) to
         <strong class="js-user-identifier"></strong>
         <div class="auth-change-email">
-          <a href="#">(Change)</a>
+          <a href="#" class="js-change-user">(Change)</a>
         </div>
       </div>
 
-      <form class="create-form">
+      <form class="create-form js-email-create-form">
         <div class="input-group">
           <label>Enter security code</label>
           <div class="create-input-wrapper">
@@ -49,7 +49,7 @@
           </div>
         </div>
 
-        <button type="button" class="primary-button">
+        <button type="submit" class="primary-button js-otp-email-submit">
           Verify
         </button>
 
@@ -78,7 +78,8 @@
     </div>
   </footer>
 
-  <script type="module" src="scripts/emailVerify.js"></script>
+  <script type="module" src="scripts/auth/authGuard.js"></script>
+  <script type="module" src="scripts/auth/emailVerify.js"></script>
 
 </body>
 

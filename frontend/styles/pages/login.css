@@ -522,3 +522,36 @@
   text-decoration: underline;
   color: #700e19;
 }
+
+/* Animated Checkmark Style */
+.checkmark-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #2e7d32;
+  /* Success Green */
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  box-shadow: inset 0px 0px 0px #2e7d32;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.user-confirmation-box {
+  background-color: #f0f2f2;
+  border: 1px solid #d5dbdb;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 20px 0;
+  font-size: 13px;
+  color: #565959;
+  display: flex;
+  justify-content: space-between;
+}
+
+.success-subtext {
+  font-size: 14px;
+  color: #111;
+  margin-top: 8px;
+}
