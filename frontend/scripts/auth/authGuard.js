@@ -1,6 +1,8 @@
 import { auth } from "./authStore.js";
 import { getAuthState, getAuthRoutes } from "./authFlow.js";
 
+console.trace("AuthGuard triggered");
+
 export function initAuthGuard(pageName) {
 
   console.log("AuthGuard:", pageName);
@@ -8,44 +10,38 @@ export function initAuthGuard(pageName) {
   const session = getAuthState();
   const routes = getAuthRoutes();
 
-  // allow auth flow pages
-  const currentFile = window.location.pathname.split("/").pop() || "amazon.html";
+  const currentFile =
+    window.location.pathname.split("/").pop() || "amazon.html";
 
-  if (session && session.step) {
+  if (pageName === "amazon-page") {
 
+    if (!auth.isLoggedIn()) {
+      console.log("Not logged in → redirect login");
+      window.location.replace("login.html");
+      return;
+    }
+
+    document.body.classList.add("auth-ready");
+    console.log("Amazon access granted");
+    return;
+  }
+
+  if (
+    session &&
+    session.step &&
+    session.step !== "authenticated"
+  ) {
     const expectedFile = routes[session.step];
 
-    if (expectedFile && expectedFile !== currentFile) {
-
-      console.warn(
-        "Wrong page for auth state → redirecting"
+    if (expectedFile && currentFile !== expectedFile) {
+      console.log(
+        `AuthGuard redirecting: ${currentFile} → ${expectedFile}`
       );
-
-      location.replace(expectedFile);
+      window.location.replace(expectedFile);
       return;
     }
   }
 
-  // protect amazon homepage
-  if (pageName === "amazon-page") {
-
-    if (!auth.isLoggedIn()) {
-
-      console.warn("Blocked by AuthGuard");
-
-      if (session && session.step) {
-        const targetFile = routes[session.step];
-        const currentFile = window.location.pathname.split("/").pop() || "amazon.html";
-
-        // FIX: Only redirect if we aren't already there!
-        if (targetFile && currentFile !== targetFile) {
-          location.replace(targetFile);
-        } else if (!targetFile) {
-          location.replace("login.html");
-        }
-      } else {
-        location.replace("login.html");
-      }
-    }
-  }
+  document.body.classList.add('auth-ready');
+  console.log("AuthGuard OK - Page Revealed");
 }

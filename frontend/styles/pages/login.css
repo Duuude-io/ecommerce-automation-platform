@@ -555,3 +555,19 @@
   color: #111;
   margin-top: 8px;
 }
+
+.number-verify-page,
+.email-verify-page,
+.add-number-page,
+.add-email-page,
+.acc-success-page,
+.acc-verified-page {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.auth-ready {
+  visibility: visible !important;
+  opacity: 1 !important;
+}

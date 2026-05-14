@@ -10,210 +10,217 @@ import { authContext } from "./authContext.js";
 console.log("Number verify loaded");
 
 initAuthGuard("number-verify-page");
-resumeAuthFlow();
 
-function initNumberVerify() {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const page = document.querySelector(".number-verify-page");
-  if (!page) return;
+  function initNumberVerify() {
 
-  const form = page.querySelector(".js-phone-create-form");
-  const input = page.querySelector(".js-otp-input");
+    const page = document.querySelector(".number-verify-page");
+    if (!page) return;
 
-  const identifier = authContext.getIdentifier() || getAuthState()?.identifier || "";
-  const resendBtn = page.querySelector(".js-resend-otp");
+    const form = page.querySelector(".js-phone-create-form");
+    const input = page.querySelector(".js-otp-input");
 
-  console.log(identifier);
+    const identifier = authContext.getIdentifier() || getAuthState()?.identifier || "";
+    const resendBtn = page.querySelector(".js-resend-otp");
 
-  const numberChangeLink = page.querySelector(".js-phone-number");
-  if (numberChangeLink) {
-    numberChangeLink.textContent = identifier || "your mobile number";
-  }
+    console.log(identifier);
 
-  const changeUser = page.querySelector(".js-change-user");
-  if (changeUser) {
-    changeUser.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      console.log("Resetting session and returning to login...");
-
-      // 1. Clear the temporary "in-progress" session data
-      localStorage.removeItem("authSession");
-      localStorage.removeItem("authContext_identifier");
-      window.location.href = "login.html";
-    });
-  }
-
-  let verifying = false;
-
-  form.addEventListener("submit", handleSubmit);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    console.log("Submit button clicked!");
-
-    if (verifying) return;
-
-    const otp = input.value.trim();
-
-    if (!otp) {
-      alert("Enter OTP");
-      return;
+    const numberChangeLink = page.querySelector(".js-phone-number");
+    if (numberChangeLink) {
+      numberChangeLink.textContent = identifier || "your mobile number";
     }
 
-    console.log("OTP retrieved:", otp);
-    verifying = true;
+    const changeUser = page.querySelector(".js-change-user");
+    if (changeUser) {
+      changeUser.addEventListener("click", (e) => {
+        e.preventDefault();
 
-    try {
+        console.log("Resetting session and returning to login...");
 
-      const session = getAuthState();
-      console.log("Session retrieved:", session);
+        // 1. Clear the temporary "in-progress" session data
+        localStorage.removeItem("authSession");
+        localStorage.removeItem("authContext_identifier");
 
-      if (!session) {
-        alert("Session expired. Please start over.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const targetUserId = session.userId || auth.getUserId();
-      console.log("Target User ID:", targetUserId);
-
-      let purpose = "signup";
-
-      if (session.step === AuthState.VERIFY_ADD_PHONE) {
-        purpose = "add_phone";
-      }
-      console.log("Purpose decided:", purpose);
-
-      const { data } = await verifyOtp({
-        userId: targetUserId,
-        otp,
-        purpose
+        authContext.clear();
+        setAuthState(AuthState.LOGIN);
+        goToNextAuthStep();
       });
-
-      console.log("VERIFY DATA:", data);
-
-      if (!data.success) {
-        alert(data.message);
-        return;
-      }
-
-      auth.login({
-        token: data.token,
-        userId: data.userId,
-        userData: data.userData
-      });
-
-      console.log("SETTING ACCOUNT_SUCCESS");
-
-      if (data.fullyVerified) {
-        setAuthState(AuthState.ACCOUNT_VERIFIED);
-      } else {
-        setAuthState(AuthState.ACCOUNT_SUCCESS);
-      }
-
-      goToNextAuthStep();
-
-    } catch (err) {
-
-      console.error(err);
-      alert(err.message);
-
-    } finally {
-
-      verifying = false;
     }
-  };
 
-  // --- Resend Logic ---
+    let verifying = false;
 
-  if (resendBtn) {
-    resendBtn.addEventListener("click", async (e) => {
+    form.addEventListener("submit", handleSubmit);
+
+    async function handleSubmit(e) {
       e.preventDefault();
-      if (cooldownActive) {
-        console.log("Cooldown still active. Please wait.");
+      console.log("Submit button clicked!");
+
+      if (verifying) return;
+
+      const otp = input.value.trim();
+
+      if (!otp) {
+        alert("Enter OTP");
         return;
       }
 
-
-      const session = getAuthState();
-      const currentId = identifier || authContext.getIdentifier();
-      const targetUserId = session?.userId || auth.getUserId();
-
-      console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
-
-      if (!currentId || !targetUserId) {
-        return alert("Session data missing. Please try logging in again.");
-      }
+      console.log("OTP retrieved:", otp);
+      verifying = true;
 
       try {
-        // 1. Disable UI
-        cooldownActive = true;
-        resendBtn.style.opacity = "0.5";
-        resendBtn.style.pointerEvents = "none";
-        resendBtn.style.cursor = "not-allowed";
-        resendBtn.textContent = "Sending...";
 
-        let resendPurpose = "signup";
+        const session = getAuthState();
+        console.log("Session retrieved:", session);
 
-        if (session.step === AuthState.VERIFY_ADD_EMAIL) {
-          resendPurpose = "add_email";
-        } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
-          resendPurpose = "add_phone";
+        if (!session) {
+          alert("Session expired. Please start over.");
+          setAuthState(AuthState.LOGIN);
+          goToNextAuthStep();
+          return;
         }
 
-        // 2. Call Backend
-        const res = await fetch("http://127.0.0.1:8000/send-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: targetUserId,
-            identifier: currentId,
-            purpose: resendPurpose
-          })
+        const targetUserId = session.userId || auth.getUserId();
+        console.log("Target User ID:", targetUserId);
+
+        let purpose = "signup";
+
+        if (session.step === AuthState.VERIFY_ADD_PHONE) {
+          purpose = "add_phone";
+        }
+        console.log("Purpose decided:", purpose);
+
+        const { data } = await verifyOtp({
+          userId: targetUserId,
+          otp,
+          purpose
         });
 
-        const data = await res.json();
+        console.log("VERIFY DATA:", data);
 
-        if (data.success) {
-          alert("A new code has been sent!");
-          startResendTimer(60, resendBtn);
-        } else {
-          alert(data.message || "Failed to send code");
-          resetResendBtn(resendBtn);
+        if (!data.success) {
+          alert(data.message);
+          return;
         }
 
+        auth.login({
+          token: data.token,
+          userId: data.userId,
+          userData: data.userData
+        });
+
+        console.log("SETTING ACCOUNT_SUCCESS");
+
+        if (data.fullyVerified) {
+          setAuthState(AuthState.ACCOUNT_VERIFIED);
+        } else {
+          setAuthState(AuthState.ACCOUNT_SUCCESS);
+        }
+
+        goToNextAuthStep();
+
       } catch (err) {
-        console.error("Resend error:", err);
-        resetResendBtn(resendBtn);
+
+        console.error(err);
+        alert(err.message);
+
+      } finally {
+
+        verifying = false;
       }
-    });
-  }
-}
+    };
 
-function startResendTimer(seconds, btn) {
-  let timeLeft = seconds;
-  const originalText = btn.textContent;
+    // --- Resend Logic ---
 
-  const interval = setInterval(() => {
-    timeLeft--;
-    btn.textContent = `Resend code in ${timeLeft}s`;
+    if (resendBtn) {
+      resendBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (cooldownActive) {
+          console.log("Cooldown still active. Please wait.");
+          return;
+        }
 
-    if (timeLeft <= 0) {
-      clearInterval(interval);
-      btn.textContent = originalText;
-      resetResendBtn(btn);
+
+        const session = getAuthState();
+        const currentId = identifier || authContext.getIdentifier();
+        const targetUserId = session?.userId || auth.getUserId();
+
+        console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
+
+        if (!currentId || !targetUserId) {
+          return alert("Session data missing. Please try logging in again.");
+        }
+
+        try {
+          // 1. Disable UI
+          cooldownActive = true;
+          resendBtn.style.opacity = "0.5";
+          resendBtn.style.pointerEvents = "none";
+          resendBtn.style.cursor = "not-allowed";
+          resendBtn.textContent = "Sending...";
+
+          let resendPurpose = "signup";
+
+          if (session.step === AuthState.VERIFY_ADD_EMAIL) {
+            resendPurpose = "add_email";
+          } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
+            resendPurpose = "add_phone";
+          }
+
+          // 2. Call Backend
+          const res = await fetch("http://127.0.0.1:8000/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: targetUserId,
+              identifier: currentId,
+              purpose: resendPurpose
+            })
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert("A new code has been sent!");
+            startResendTimer(60, resendBtn);
+          } else {
+            alert(data.message || "Failed to send code");
+            resetResendBtn(resendBtn);
+          }
+
+        } catch (err) {
+          console.error("Resend error:", err);
+          resetResendBtn(resendBtn);
+        }
+      });
     }
-  }, 1000);
-}
-
-function resetResendBtn(btn) {
-  cooldownActive = false;
-  if (btn) {
-    btn.style.opacity = "1";
-    btn.style.pointerEvents = "auto";
-    btn.style.cursor = "pointer";
   }
-}
 
-initNumberVerify();
+  function startResendTimer(seconds, btn) {
+    let timeLeft = seconds;
+    const originalText = btn.textContent;
+
+    const interval = setInterval(() => {
+      timeLeft--;
+      btn.textContent = `Resend code in ${timeLeft}s`;
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        btn.textContent = originalText;
+        resetResendBtn(btn);
+      }
+    }, 1000);
+  }
+
+  function resetResendBtn(btn) {
+    cooldownActive = false;
+    if (btn) {
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+      btn.style.cursor = "pointer";
+    }
+  }
+
+  initNumberVerify();
+
+});

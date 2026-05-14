@@ -1,44 +1,47 @@
 import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
+import { initAuthGuard } from "./authGuard.js";
 
 console.log("New user login loaded");
 
-function initNewUserLogin() {
+initAuthGuard("login-auth-page");
 
-  const page = document.querySelector(".login-auth-page");
-  if (!page) return;
+document.addEventListener("DOMContentLoaded", () => {
 
-  const identifier = authContext.getIdentifier();
+  function initNewUserLogin() {
 
-  if (!identifier) {
-    window.location.href = "login.html";
-    return;
-  }
+    const page = document.querySelector(".login-auth-page");
+    if (!page) return;
 
-  const userEl = page.querySelector(".js-user-identifier");
-  if (userEl) userEl.textContent = identifier;
+    const identifier = authContext.getIdentifier();
+    if (!identifier) return;
 
-  const typeEl = page.querySelector(".js-identifier-type");
+    const userEl = page.querySelector(".js-user-identifier");
+    if (userEl) userEl.textContent = identifier;
 
-  if (typeEl) {
-    typeEl.textContent =
-      authContext.getAuthType() === "email"
-        ? "email"
-        : "mobile number";
-  }
+    const typeEl = page.querySelector(".js-identifier-type");
 
-  page.querySelector(".primary-button")?.addEventListener("click", () => {
-    setAuthState(AuthState.CREATE_ACCOUNT);
-    goToNextAuthStep();
-  });
+    if (typeEl) {
+      typeEl.textContent =
+        authContext.getAuthType() === "email"
+          ? "email"
+          : "mobile number";
+    }
 
-  page.querySelectorAll(".js-change-user").forEach(el => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("identifier");
-      window.location.href = "login.html";
+    page.querySelector(".primary-button")?.addEventListener("click", () => {
+      setAuthState(AuthState.CREATE_ACCOUNT);
+      goToNextAuthStep();
     });
-  });
-}
 
-initNewUserLogin();
+    page.querySelectorAll(".js-change-user").forEach(el => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("identifier");
+        window.location.href = "login.html";
+      });
+    });
+  }
+
+  initNewUserLogin();
+
+});

@@ -4,80 +4,79 @@ import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
 
 console.log("User Login Loaded");
 
-function initOtpUserLogin() {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const page = document.querySelector(".otp-user-login-page");
-  if (!page) return;
+  function initOtpUserLogin() {
 
-  const form = page.querySelector(".create-form");
-  const input = page.querySelector(".js-otp-user-input");
-  const btn = form?.querySelector("button");
+    const page = document.querySelector(".otp-user-login-page");
+    if (!page) return;
 
-  const identifier = authContext.getIdentifier();
+    const form = page.querySelector(".create-form");
+    const input = page.querySelector(".js-otp-user-input");
+    const btn = form?.querySelector("button");
 
-  if (!identifier) {
-    window.location.replace("login.html");
-    return;
-  }
+    const identifier = authContext.getIdentifier();
 
-  const otpNumber = page.querySelector(".otp-number");
-  if (otpNumber) {
-    otpNumber.textContent = identifier;
-  }
-
-  let verifying = false;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (verifying) return;
-
-    const otp = input.value.trim();
-
-    if (!otp) {
-      alert("Enter OTP");
-      return;
+    const otpNumber = page.querySelector(".otp-number");
+    if (otpNumber) {
+      otpNumber.textContent = identifier;
     }
 
-    verifying = true;
-    if (btn) btn.disabled = true;
+    let verifying = false;
 
-    try {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-      const res = await fetch("http://127.0.0.1:8000/verify-login-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          identifier,
-          otp,
-          purpose: "login"
-        })
-      });
+      if (verifying) return;
 
-      const data = await res.json();
+      const otp = input.value.trim();
 
-      if (!res.ok || data.error) {
-        alert(data.error || "Failed to verify OTP");
+      if (!otp) {
+        alert("Enter OTP");
         return;
       }
 
-      auth.login({
-        token: data.token,
-        userId: data.userId
-      });
+      verifying = true;
+      if (btn) btn.disabled = true;
 
-      setAuthState(AuthState.AUTHENTICATED);
-      goToNextAuthStep();
+      try {
 
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
+        const res = await fetch("http://127.0.0.1:8000/verify-login-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            identifier,
+            otp,
+            purpose: "login"
+          })
+        });
 
-    } finally {
-      verifying = false;
-      if (btn) btn.disabled = false;
-    }
-  });
-}
+        const data = await res.json();
 
-initOtpUserLogin();
+        if (!res.ok || data.error) {
+          alert(data.error || "Failed to verify OTP");
+          return;
+        }
+
+        auth.login({
+          token: data.token,
+          userId: data.userId
+        });
+
+        setAuthState(AuthState.AUTHENTICATED);
+        goToNextAuthStep();
+
+      } catch (err) {
+        console.error(err);
+        alert("Server error");
+
+      } finally {
+        verifying = false;
+        if (btn) btn.disabled = false;
+      }
+    });
+  }
+
+  initOtpUserLogin();
+
+});

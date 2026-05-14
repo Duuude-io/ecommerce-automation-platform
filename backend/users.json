@@ -1024,5 +1024,286 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "0c1cace6-ba20-4254-a971-0c1dfc574888",
+    "email": "uphand77s401@gmail.com",
+    "phone": null,
+    "password": "$2b$12$.tIPA0lpEzXc7UpvSY4osOzSfFpJBkmkKiIksPMx4XPsNi/qO0JPe",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": false,
+    "auth_state": "ADD_PHONE_OPTIONAL"
+  },
+  {
+    "id": "d151b2b1-f6bb-4ad7-8576-24f3bde90d52",
+    "email": "uph432ands401@gmail.com",
+    "phone": "+23408155440055",
+    "password": "$2b$12$SAz9B0c3wTsViuiyEHVIEu9kEnLE13LL7gBVZd5FkfCnfDM8Z/ztu",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "c022a35a-1642-40d8-9420-0438359d4018",
+    "email": "apalara33@gmail.com",
+    "phone": null,
+    "password": "$2b$12$Qk59mLfq4vAbubWt2oztoeof9nD0tfVBd4qR.C7CIwQW1gNb4ui0a",
+    "name": "durfuc",
+    "verified_email": true,
+    "verified_phone": false,
+    "auth_state": "VERIFY_PHONE",
+    "pending_phone": "+23409054432122"
+  },
+  {
+    "id": "9636c353-d666-470c-9a08-8372ae7dd999",
+    "email": "kouuutt@gmail.com",
+    "phone": "08052211583",
+    "password": "$2b$12$5zWyke/EEuM7FvgjCg78E.SX3z6KH3wWhdgA2R3S2mrVtVRIViNYG",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "2c9426b7-2d52-44e1-9658-a37fafe23d09",
+    "email": "nufufni4@gmail.com",
+    "phone": "08033005158",
+    "password": "$2b$12$if02E5OIUc5AJnnHB/aKzOiO.xPM6cvEcaxLZolMLaerrGFss4uiq",
+    "name": "jn2u3u",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "30b24f19-bad4-4c80-a9ad-7e8c4f7fa4e5",
+    "email": "hiuveruhbu@gmail.com",
+    "phone": "08051583090",
+    "password": "$2b$12$9spmVaRsTA19wVIQSv/01.DoPXHyccrlvTMIDHsA8g2QLqWovfvqy",
+    "name": "fyegf",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "edb44baf-da72-43e1-b4d6-a48374512494",
+    "email": "nvuuvnrnu@gmail.com",
+    "phone": "08051583500",
+    "password": "$2b$12$e5iWkXOWfbtbp5uK2G0xsu86Vg0qLo06t64.sBC1ll8NIm/sGJPpK",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "44889d03-8abd-4d83-8989-c8b6924c5201",
+    "email": null,
+    "phone": "080515600",
+    "password": "$2b$12$JeCiNFU6BPEUhLaikyZC3eUBzJg1zu/hPemGbp9j5.fez5CosTRzK",
+    "name": "sfgerher",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "6e8354ce-18f4-4f1f-903e-c89f20100791",
+    "email": "ufgwug@gmail.com",
+    "phone": "08051583700",
+    "password": "$2b$12$ROA0Vq4w6tI4zoGVrd9nke37oQinRRA2Sv6rrBTpkzDhoZYoCWC7O",
+    "name": "uygd2w3udfg",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "67eab5b1-ec70-4cd4-abf5-c724aa16a321",
+    "email": "ghtugfy@gmail.com",
+    "phone": "08051583100",
+    "password": "$2b$12$Pb4bQsI0pa2ctMWr9LfCM.STsu8sAtsNhjjAhSwfTHeK3zPtdWyTi",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "940b796b-8cf0-4fdc-b329-3b9bbe185f28",
+    "email": "uph444ands401@gmail.com",
+    "phone": null,
+    "password": "$2b$12$etOYLQhsDeUTcSZ98h2UpuOdpL8jAoJUo4293klH6gqYPc01b0EXq",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": false,
+    "auth_state": "ADD_PHONE_OPTIONAL"
+  },
+  {
+    "id": "b8f91d6e-89c2-4556-93ce-2ae6b43fd59d",
+    "email": "ghtjwueun@gmail.com",
+    "phone": "08051581212",
+    "password": "$2b$12$c9ZRgoM0GgApcGntyy.X5.u7eY8oCL2wVaAsfvBT.Xzq4Ir9WuInm",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "a9dc0628-ef22-4534-be35-32eb1ee53f8c",
+    "email": "uph1212ands401@gmail.com",
+    "phone": "+23409099887700",
+    "password": "$2b$12$yuIdksNfhNidKgGYObkPUOYh9D8NFNDjh2bu9fQnSOsYc3Ok.enry",
+    "name": "juhef",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "303089ba-56ef-4a49-94b3-a0b6bb147b2a",
+    "email": null,
+    "phone": "08051583150",
+    "password": "$2b$12$GLOE4R.73ovYeXzhd44uj.UZ2yMLIMOPLXgQ2BkkS3APNWdAY510O",
+    "name": "dude",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "b288399a-0bc3-4a97-939b-d0e3c59da445",
+    "email": "jncweiofh@gmail.com",
+    "phone": "08051583250",
+    "password": "$2b$12$gzl3Kf9OdmLmT1DrqybcUOQEEKg5oG7MA0ls5UcxYUVSBJte2te7K",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "d7343013-611e-420b-a417-82efd37a2067",
+    "email": "gyhhti@gmail.com",
+    "phone": "08051583350",
+    "password": "$2b$12$UwbRm2bNzmYX7RxYrKO4ROtNEVK/ACXNteNr1O3/PmjAz8RZ5GUlS",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "7d0f31fe-a4cb-46ef-bf0b-786295aa7f5a",
+    "email": "grthrfn@gmail.com",
+    "phone": "08051583450",
+    "password": "$2b$12$ghLYg5fj..OC1ZEvAt3Aa.0OCy9MT2i8B./XhMCXFW5fzpzy8yGMu",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "0a49ddc3-9e84-45d2-8564-8e7bea8703cb",
+    "email": null,
+    "phone": "08051583650",
+    "password": "$2b$12$act5LrDR0zsfmK8Qas1K6Ohu7/yKFF0Up4Qyl9Sv5Bk23Fvr9ROR2",
+    "name": "dude",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "a1e527eb-1b2b-44c8-902b-43a7ac73da8c",
+    "email": "apa112lara@gmail.com",
+    "phone": "+23409033441100",
+    "password": "$2b$12$xXkWjwEiszwXl/5cnQPIHelny6Td3bpmQaR9Z6tuZZ8axiQhxeTIW",
+    "name": "eudu",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "d278cf01-18d6-4894-93e1-faef8dd3bb2a",
+    "email": "uefh3uei@gmail.com",
+    "phone": "08051583800",
+    "password": "$2b$12$uORwTOUX12ymRJEQCJhA2u6KBpDMgyXM91S0ImzNKtVqzyzbyOIya",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "17129698-f839-4450-8781-90bdb29c0106",
+    "email": "ghtu3iu4u@gmail.com",
+    "phone": "08051581177",
+    "password": "$2b$12$5g8ExwbeeKTeemHP895cdeMK4GHb2MAVJtweS8iqDeLYvI3kIk5V.",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "3b3be8fd-dbdb-4880-8297-c529da1b34e3",
+    "email": "gggfftr@gmail.com",
+    "phone": "08051584500",
+    "password": "$2b$12$QckN98wz0IBGaiSoPZtIO.hMPN88tAPgTbvoKHIVwCD7/Vn7E8utm",
+    "name": "dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "2ce8044c-28d1-40a6-88f3-63ed7bd90af2",
+    "email": null,
+    "phone": "08051555442",
+    "password": "$2b$12$7LuJmgAuGm07TfZAM4ueY.ywXCrnRguiEOdsALopW8QbuWa/jKdR2",
+    "name": "dude",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "1e01bac6-394c-4895-b362-a2d02b288947",
+    "email": null,
+    "phone": "08051566554",
+    "password": "$2b$12$n8TwdDLH6FUpxMJOb/ZwsedmBzgUXSCjyAgB1d4Bi.0v5gRGGyCYS",
+    "name": "Dude",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "f0f0d53f-49a5-417e-a7c3-68083c7850b7",
+    "email": "88uphands401@gmail.com",
+    "phone": null,
+    "password": "$2b$12$bf9Ppm1.axypn2wMz1JPXu0mKru3eR/gZpBqQKhNviRIs3uNmkzyC",
+    "name": "gugr",
+    "verified_email": true,
+    "verified_phone": false,
+    "auth_state": "ADD_PHONE_OPTIONAL"
+  },
+  {
+    "id": "4a93d77b-26fb-40b2-a091-0273f3b11b07",
+    "email": "a4palara@gmail.com",
+    "phone": "08051566655",
+    "password": "$2b$12$T9Xbz6hcCszlxDuTXhSl4O9Cd59Lw//32X1vDQHQ4PjpguwmDaekK",
+    "name": "jnf3in",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "853a5171-87e4-42e2-a365-8cc123f1ea5d",
+    "email": null,
+    "phone": "08051522334",
+    "password": "$2b$12$ZbcYlXSV4nWCdbYaS1Pfq.ltRsHby1jJCK6yzvqFlNREXEInimsPu",
+    "name": "dude",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "32017d50-b294-4b91-b4af-f539b4594e51",
+    "email": "rgehr5434@gmail.com",
+    "phone": "08051544411",
+    "password": "$2b$12$WIvffny041IhuWN8oTjEvuOvvtJzQXKuAig9wBHNTGtAv19X2szzy",
+    "name": "fwege",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

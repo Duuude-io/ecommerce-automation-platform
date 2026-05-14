@@ -2,71 +2,92 @@ import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
 import { resumeAuthFlow } from "./resumeAuth.js";
+import { initAuthGuard } from "./authGuard.js";
 
 console.log("Add Email loaded");
 
-resumeAuthFlow();
+initAuthGuard("add-email-page");
 
-function initAddEmail() {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const page = document.querySelector(".add-email-page");
-  if (!page) return;
+  function initAddEmail() {
 
-  const form = page.querySelector(".js-email-form");
-  const skipLink = page.querySelector(".js-skip-verification");
+    const page = document.querySelector(".add-email-page");
+    if (!page) return;
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    const form = page.querySelector(".js-email-form");
+    const skipLink = page.querySelector(".js-skip-verification");
 
-    const email = page.querySelector(".js-email-input").value.trim();
-    if (!email) return alert("Enter email");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    try {
+      const email = page.querySelector(".js-email-input").value.trim();
+      if (!email) return alert("Enter email");
 
-      const token = auth.getToken();
+      try {
 
-      const addRes = await fetch("http://127.0.0.1:8000/add-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ email })
-      });
+        // 1. CHECK IF PHONE ALREADY EXISTS
+        const checkRes = await fetch("http://127.0.0.1:8000/check-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier: email })
+        });
 
-      const addData = await addRes.json();
-      if (!addRes.ok || addData.error) return alert(addData.error);
+        const checkData = await checkRes.json();
 
-      const otpRes = await fetch("http://127.0.0.1:8000/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: auth.getUserId(),
-          identifier: email,
-          purpose: "add_email"
-        })
-      });
+        if (checkData.userExists) {
+          alert("This email is already linked to an account. Please login or use another.");
 
-      const otpData = await otpRes.json();
-      if (!otpData.success) return alert("Failed OTP");
+          return;
+        }
 
-      authContext.setIdentifier(email);
+        const token = auth.getToken();
 
-      setAuthState(AuthState.VERIFY_ADD_EMAIL, {
-        userId: auth.getUserId()
-      });
+        const addRes = await fetch("http://127.0.0.1:8000/add-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ email })
+        });
 
+        const addData = await addRes.json();
+        if (!addRes.ok || addData.error) return alert(addData.error);
+
+        const otpRes = await fetch("http://127.0.0.1:8000/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: auth.getUserId(),
+            identifier: email,
+            purpose: "add_email"
+          })
+        });
+
+        const otpData = await otpRes.json();
+        if (!otpData.success) return alert("Failed OTP");
+
+        authContext.setIdentifier(email);
+
+        setAuthState(AuthState.VERIFY_ADD_EMAIL, {
+          userId: auth.getUserId()
+        });
+
+        goToNextAuthStep();
+
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    skipLink?.addEventListener("click", (e) => {
+      e.preventDefault();
+      setAuthState(AuthState.AUTHENTICATED);
       goToNextAuthStep();
+    });
+  }
 
-    } catch (err) {
-      console.error(err);
-    }
-  });
+  initAddEmail();
 
-  skipLink?.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = "amazon.html";
-  });
-}
-
-initAddEmail();
+});

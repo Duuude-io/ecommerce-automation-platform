@@ -1,199 +1,198 @@
 import { verifyOtp } from "./otpService.js";
 import { setAuthState, goToNextAuthStep, AuthState, getAuthState } from "./authFlow.js";
 import { auth } from "./authStore.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
 import { initAuthGuard } from "./authGuard.js";
 import { authContext } from "./authContext.js";
 
 console.log("Email verify loaded");
 
-let cooldownActive = false;
-
 initAuthGuard("email-verify-page");
 
-resumeAuthFlow();
+document.addEventListener("DOMContentLoaded", () => {
 
-function initEmailVerify() {
+  let cooldownActive = false;
 
-  const page = document.querySelector(".email-verify-page");
-  if (!page) return;
+  function initEmailVerify() {
 
-  const form = page.querySelector(".js-email-create-form");
-  const input = page.querySelector(".js-otp-input");
+    const page = document.querySelector(".email-verify-page");
+    if (!page) return;
 
-  const identifier = authContext.getIdentifier() || getAuthState()?.identifier || "";
-  const userEl = page.querySelector(".js-user-identifier");
-  const changeLink = page.querySelector(".js-change-user");
-  const resendBtn = page.querySelector(".js-resend-otp");
+    const form = page.querySelector(".js-email-create-form");
+    const input = page.querySelector(".js-otp-input");
 
-  if (userEl) userEl.textContent = identifier;
+    const identifier = authContext.getIdentifier() || getAuthState()?.identifier || "";
+    const userEl = page.querySelector(".js-user-identifier");
+    const changeLink = page.querySelector(".js-change-user");
+    const resendBtn = page.querySelector(".js-resend-otp");
 
-  if (changeLink) {
-    changeLink.addEventListener("click", (e) => {
-      e.preventDefault();
+    if (userEl) userEl.textContent = identifier;
 
-      console.log("Resetting session and returning to login...");
+    if (changeLink) {
+      changeLink.addEventListener("click", (e) => {
+        e.preventDefault();
 
-      // 1. Clear the temporary "in-progress" session data
-      localStorage.removeItem("authSession");
-      localStorage.removeItem("authContext_identifier");
-      window.location.href = "login.html";
-    });
-  }
+        console.log("Resetting session and returning to login...");
 
-  let verifying = false;
+        // 1. Clear the temporary "in-progress" session data
+        localStorage.removeItem("authSession");
+        localStorage.removeItem("authContext_identifier");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (verifying) return;
-
-    const otp = input.value.trim();
-
-    if (!otp) {
-      alert("Enter OTP");
-      return;
+        authContext.clear();
+        setAuthState(AuthState.LOGIN);
+        goToNextAuthStep();
+      });
     }
 
-    verifying = true;
+    let verifying = false;
 
-    try {
-      const session = getAuthState();
-
-      console.log("Current Session Object:", session);
-      if (!session) {
-        alert("Session expired. Please start over.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const userId = session.userId;
-
-      let purpose = "signup";
-
-      if (session.step === AuthState.VERIFY_ADD_EMAIL) {
-        purpose = "add_email";
-      } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
-        purpose = "add_phone";
-      }
-
-      const { data } = await verifyOtp({
-        userId,
-        otp,
-        purpose
-      });
-
-      console.log("VERIFY DATA:", data)
-
-      if (!data.success) {
-        alert(data.message || "Invalid OTP");
-        return;
-      }
-
-      console.log("OTP RESPONSE:", data);
-
-      auth.login({
-        token: data.token,
-        userId: data.userId,
-        userData: data.userData
-      });
-
-      if (data.fullyVerified) {
-        setAuthState(AuthState.ACCOUNT_VERIFIED);
-      } else {
-        setAuthState(AuthState.ACCOUNT_SUCCESS);
-      }
-
-      goToNextAuthStep();
-
-    } catch (err) {
-      console.error("Verification Error:", err);
-      alert(err.message || "Server error");
-    } finally {
-      verifying = false;
-    }
-  });
-
-  // --- Resend Logic ---
-
-  if (resendBtn) {
-    resendBtn.addEventListener("click", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (cooldownActive) {
-        console.log("Cooldown still active. Please wait.");
+
+      if (verifying) return;
+
+      const otp = input.value.trim();
+
+      if (!otp) {
+        alert("Enter OTP");
         return;
       }
 
-
-      const session = getAuthState();
-      const currentId = identifier || authContext.getIdentifier();
-      const targetUserId = session?.userId || auth.getUserId();
-
-      console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
-
-      if (!currentId || !targetUserId) {
-        return alert("Session data missing. Please try logging in again.");
-      }
+      verifying = true;
 
       try {
-        // 1. Disable UI
-        cooldownActive = true;
-        resendBtn.style.opacity = "0.5";
-        resendBtn.style.pointerEvents = "none";
-        resendBtn.style.cursor = "not-allowed";
+        const session = getAuthState();
 
-        // 2. Call Backend
-        const res = await fetch("http://127.0.0.1:8000/send-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: targetUserId,
-            identifier: currentId,
-            purpose: session.step.includes("email") ? "add_email" : "add_phone"
-          })
-        });
+        console.log("Current Session Object:", session);
 
-        const data = await res.json();
+        const userId = session.userId;
 
-        if (data.success) {
-          alert("A new code has been sent!");
-          startResendTimer(60, resendBtn);
-        } else {
-          alert(data.message || "Failed to send code");
-          resetResendBtn(resendBtn);
+        let purpose = "signup";
+
+        if (session.step === AuthState.VERIFY_ADD_EMAIL) {
+          purpose = "add_email";
+        } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
+          purpose = "add_phone";
         }
 
+        const { data } = await verifyOtp({
+          userId,
+          otp,
+          purpose
+        });
+
+        console.log("VERIFY DATA:", data)
+
+        if (!data.success) {
+          alert(data.message || "Invalid OTP");
+          return;
+        }
+
+        console.log("OTP RESPONSE:", data);
+
+        auth.login({
+          token: data.token,
+          userId: data.userId,
+          userData: data.userData
+        });
+
+        if (data.fullyVerified) {
+          setAuthState(AuthState.ACCOUNT_VERIFIED);
+        } else {
+          setAuthState(AuthState.ACCOUNT_SUCCESS);
+        }
+
+        goToNextAuthStep();
+
       } catch (err) {
-        console.error("Resend error:", err);
-        resetResendBtn(resendBtn);
+        console.error("Verification Error:", err);
+        alert(err.message || "Server error");
+      } finally {
+        verifying = false;
       }
     });
-  }
 
-  function startResendTimer(seconds, btn) {
-    let timeLeft = seconds;
-    const originalText = btn.textContent;
+    // --- Resend Logic ---
 
-    const interval = setInterval(() => {
-      timeLeft--;
-      btn.textContent = `Resend code in ${timeLeft}s`;
+    if (resendBtn) {
+      resendBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (cooldownActive) {
+          console.log("Cooldown still active. Please wait.");
+          return;
+        }
 
-      if (timeLeft <= 0) {
-        clearInterval(interval);
-        btn.textContent = originalText;
-        resetResendBtn(btn);
+
+        const session = getAuthState();
+        const currentId = identifier || authContext.getIdentifier();
+        const targetUserId = session?.userId || auth.getUserId();
+
+        console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
+
+        if (!currentId || !targetUserId) {
+          return alert("Session data missing. Please try logging in again.");
+        }
+
+        try {
+          // 1. Disable UI
+          cooldownActive = true;
+          resendBtn.style.opacity = "0.5";
+          resendBtn.style.pointerEvents = "none";
+          resendBtn.style.cursor = "not-allowed";
+
+          // 2. Call Backend
+          const res = await fetch("http://127.0.0.1:8000/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: targetUserId,
+              identifier: currentId,
+              purpose: session.step.includes("email") ? "add_email" : "add_phone"
+            })
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert("A new code has been sent!");
+            startResendTimer(60, resendBtn);
+          } else {
+            alert(data.message || "Failed to send code");
+            resetResendBtn(resendBtn);
+          }
+
+        } catch (err) {
+          console.error("Resend error:", err);
+          resetResendBtn(resendBtn);
+        }
+      });
+    }
+
+    function startResendTimer(seconds, btn) {
+      let timeLeft = seconds;
+      const originalText = btn.textContent;
+
+      const interval = setInterval(() => {
+        timeLeft--;
+        btn.textContent = `Resend code in ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          btn.textContent = originalText;
+          resetResendBtn(btn);
+        }
+      }, 1000);
+    }
+
+    function resetResendBtn(btn) {
+      cooldownActive = false;
+      if (btn) {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+        btn.style.cursor = "pointer";
       }
-    }, 1000);
-  }
-
-  function resetResendBtn(btn) {
-    cooldownActive = false;
-    if (btn) {
-      btn.style.opacity = "1";
-      btn.style.pointerEvents = "auto";
-      btn.style.cursor = "pointer";
     }
   }
-}
 
-initEmailVerify();
+  initEmailVerify();
+
+});

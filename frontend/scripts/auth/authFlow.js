@@ -76,7 +76,14 @@ export function clearAuthState() {
   localStorage.removeItem(AUTH_SESSION_KEY);
 }
 
+let navigating = false;
+
 export function goToNextAuthStep() {
+
+  if (navigating) {
+    console.log("Navigation already in progress");
+    return;
+  }
 
   const session = getAuthState();
   if (!session || !session.step) return;
@@ -86,9 +93,13 @@ export function goToNextAuthStep() {
 
   if (!target) return;
 
+  console.log("CURRENT AUTH STEP:", session.step);
+  console.log("ROUTE FOUND:", routes[session.step]);
+
   const current = window.location.pathname.split("/").pop();
 
   if (current !== target) {
+    navigating = true;
     window.location.replace(target);
   }
 }

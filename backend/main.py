@@ -133,10 +133,6 @@ def is_identifier_taken(identifier: str, users, signup_sessions, exclude_user_id
 
 
 def assert_identifier_available(identifier: str, user_id: str | None = None):
-    """
-    Ensures an email or phone is NOT used anywhere
-    except by the current user.
-    """
 
     identifier = normalize_identifier(identifier)
 
@@ -160,13 +156,6 @@ def signup(data: SignupRequest):
     identifier = normalize_identifier(data.identifier)
 
     users = load_users()
-
-    # block existing users
-
-    try:
-        identifier = assert_identifier_available(data.identifier)
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
 
     for sid, s in signup_sessions.items():
         if s.get("email") == identifier or s.get("phone") == identifier:
@@ -205,7 +194,8 @@ def signup(data: SignupRequest):
 
     return {
         "success": True,
-        "userId": user_id
+        "userId": user_id,
+        "nextStep": auth_state
     }
 
 
@@ -228,7 +218,10 @@ def login(data: LoginRequest):
         return {"error": "User not found"}
 
     if not verify_password(data.password, user["password"]):
-        return {"error": "Invalid password"}
+        return {
+            "success": False,
+            "message": "Invalid password"
+        }
 
     if not user.get("verified_email") and not user.get("verified_phone"):
         return {
@@ -239,6 +232,7 @@ def login(data: LoginRequest):
     token = create_token(user["id"])
 
     return {
+        "success": True,
         "message": "Login successful",
         "token": token,
         "userId": user["id"],
@@ -549,7 +543,7 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
             current_user["id"]
         )
     except ValueError as e:
-        return {"error": str(e)}
+        return {"error": "Phone already used"}
 
     user = next((u for u in users if u["id"] == current_user["id"]), None)
 
@@ -582,7 +576,7 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
             current_user["id"]
         )
     except ValueError as e:
-        return {"error": str(e)}
+        return {"error": "Email already used"}
 
     user = next((u for u in users if u["id"] == current_user["id"]), None)
 
