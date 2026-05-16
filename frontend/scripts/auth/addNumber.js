@@ -1,14 +1,14 @@
 import { auth } from "./authStore.js";
-import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { setAuthState, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
-import { initAuthGuard } from "./authGuard.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Add Number loaded");
 
-initAuthGuard("add-number-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("add-number-page");
 
   function initAddNumber() {
 
@@ -91,12 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // 4. UPDATE STATE
         authContext.setIdentifier(fullPhone);
 
-        // 5. REDIRECT
         setAuthState(AuthState.VERIFY_ADD_PHONE);
-        goToNextAuthStep();
+        navigateAuth();
 
       } catch (err) {
         console.error(err);
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
       skipLink.addEventListener("click", (e) => {
         e.preventDefault();
         setAuthState(AuthState.AUTHENTICATED);
-        goToNextAuthStep();
+        navigateAuth();
       });
     }
   }

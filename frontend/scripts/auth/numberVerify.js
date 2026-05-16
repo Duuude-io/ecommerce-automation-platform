@@ -2,16 +2,16 @@ let cooldownActive = false;
 
 import { verifyOtp } from "./otpService.js";
 import { auth } from "./authStore.js";
-import { setAuthState, goToNextAuthStep, AuthState, getAuthState } from "./authFlow.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
-import { initAuthGuard } from "./authGuard.js";
+import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Number verify loaded");
 
-initAuthGuard("number-verify-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("number-verify-page");
 
   function initNumberVerify() {
 
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         authContext.clear();
         setAuthState(AuthState.LOGIN);
-        goToNextAuthStep();
+        navigateAuth();
       });
     }
 
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!session) {
           alert("Session expired. Please start over.");
           setAuthState(AuthState.LOGIN);
-          goToNextAuthStep();
           return;
         }
 
@@ -116,8 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           setAuthState(AuthState.ACCOUNT_SUCCESS);
         }
-
-        goToNextAuthStep();
+        navigateAuth();
 
       } catch (err) {
 

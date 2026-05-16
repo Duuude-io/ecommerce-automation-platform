@@ -571,3 +571,7 @@
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+body:not(.auth-ready) {
+  visibility: hidden;
+}

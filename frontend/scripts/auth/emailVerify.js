@@ -1,14 +1,15 @@
 import { verifyOtp } from "./otpService.js";
-import { setAuthState, goToNextAuthStep, AuthState, getAuthState } from "./authFlow.js";
+import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
 import { auth } from "./authStore.js";
-import { initAuthGuard } from "./authGuard.js";
 import { authContext } from "./authContext.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Email verify loaded");
 
-initAuthGuard("email-verify-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("email-verify-page");
 
   let cooldownActive = false;
 
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         authContext.clear();
         setAuthState(AuthState.LOGIN);
-        goToNextAuthStep();
+        navigateAuth();
       });
     }
 
@@ -100,8 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           setAuthState(AuthState.ACCOUNT_SUCCESS);
         }
-
-        goToNextAuthStep();
+        navigateAuth();
 
       } catch (err) {
         console.error("Verification Error:", err);

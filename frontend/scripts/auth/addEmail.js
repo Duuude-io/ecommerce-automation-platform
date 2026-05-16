@@ -1,14 +1,14 @@
-import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { setAuthState, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
-import { initAuthGuard } from "./authGuard.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Add Email loaded");
 
-initAuthGuard("add-email-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("add-email-page");
 
   function initAddEmail() {
 
@@ -73,8 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setAuthState(AuthState.VERIFY_ADD_EMAIL, {
           userId: auth.getUserId()
         });
-
-        goToNextAuthStep();
+        navigateAuth();
 
       } catch (err) {
         console.error(err);
@@ -83,8 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     skipLink?.addEventListener("click", (e) => {
       e.preventDefault();
+
       setAuthState(AuthState.AUTHENTICATED);
-      goToNextAuthStep();
+      navigateAuth();
     });
   }
 

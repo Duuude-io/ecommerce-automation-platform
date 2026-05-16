@@ -1,12 +1,13 @@
-import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { setAuthState, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
-import { initAuthGuard } from "./authGuard.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("New user login loaded");
 
-initAuthGuard("login-auth-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("login-auth-page");
 
   function initNewUserLogin() {
 
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     page.querySelector(".primary-button")?.addEventListener("click", () => {
       setAuthState(AuthState.CREATE_ACCOUNT);
-      goToNextAuthStep();
+      navigateAuth();
     });
 
     page.querySelectorAll(".js-change-user").forEach(el => {

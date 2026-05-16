@@ -264,8 +264,14 @@ def check_user(data: IdentifierRequest):
         None
     )
 
+    if user:
+        return {
+            "userExists": True,
+            "userId": user["id"]
+        }
+
     return {
-        "userExists": user is not None
+        "userExists": False
     }
 
 

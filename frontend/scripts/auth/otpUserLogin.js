@@ -1,10 +1,14 @@
 import { auth } from "./authStore.js";
 import { authContext } from "./authContext.js";
-import { setAuthState, goToNextAuthStep, AuthState } from "./authFlow.js";
+import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("User Login Loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("otp-user-login-page");
 
   function initOtpUserLogin() {
 
@@ -41,11 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
+        const session = getAuthState();
+
         const res = await fetch("http://127.0.0.1:8000/verify-login-otp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            identifier,
+            userId: session.userId,
             otp,
             purpose: "login"
           })
@@ -63,8 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
           userId: data.userId
         });
 
-        setAuthState(AuthState.AUTHENTICATED);
-        goToNextAuthStep();
+        setAuthState(AuthState.AUTHENTICATED, {
+          userId: data.userId
+        });
+        navigateAuth();
 
       } catch (err) {
         console.error(err);

@@ -55,33 +55,41 @@ export const AuthState = {
 const AUTH_SESSION_KEY = "authSession";
 
 export function setAuthState(step, extra = {}) {
+  const current = getAuthState();
 
   const session = {
     step,
-    ...extra
+    ...extra,
   };
 
-  localStorage.setItem(
+  sessionStorage.setItem(
     AUTH_SESSION_KEY,
     JSON.stringify(session)
   );
+
+  console.log("AUTH STATE →", step);
 }
 
 export function getAuthState() {
-  const raw = localStorage.getItem(AUTH_SESSION_KEY);
+  const raw = sessionStorage.getItem(AUTH_SESSION_KEY);
   return raw ? JSON.parse(raw) : null;
 }
 
 export function clearAuthState() {
-  localStorage.removeItem(AUTH_SESSION_KEY);
+  sessionStorage.removeItem(AUTH_SESSION_KEY);
 }
 
-let navigating = false;
+/*
+
+const NAV_LOCK_KEY = "authNavigating";
 
 export function goToNextAuthStep() {
 
-  if (navigating) {
-    console.log("Navigation already in progress");
+  const alreadyNavigating =
+    sessionStorage.getItem(NAV_LOCK_KEY);
+
+  if (alreadyNavigating) {
+    console.log("Navigation blocked (already navigating)");
     return;
   }
 
@@ -90,7 +98,6 @@ export function goToNextAuthStep() {
 
   const routes = getAuthRoutes();
   const target = routes[session.step];
-
   if (!target) return;
 
   console.log("CURRENT AUTH STEP:", session.step);
@@ -98,8 +105,10 @@ export function goToNextAuthStep() {
 
   const current = window.location.pathname.split("/").pop();
 
-  if (current !== target) {
-    navigating = true;
-    window.location.replace(target);
-  }
+  if (current === target) return;
+  console.log("Navigating →", target);
+  sessionStorage.setItem(NAV_LOCK_KEY, "true");
+  window.location.replace(target);
+
 }
+*/

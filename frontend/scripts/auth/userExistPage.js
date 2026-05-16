@@ -1,14 +1,18 @@
+console.log("PAGE:", window.location.pathname);
+console.log("SESSION:", getAuthState());
+
 import { verifyOtp } from "./otpService.js";
-import { setAuthState, goToNextAuthStep, AuthState, clearAuthState } from "./authFlow.js";
+import { setAuthState, AuthState, clearAuthState, getAuthState } from "./authFlow.js";
 import { auth } from "./authStore.js";
 import { authContext } from "./authContext.js";
-import { initAuthGuard } from "./authGuard.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("User Exist Page loaded");
 
-initAuthGuard("user-exist-page");
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("user-exist-page");
 
   function initUserExistPage() {
 
@@ -33,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       authContext.clear();
       setAuthState(AuthState.LOGIN);
-      window.location.replace("login.html");
+      navigateAuth();
     });
 
     const form = page.querySelector(".create-form");
@@ -77,11 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("SETTING AUTHENTICATED");
 
-        setAuthState(AuthState.AUTHENTICATED);
+        setAuthState(AuthState.AUTHENTICATED, {
+          userId: data.userId
+        });
+        navigateAuth();
 
         console.log("NEW SESSION:", localStorage.getItem("authSession"));
-        goToNextAuthStep();
-        console.log("AFTER NEXT STEP");
 
       } catch (err) {
         console.error(err);
@@ -93,20 +98,29 @@ document.addEventListener("DOMContentLoaded", () => {
     otpLoginLink.addEventListener("click", async (e) => {
       e.preventDefault();
 
-      await fetch(
-        "http://127.0.0.1:8000/send-otp",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            identifier,
-            purpose: "login"
-          })
-        }
-      );
+      const session = getAuthState();
 
-      setAuthState(AuthState.OTP_LOGIN);
-      goToNextAuthStep();
+      if (!session?.userId) {
+        alert("Session expired. Please login again.");
+        window.location.replace("login.html");
+        return;
+      }
+
+      await fetch("http://127.0.0.1:8000/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: session.userId,
+          identifier,
+          purpose: "login"
+        })
+      });
+
+      setAuthState(AuthState.OTP_LOGIN, {
+        userId: session.userId
+      });
+      navigateAuth();
+
     });
   }
 

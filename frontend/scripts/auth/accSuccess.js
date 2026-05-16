@@ -1,14 +1,16 @@
 import { initAuthGuard } from "./authGuard.js";
 import { resumeAuthFlow } from "./resumeAuth.js";
-import { setAuthState, AuthState, goToNextAuthStep } from "./authFlow.js";
+import { setAuthState, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
-
-initAuthGuard("acc-success-page");
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Acc Success loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter("acc-success-page");
 
   function initAccSuccess() {
 
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (user && user.fullyVerified) {
         console.log("User is fully verified. Sending home.");
         setAuthState(AuthState.AUTHENTICATED);
-        goToNextAuthStep();
+        navigateAuth();
         return;
       }
 
@@ -48,7 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         setAuthState(AuthState.ADD_EMAIL);
       }
-      goToNextAuthStep();
+
+      navigateAuth();
+
     });
   }
 

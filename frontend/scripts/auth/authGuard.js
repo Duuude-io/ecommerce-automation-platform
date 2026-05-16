@@ -1,5 +1,4 @@
 import { auth } from "./authStore.js";
-import { getAuthState, getAuthRoutes } from "./authFlow.js";
 
 console.trace("AuthGuard triggered");
 
@@ -7,41 +6,20 @@ export function initAuthGuard(pageName) {
 
   console.log("AuthGuard:", pageName);
 
-  const session = getAuthState();
-  const routes = getAuthRoutes();
+  // Hide page immediately
+  document.body.classList.remove("auth-ready");
 
-  const currentFile =
-    window.location.pathname.split("/").pop() || "amazon.html";
+  const loggedIn = auth.isLoggedIn();
 
-  if (pageName === "amazon-page") {
+  const protectedPages = [
+    "app-page"
+  ];
 
-    if (!auth.isLoggedIn()) {
-      console.log("Not logged in → redirect login");
-      window.location.replace("login.html");
-      return;
-    }
-
+  if (protectedPages.includes(pageName) && !loggedIn) {
+    console.log("Blocked — not logged in");
     document.body.classList.add("auth-ready");
-    console.log("Amazon access granted");
     return;
   }
 
-  if (
-    session &&
-    session.step &&
-    session.step !== "authenticated"
-  ) {
-    const expectedFile = routes[session.step];
-
-    if (expectedFile && currentFile !== expectedFile) {
-      console.log(
-        `AuthGuard redirecting: ${currentFile} → ${expectedFile}`
-      );
-      window.location.replace(expectedFile);
-      return;
-    }
-  }
-
-  document.body.classList.add('auth-ready');
   console.log("AuthGuard OK - Page Revealed");
 }

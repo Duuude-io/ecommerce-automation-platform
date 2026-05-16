@@ -1,13 +1,14 @@
-import { setAuthState, goToNextAuthStep, AuthState, clearAuthState } from "./authFlow.js";
+import { setAuthState, AuthState, getAuthRoutes } from "./authFlow.js";
 import { authContext } from "./authContext.js";
-import { initAuthGuard } from "./authGuard.js";
 import { resumeAuthFlow } from "./resumeAuth.js";
+import { initAuthRouter } from "./authRouter.js";
+import { navigateAuth } from "./authNavigator.js";
 
 console.log("Login Page loaded");
 
 resumeAuthFlow();
 
-initAuthGuard("login-page");
+initAuthRouter("login-page");
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -27,28 +28,40 @@ document.addEventListener("DOMContentLoaded", () => {
         .value.trim()
         .toLowerCase();
 
-      if (!identifier) return alert("Enter email or phone");
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/check-user",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identifier })
-        }
-      );
-
-      const data = await response.json();
-
-      authContext.setIdentifier(identifier);
-
-      if (data.userExists) {
-        setAuthState(AuthState.USER_EXISTS);
-      } else {
-        setAuthState(AuthState.NEW_USER_AUTH);
+      if (!identifier) {
+        alert("Enter email or phone");
+        return;
       }
 
-      goToNextAuthStep();
+      try {
+
+        const response = await fetch(
+          "http://127.0.0.1:8000/check-user",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ identifier })
+          }
+        );
+
+        const data = await response.json();
+        const routes = getAuthRoutes();
+        authContext.setIdentifier(identifier);
+
+        if (data.userExists) {
+          setAuthState(AuthState.USER_EXISTS, {
+            userId: data.userId
+          });
+
+        } else {
+          setAuthState(AuthState.NEW_USER_AUTH);
+        }
+        navigateAuth();
+
+      } catch (apiError) {
+        console.error("Network communication error:", apiError);
+        alert("Something went wrong connecting to the auth server.");
+      }
     });
   }
 

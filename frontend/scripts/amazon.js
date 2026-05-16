@@ -5,6 +5,7 @@ import { renderAccountHeader } from './shared/accountHeader.js';
 import { initAuthGuard } from './auth/authGuard.js';
 
 initAuthGuard("app-page");
+
 renderAccountHeader();
 
 loadProducts(renderProductsGrid);

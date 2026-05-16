@@ -1,20 +1,20 @@
 import { authContext } from "./authContext.js";
-import { setAuthState, goToNextAuthStep, getAuthState, AuthState } from "./authFlow.js";
-import { initAuthGuard } from "./authGuard.js";
+import { setAuthState, getAuthState, AuthState } from "./authFlow.js";
+import { navigateAuth } from "./authNavigator.js";
+import { initAuthRouter } from "./authRouter.js";
 import { auth } from "./authStore.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
 
 console.log("Create Account loaded");
 
 const CURRENT_PAGE_ID = "create-account-page";
 
-const session = getAuthState();
-
-console.log("Current Page ID:", CURRENT_PAGE_ID, "Stored Session Step:", session?.step);
-
-initAuthGuard(CURRENT_PAGE_ID);
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  initAuthRouter(CURRENT_PAGE_ID);
+
+  const session = getAuthState();
+
+  console.log("Current Page ID:", CURRENT_PAGE_ID, "Stored Session Step:", session?.step);
 
   function initUserCreateAcct() {
 
@@ -94,14 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (signupData.resume) {
-
           setAuthState(signupData.nextStep, {
             identifier,
             authType: signupData.authType,
             userId: signupData.userId
           });
-
-          goToNextAuthStep();
+          navigateAuth();
           return;
         }
 
@@ -116,8 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
           authType,
           userId: signupData.userId
         });
-
-        goToNextAuthStep();
+        navigateAuth();
 
       } catch (error) {
         console.error(error);
