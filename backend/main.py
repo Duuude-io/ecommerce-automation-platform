@@ -18,6 +18,9 @@ from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, Identi
 from auth import verify_password, create_token, hash_password
 from datetime import datetime
 from auth import get_current_user
+from automation.dispatcher import dispatch
+from automation.events import Events
+import automation.handlers
 
 app = FastAPI()
 
@@ -191,6 +194,13 @@ def signup(data: SignupRequest):
     }
 
     generate_and_save_otp(user_id, identifier, purpose)
+
+    dispatch(Events.USER_CREATED, {
+        "userId": user_id,
+        "email": identifier if "@" in identifier else None,
+        "phone": identifier if "@" not in identifier else None,
+        "name": data.name
+    })
 
     return {
         "success": True,
@@ -661,6 +671,11 @@ def create_order(order: Order, current_user=Depends(get_current_user)):
     orders.append(new_order)
     save_orders(orders)
 
+    dispatch(Events.ORDER_CREATED, {
+        "orderId": new_order["id"],
+        "userId": user_id
+    })
+
     return {
         "message": "Order created successfully!",
         "orderId": new_order["id"]
@@ -691,6 +706,11 @@ def cancel_order(order_id: str, current_user=Depends(get_current_user)):
     ]
 
     save_orders(updated_orders)
+
+    dispatch(Events.ORDER_CANCELLED, {
+        "orderId": order_id,
+        "userId": current_user["id"]
+    })
 
     return {"message": "Order cancelled successfully"}
 
