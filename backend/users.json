@@ -28,5 +28,25 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "40d0dd8f-8291-41be-aa9f-b9d97cba2b77",
+    "email": "uphan445ds401@gmail.com",
+    "phone": null,
+    "password": "$2b$12$GMikD2/ckIJiGm7ZgvTj2ui7YOUxFGEGjMjGvm4D5lNTOFweoX0qq",
+    "name": "kjhgfghjk",
+    "verified_email": true,
+    "verified_phone": false,
+    "auth_state": "ADD_PHONE_OPTIONAL"
+  },
+  {
+    "id": "11a9868d-6175-4c12-8a66-66a436ff4836",
+    "email": "up22111hands401@gmail.com",
+    "phone": "+23409099988855",
+    "password": "$2b$12$fBit6sqHxZoik8H3PzbrGOKZ8Oviqa8EvDq7ytrFWO1j.L3Slpm.K",
+    "name": "kjhgfdfghjkl",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

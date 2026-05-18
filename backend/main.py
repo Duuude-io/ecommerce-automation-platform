@@ -3,8 +3,6 @@ from uuid import uuid4
 from fastapi import FastAPI, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import random
-from sms_service import send_sms_otp
-from email_service import send_email_otp
 import time
 from auth_states import AuthState
 from fastapi import HTTPException
