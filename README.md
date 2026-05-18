@@ -1,65 +1,92 @@
-# ecommerce-automation-platform
-Event-driven e-commerce system with authentication and automation workflows.
+## E-Commerce Automation Platform (Amazon Clone)
 
-## Overview
-This project is a full-stack e-commerce system built with a focus on automation and scalable backend architecture.
+A full-stack e-commerce system that simulates real-world shopping flows including authentication, OTP verification, cart management, and order processing.
 
-Instead of placing logic directly inside API routes, the system uses an **event-driven automation engine** that triggers workflows automatically.
+This project was built to practice backend architecture, authentication flows, and frontend-backend integration using FastAPI and JavaScript.
 
----
+🚀 Features
 
-## Features
+## Authentication System
+Multi-step signup flow
+OTP verification (email + phone simulation)
+Session-based authentication handling
+Resume signup support
 
-- Multi-step authentication system
-- OTP verification (Email & Phone)
-- Resume signup sessions
-- Event dispatcher automation system
-- Order processing automation
-- User onboarding workflows
+## E-Commerce System
+Product listing system
+Add to cart / remove items
+Cart persistence logic
+Checkout flow simulation
 
----
+## Order System
+Order creation endpoint
+Order history tracking
+Order summary rendering
 
-## Architecture
+## Backend Architecture
+-FastAPI REST API
+-Event-driven structure (internal automation system)
+-JSON-based temporary storage (dev phase)
 
-User → Frontend → FastAPI Backend → Event Dispatcher → Automation Handlers
-
----
-
-## Automation System
-
-The application emits events such as:
-
-- USER_CREATED
-- ORDER_CREATED
-- ORDER_CANCELLED
-
-Automation handlers listen to these events and perform background actions like:
-
-- Sending welcome emails
-- Sending SMS notifications
-- Logging analytics
-- Triggering workflows
-
----
+## Architecture Overview
+Frontend (JavaScript UI)
+        ↓
+FastAPI Backend
+        ↓
+Auth System → Cart System → Order System
+        ↓
+Event Dispatcher (Automation Layer)
 
 ## Tech Stack
+-FastAPI (Python)
+-JavaScript (Frontend logic)
+-HTML / CSS
+-SON (temporary storage)
+-Event-driven backend design
 
-- FastAPI (Python)
-- JavaScript
-- HTML/CSS
-- REST APIs
-- Event-Driven Architecture
+## How to Run
+Backend:
 
----
+cd backend
+venv\Scripts\activate
+uvicorn main:app --reload
+
+Server runs at:
+http://127.0.0.1:8000
+
+Frontend
+Open:
+amazon.html
+or use VS Code Live Server
 
 ## Project Status
 
-🚧 Active Development  
-Currently expanding automation workflows and system scalability.
+* In active development
 
----
+Core systems implemented:
+Authentication flow
+Cart system
+Order processing
+
+## Future improvements:
+
+-Real database integration
+-Payment gateway
+-Email/SMS services (production)
+
+
+## Purpose of This Project
+
+This project demonstrates:
+
+--full-stack system design thinking
+--backend architecture structuring
+--frontend-backend communication
+--event-driven system design concepts
+
 
 ## Author
 
-Oladokun Adeyemi
-Automation & Backend Engineer.
+Built by a developer focused on building production-level backend systems and scalable e-commerce architecture.
+
+## Duude_io.
