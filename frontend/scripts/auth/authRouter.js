@@ -8,17 +8,9 @@ export function initAuthRouter(pageName) {
 
   const currentFile = window.location.pathname.split("/").pop();
 
-  // No session → only allow login page
-  if (!session?.step) {
-    const authPages = Object.values(routes);
-
-    if (authPages.includes(currentFile) && currentFile !== routes.login) {
-      window.location.replace(routes.login);
-      return;
-    }
-
-    document.body.classList.add("auth-ready");
-    return;
+  // If no session → allow only login page
+  if (!session?.step && currentFile !== routes.login) {
+    console.log("No session — waiting for navigator");
   }
 
   document.body.classList.add("auth-ready");

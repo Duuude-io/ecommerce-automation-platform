@@ -1,5 +1,6 @@
 from .dispatcher import register
 from .events import Events
+import time
 
 
 def welcome_user(data):
@@ -8,6 +9,9 @@ def welcome_user(data):
 
 
 def send_welcome_email(data):
+    print("📧 Preparing email...")
+
+    time.sleep(5)
 
     if data.get("email"):
         print(f"📧 Sending welcome EMAIL to {data['email']}")

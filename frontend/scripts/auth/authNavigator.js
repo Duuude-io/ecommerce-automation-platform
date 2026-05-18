@@ -1,9 +1,10 @@
 import { getAuthState, getAuthRoutes } from "./authFlow.js";
 
-let navigating = false;
+const NAV_KEY = "authNavigating";
 
 export function navigateAuth() {
-  if (navigating) return;
+
+  if (sessionStorage.getItem(NAV_KEY)) return;
 
   const session = getAuthState();
   if (!session?.step) return;
@@ -11,7 +12,8 @@ export function navigateAuth() {
   const routes = getAuthRoutes();
   const target = routes[session.step];
 
-  const current = window.location.pathname.split("/").pop();
+  const current =
+    window.location.pathname.split("/").pop();
 
   console.log("STEP:", session.step);
   console.log("TARGET:", target);
@@ -19,13 +21,13 @@ export function navigateAuth() {
 
   if (!target || current === target) return;
 
-  navigating = true;
+  sessionStorage.setItem(NAV_KEY, "true");
 
-  console.log("NAVIGATOR →", current, "→", target);
+  console.log("NAVIGATOR:", current, "→", target);
 
   window.location.replace(target);
 }
 
-window.addEventListener("beforeunload", () => {
-  navigating = false;
+window.addEventListener("pageshow", () => {
+  sessionStorage.removeItem(NAV_KEY);
 });

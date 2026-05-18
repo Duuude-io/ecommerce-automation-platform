@@ -195,13 +195,6 @@ def signup(data: SignupRequest):
 
     generate_and_save_otp(user_id, identifier, purpose)
 
-    dispatch(Events.USER_CREATED, {
-        "userId": user_id,
-        "email": identifier if "@" in identifier else None,
-        "phone": identifier if "@" not in identifier else None,
-        "name": data.name
-    })
-
     return {
         "success": True,
         "userId": user_id,
@@ -374,7 +367,7 @@ def verify_otp(data: VerifyOTPRequest):
         signup = signup_sessions.get(user_id)
 
         if not signup:
-            return {"success": False, "message": "Session expired"}
+            return {"success": False, "message": "Session expired, login instead"}
 
         signup["auth_state"] = (
             AuthState.ADD_PHONE_OPTIONAL.value
@@ -397,7 +390,15 @@ def verify_otp(data: VerifyOTPRequest):
             return {"success": False, "message": "Duplicate user id"}
 
         users.append(new_user)
+
         save_users(users)
+
+        dispatch(Events.USER_CREATED, {
+            "userId": user_id,
+            "email": signup.get("email"),
+            "phone": signup.get("phone"),
+            "name": signup.get("name")
+        })
 
         signup_sessions.pop(user_id, None)
 
