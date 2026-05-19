@@ -4,9 +4,9 @@ import { resumeAuthFlow } from "./resumeAuth.js";
 import { initAuthRouter } from "./authRouter.js";
 import { navigateAuth } from "./authNavigator.js";
 
-console.log("Login Page loaded");
+document.body.classList.add("auth-ready");
 
-resumeAuthFlow();
+console.log("Login Page loaded");
 
 initAuthRouter("login-page");
 

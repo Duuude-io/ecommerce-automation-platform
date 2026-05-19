@@ -1,5 +1,7 @@
 import { getAuthState, getAuthRoutes } from "./authFlow.js";
 
+console.log("NAVIGATOR ACTIVE");
+
 const NAV_KEY = "authNavigating";
 
 export function navigateAuth() {
@@ -7,13 +9,12 @@ export function navigateAuth() {
   if (sessionStorage.getItem(NAV_KEY)) return;
 
   const session = getAuthState();
-  if (!session?.step) return;
+  if (!session || !session.step) return;
 
   const routes = getAuthRoutes();
   const target = routes[session.step];
 
-  const current =
-    window.location.pathname.split("/").pop();
+  const current = window.location.pathname.split("/").pop();
 
   console.log("STEP:", session.step);
   console.log("TARGET:", target);

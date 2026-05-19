@@ -10,7 +10,9 @@ const CURRENT_PAGE_ID = "create-account-page";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  initAuthRouter(CURRENT_PAGE_ID);
+  if (CURRENT_PAGE_ID !== "login-page") {
+    initAuthRouter(CURRENT_PAGE_ID);
+  }
 
   const session = getAuthState();
 
@@ -32,13 +34,22 @@ document.addEventListener("DOMContentLoaded", () => {
     input.style.backgroundColor = "#f0f2f2";
     input.style.cursor = "not-allowed";
 
-    page.querySelector(".js-signin-link")
-      ?.addEventListener("click", (e) => {
+    const signinLink = page.querySelector(".js-signin-link");
+
+    if (signinLink && !signinLink.dataset.bound) {
+      signinLink.dataset.bound = "true";
+
+      signinLink.addEventListener("click", (e) => {
         e.preventDefault();
+        e.stopPropagation();
+
+        sessionStorage.removeItem("authSession")
         localStorage.removeItem("identifier");
         localStorage.removeItem("userId");
-        window.location.href = "login.html";
+
+        window.location.assign("login.html");
       });
+    }
 
     let submitting = false;
 

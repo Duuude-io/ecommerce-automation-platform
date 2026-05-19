@@ -142,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const session = getAuthState();
         const currentId = identifier || authContext.getIdentifier();
         const targetUserId = session?.userId || auth.getUserId();
+        const originalText = resendBtn.textContent;
 
         console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
 
@@ -183,12 +184,12 @@ document.addEventListener("DOMContentLoaded", () => {
             startResendTimer(60, resendBtn);
           } else {
             alert(data.message || "Failed to send code");
-            resetResendBtn(resendBtn);
+            resetResendBtn(resendBtn, originalText);
           }
 
         } catch (err) {
           console.error("Resend error:", err);
-          resetResendBtn(resendBtn);
+          resetResendBtn(resendBtn, originalText);
         }
       });
     }
@@ -212,7 +213,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function resetResendBtn(btn) {
     cooldownActive = false;
+
     if (btn) {
+      btn.textContent = text;
       btn.style.opacity = "1";
       btn.style.pointerEvents = "auto";
       btn.style.cursor = "pointer";

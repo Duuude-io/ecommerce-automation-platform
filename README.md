@@ -37,6 +37,17 @@ Auth System → Cart System → Order System
         ↓
 Event Dispatcher (Automation Layer)
 
+```markdown
+## 🧠 System Architecture
+
+<p align="center">
+  <img src="docs/architecture.png" width="900"/>
+</p>
+
+This system follows a modular backend architecture with an event-driven automation layer that simulates real-world e-commerce workflows including authentication, cart management, and order processing.
+
+```
+
 ## Tech Stack
 -FastAPI (Python)
 -JavaScript (Frontend logic)

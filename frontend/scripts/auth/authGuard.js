@@ -6,20 +6,23 @@ export function initAuthGuard(pageName) {
 
   console.log("AuthGuard:", pageName);
 
-  // Hide page immediately
+  const protectedPages = ["app-page"];
+
+  if (!protectedPages.includes(pageName)) {
+    document.body.classList.add("auth-ready");
+    return;
+  }
+
   document.body.classList.remove("auth-ready");
 
   const loggedIn = auth.isLoggedIn();
 
-  const protectedPages = [
-    "app-page"
-  ];
-
-  if (protectedPages.includes(pageName) && !loggedIn) {
-    console.log("Blocked — not logged in");
+  if (!loggedIn) {
     document.body.classList.add("auth-ready");
     return;
   }
+
+  document.body.classList.add("auth-ready");
 
   console.log("AuthGuard OK - Page Revealed");
 }

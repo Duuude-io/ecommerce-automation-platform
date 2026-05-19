@@ -8,6 +8,10 @@ export function initAuthRouter(pageName) {
 
   const currentFile = window.location.pathname.split("/").pop();
 
+  if (currentFile === "login.html") {
+    return;
+  }
+
   // If no session → allow only login page
   if (!session?.step && currentFile !== routes.login) {
     console.log("No session — waiting for navigator");

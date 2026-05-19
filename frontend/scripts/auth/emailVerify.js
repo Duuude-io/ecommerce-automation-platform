@@ -125,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const session = getAuthState();
         const currentId = identifier || authContext.getIdentifier();
         const targetUserId = session?.userId || auth.getUserId();
+        const originalText = resendBtn.textContent;
 
         console.log("Resend Check - ID:", currentId, "UID:", targetUserId);
 
@@ -139,6 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
           resendBtn.style.pointerEvents = "none";
           resendBtn.style.cursor = "not-allowed";
 
+          let resendPurpose = "signup";
+
+          if (session.step === AuthState.VERIFY_ADD_EMAIL) {
+            resendPurpose = "add_email";
+          } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
+            resendPurpose = "add_phone";
+          }
+
           // 2. Call Backend
           const res = await fetch("http://127.0.0.1:8000/send-otp", {
             method: "POST",
@@ -146,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({
               userId: targetUserId,
               identifier: currentId,
-              purpose: session.step.includes("email") ? "add_email" : "add_phone"
+              purpose: resendPurpose
             })
           });
 
@@ -157,12 +166,12 @@ document.addEventListener("DOMContentLoaded", () => {
             startResendTimer(60, resendBtn);
           } else {
             alert(data.message || "Failed to send code");
-            resetResendBtn(resendBtn);
+            resetResendBtn(resendBtn, originalText);
           }
 
         } catch (err) {
           console.error("Resend error:", err);
-          resetResendBtn(resendBtn);
+          resetResendBtn(resendBtn, originalText);
         }
       });
     }
