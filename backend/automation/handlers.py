@@ -9,7 +9,7 @@ def welcome_user(data):
 
 
 def send_welcome_email(data):
-    print("📧 Preparing email...")
+    print("📧 Welcome, Prepaing....")
 
     time.sleep(5)
 

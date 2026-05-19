@@ -115,12 +115,17 @@ def is_identifier_taken(identifier: str, users, signup_sessions, exclude_user_id
         if u["id"] == exclude_user_id:
             continue
 
-        if u.get("email") == identifier or u.get("phone") == identifier:
+        if (
+            u.get("email") == identifier
+            or u.get("phone") == identifier
+            or u.get("pending_email") == identifier
+            or u.get("pending_phone") == identifier
+        ):
             return True
 
     # check pending sessions
     for sid, s in signup_sessions.items():
-        if sid == exclude_user_id:
+        if s.get("user_id") == exclude_user_id:
             continue
 
         if s.get("email") == identifier or s.get("phone") == identifier:
@@ -280,48 +285,91 @@ def check_user(data: IdentifierRequest):
 async def handle_send_otp(data: OTPRequest):
 
     user_id = data.userId
-    identifier = normalize_identifier(data.identifier)
+    purpose = data.purpose
 
     users = load_users()
 
     user = next((u for u in users if u["id"] == user_id), None)
     signup = signup_sessions.get(user_id)
 
+    # SESSION VALIDATION
     if not user and not signup:
-        return {"error": "Invalid session"}
+        return {"success": False, "message": "Invalid session"}
 
     if signup:
         if time.time() - signup["created_at"] > OTP_EXPIRY:
             signup_sessions.pop(user_id, None)
-            return {"error": "Signup session expired"}
+            return {"success": False, "message": "Signup session expired"}
 
-    if user:
-        if data.purpose == "add_email":
-            identifier = user.get("pending_email")
-        elif data.purpose == "add_phone":
-            identifier = user.get("pending_phone")
-        else:
-            identifier = user.get("email") or user.get("phone")
-        if not identifier:
-            return {"error": "No pending identifier"}
+    identifier = None
 
-    try:
-        assert_identifier_available(identifier, user_id)
-    except ValueError as e:
-        return {"error": str(e)}
+    # SIGNUP FLOW
+    if purpose == "signup":
+        if not signup:
+            return {"success": False, "message": "Signup session missing"}
 
-    if user:
-        if data.purpose == "add_email" and user.get("verified_email"):
-            return {"error": "Email already verified"}
+        identifier = (
+            signup.get("email")
+            or signup.get("phone")
+        )
 
-        if data.purpose == "add_phone" and user.get("verified_phone"):
-            return {"error": "Phone already verified"}
+    # LOGIN FLOW
+    elif purpose == "login":
+        if not user:
+            return {"success": False, "message": "User not found"}
 
-    generate_and_save_otp(user_id, identifier, data.purpose)
+        identifier = data.identifier
+
+        if identifier not in [user.get("email"), user.get("phone")]:
+            return {"success": False, "message": "Identifier not linked to user"}
+
+        # SECURITY CHECK FOR LOGIN OTP
+        if identifier not in [
+            user.get("email"),
+            user.get("phone")
+        ]:
+            return {"success": False, "message": "Identifier not linked to user"}
+
+    # ADD EMAIL FLOW
+    elif purpose == "add_email":
+        if not user:
+            return {"success": False, "message": "User not found"}
+
+        if user.get("verified_email"):
+            return {"success": False, "message": "Email already verified"}
+
+        identifier = user.get("pending_email")
+
+    # ADD PHONE FLOW
+    elif purpose == "add_phone":
+        if not user:
+            return {"success": False, "message": "User not found"}
+
+        if user.get("verified_phone"):
+            return {"success": False, "message": "Phone already verified"}
+
+        identifier = user.get("pending_phone")
+
+    else:
+        return {"success": False, "message": "Invalid purpose"}
+
+    # FINAL CHECK
+    if not identifier:
+        return {"success": False, "message": "No pending identifier"}
+
+    generate_and_save_otp(user_id, identifier, purpose)
+
+    print(
+        "SEND OTP DEBUG:",
+        "user_id:", user_id,
+        "identifier:", identifier,
+        "purpose:", purpose
+    )
 
     return {
         "success": True,
-        "message": "OTP generated"}
+        "message": "OTP generated"
+    }
 
 
 @app.post("/verify-otp")
@@ -554,7 +602,7 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 
     try:
         phone = assert_identifier_available(
-            data["phone"],
+            phone,
             current_user["id"]
         )
     except ValueError as e:
