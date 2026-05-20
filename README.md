@@ -40,9 +40,7 @@ Event Dispatcher (Automation Layer)
 ```markdown
 ## 🧠 System Architecture
 
-<p align="center">
-  <img src="docs/architecture.png" width="900"/>
-</p>
+<img src="https://github.com/Duuude-io/ecommerce-automation-platform/blob/main/docs/architecture.png?raw=true" width="900"/>
 
 This system follows a modular backend architecture with an event-driven automation layer that simulates real-world e-commerce workflows including authentication, cart management, and order processing.
 
