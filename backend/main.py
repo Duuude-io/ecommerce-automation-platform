@@ -237,6 +237,10 @@ def login(data: LoginRequest):
 
     token = create_token(user["id"])
 
+    dispatch(Events.USER_LOGGED_IN, {
+        "userId": user["id"]
+    })
+
     return {
         "success": True,
         "message": "Login successful",
@@ -455,6 +459,13 @@ def verify_otp(data: VerifyOTPRequest):
 
         fully_verified = new_user["verified_email"] and new_user["verified_phone"]
 
+        if fully_verified:
+            dispatch(Events.OTP_VERIFIED, {
+                "userId": user_id,
+                "email": new_user.get("email"),
+                "phone": new_user.get("phone")
+            })
+
         return {
             "success": True,
             "token": token,
@@ -516,6 +527,13 @@ def verify_otp(data: VerifyOTPRequest):
     otps.pop(key, None)
     save_otps(otps)
 
+    if user["verified_email"] and user["verified_phone"]:
+        dispatch(Events.USER_FULLY_VERIFIED, {
+            "userId": user["id"],
+            "email": user.get("email"),
+            "phone": user.get("phone")
+        })
+
     return {
         "success": True,
         "token": create_token(user_id),
@@ -559,6 +577,10 @@ def verify_login_otp(data: VerifyOTPRequest):
 
     otps.pop(key, None)
     save_otps(otps)
+
+    dispatch(Events.USER_LOGGED_IN, {
+        "userId": user_id
+    })
 
     return {
         "success": True,

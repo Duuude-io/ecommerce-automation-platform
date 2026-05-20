@@ -3,6 +3,13 @@ from threading import Thread
 handlers = {}
 
 
+def listen(event_name):
+    def decorator(func):
+        register(event_name, func)
+        return func
+    return decorator
+
+
 def register(event_name, handler):
     if event_name not in handlers:
         handlers[event_name] = []
@@ -12,6 +19,7 @@ def register(event_name, handler):
 
 def run_handler(handler, payload):
     try:
+        print(f"Running automation: {handler.__name__}")
         handler(payload)
     except Exception as e:
         print("Automation error:", e)
