@@ -1,4 +1,5 @@
 from threading import Thread
+from automation.sqlite_logs import already_logged, log_event
 
 handlers = {}
 
@@ -17,12 +18,24 @@ def register(event_name, handler):
     handlers[event_name].append(handler)
 
 
-def run_handler(handler, payload):
+def run_handler(handler, payload, event_name):
+
+    handler_name = handler.__name__
+
+    if already_logged(event_name, payload, handler_name):
+        print("Duplicate automation ignored")
+        return
+
     try:
-        print(f"Running automation: {handler.__name__}")
+        print(f"Running automation: {handler_name}")
+
         handler(payload)
+
+        log_event(event_name, payload, handler_name, "success")
+
     except Exception as e:
         print("Automation error:", e)
+        log_event(event_name, payload, handler_name, "failed")
 
 
 def dispatch(event_name, payload):
@@ -35,6 +48,6 @@ def dispatch(event_name, payload):
     for handler in handlers[event_name]:
         Thread(
             target=run_handler,
-            args=(handler, payload),
+            args=(handler, payload, event_name),
             daemon=True
         ).start()

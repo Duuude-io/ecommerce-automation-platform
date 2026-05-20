@@ -1,6 +1,6 @@
 
-from uuid import uuid4
 from fastapi import FastAPI, Header, Depends
+from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 import random
 import time
@@ -17,10 +17,25 @@ from auth import verify_password, create_token, hash_password
 from datetime import datetime
 from auth import get_current_user
 from automation.dispatcher import dispatch
+from automation import handlers
 from automation.events import Events
-import automation.handlers
+from contextlib import asynccontextmanager
+from automation_db import init_db
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # STARTUP
+    init_db()
+    print("🔥 Database initialized...")
+
+    yield
+
+    # SHUTDOWN (optional)
+    print("...👋 App shutting down")
+
+
+app = FastAPI(lifespan=lifespan)
 
 signup_sessions = {}
 
@@ -407,6 +422,10 @@ def verify_otp(data: VerifyOTPRequest):
 
     if purpose != data.purpose:
         return {"success": False, "message": "OTP purpose mismatch"}
+
+    # consume OTP once verified
+    otps.pop(key, None)
+    save_otps(otps)
     target = stored.get("target")
 
     users = load_users()
@@ -439,21 +458,20 @@ def verify_otp(data: VerifyOTPRequest):
         if any(u["id"] == user_id for u in users):
             return {"success": False, "message": "Duplicate user id"}
 
-        users.append(new_user)
+        existing_user = next((u for u in users if u["id"] == user_id), None)
 
-        save_users(users)
+        if not existing_user:
+            users.append(new_user)
+            save_users(users)
 
-        dispatch(Events.USER_CREATED, {
-            "userId": user_id,
-            "email": signup.get("email"),
-            "phone": signup.get("phone"),
-            "name": signup.get("name")
-        })
+            dispatch(Events.USER_CREATED, {
+                "userId": user_id,
+                "email": signup.get("email"),
+                "phone": signup.get("phone"),
+                "name": signup.get("name")
+            })
 
         signup_sessions.pop(user_id, None)
-
-        otps.pop(key, None)
-        save_otps(otps)
 
         token = create_token(user_id)
 
@@ -590,6 +608,12 @@ def verify_login_otp(data: VerifyOTPRequest):
         "verifiedPhone": user["verified_phone"],
         "next_page": "accsuccess.html"
     }
+
+
+@app.get("/automation/logs")
+def get_automation_logs():
+    from backend.automation.sqlite_logs import load_logs
+    return load_logs()
 
 
 @app.get("/auth/session-status")

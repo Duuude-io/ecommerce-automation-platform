@@ -261,5 +261,65 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "2dbd2caa-3879-46da-b365-943b5a857bd0",
+    "email": null,
+    "phone": "08051584432",
+    "password": "$2b$12$CPNfgEAm/BRcZtapycuZt.BWQaJ/pCJnw5Ot81D1obpzYhdYPe.3m",
+    "name": ",mnbvcvbnbv",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "c3c35ea1-ac69-48f8-8333-6b566fa180db",
+    "email": null,
+    "phone": "08051588876",
+    "password": "$2b$12$OQpcmIxl15i9TpYZA/Ek0u43sX150941Bqp.mOZxcB8HFmh705p5K",
+    "name": "jhgfdfghjk",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "84e7c852-3ca5-4ac3-bfb5-f6a7033e4339",
+    "email": null,
+    "phone": "08051534522",
+    "password": "$2b$12$4wfTGETcug7pPHR1uW.aM.0m4sxGo8HD2f6cocPpYdVdriOXaql02",
+    "name": "jkhgfghj",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "4b706a66-090f-4786-aff3-80a4af3ba772",
+    "email": null,
+    "phone": "08051584439",
+    "password": "$2b$12$6N4VXOvzB2U/hCF6EfVIwO3.rH313T67Z8OxW83omEOedhb8VnZxW",
+    "name": "lkjhghjkl",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "2f996d64-2114-497d-8f4a-3139cd410572",
+    "email": "hjhgftyu@gmail.com",
+    "phone": "08051580077",
+    "password": "$2b$12$9oCUh98WLXxpp2dddKU5JeVioWGMDFwvjqK8SSKE1lEP6zkXedfqi",
+    "name": "fghjkjuyhgtrf",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "152d5607-fe2a-4b1a-9511-fcf3b7a3ba6f",
+    "email": "uphand2344s401@gmail.com",
+    "phone": "+23409165432090",
+    "password": "$2b$12$VUHZX.GEZD4QFyrOf1DCkuAHMVjkYRRMjECkfIapXq1rBwz5or64O",
+    "name": "kjhguytrewwf",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]
