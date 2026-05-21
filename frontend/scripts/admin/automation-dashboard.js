@@ -1,0 +1,140 @@
+const API_URL = "http://127.0.0.1:8000/automation/logs";
+
+const tableBody = document.getElementById("logsTable");
+
+const payloadPanel = document.getElementById("payloadPanel");
+const payloadData = document.getElementById("payloadData");
+const closePayload = document.getElementById("closePayload");
+
+let allLogs = [];
+
+let payloadStore = {};
+
+// AUTO LOAD + AUTO REFRESH
+fetchLogs();
+setInterval(fetchLogs, 60000);
+
+//  FETCH LOGS
+async function fetchLogs() {
+  try {
+    const response = await fetch(API_URL);
+    const logs = await response.json();
+
+    if (!Array.isArray(logs) || logs.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='5'>No logs found</td></tr>";
+      return;
+    }
+
+    allLogs = logs;
+    drawLogs(logs);
+
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+    tableBody.innerHTML = "<tr><td colspan='5'>Failed to load logs</td></tr>";
+  }
+}
+
+// RENDER TABLE
+function drawLogs(logs) {
+  tableBody.innerHTML = "";
+
+  logs
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .forEach((log, index) => {
+
+      const row = document.createElement("tr");
+
+      row.style.backgroundColor = getRowColor(log.event);
+
+      // STORE PAYLOAD
+      const payloadId = "payload_" + index;
+
+      payloadStore[payloadId] = log.payload || {};
+
+      row.innerHTML = `
+        <td>${log.event || "-"}</td>
+        <td>${log.handler || "-"}</td>
+        <td>${formatStatus(log.status)}</td>
+        <td>${log.user_name || "-"}</td>
+        <td>${log.email || "-"}</td>
+        <td>${log.phone || "-"}</td>
+        <td>${log.user_id || "-"}</td>
+        <td>${formatTime(log.timestamp)}</td>
+
+        <td>
+          <button class="payload-btn" onclick="viewPayload(${index})">
+            View
+          </button>
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+
+}
+
+// STATUS STYLING
+function formatStatus(status) {
+  if (status === "success") {
+    return `<span style="color: green; font-weight: bold;">🫦 success</span>`;
+  }
+
+  if (status === "failed") {
+    return `<span style="color: red; font-weight: bold;">♨️ failed</span>`;
+  }
+
+  return `<span style="color: gray;">${status || "-"}</span>`;
+}
+
+// TIME FORMAT
+function formatTime(timestamp) {
+  if (!timestamp) return "-";
+  return new Date(timestamp * 1000).toLocaleString();
+}
+
+// ROW COLORS (EVENT TYPES)
+function getRowColor(event) {
+  switch (event) {
+    case "user_created":
+      return "#a7db47"; // green
+
+    case "user_fully_verified":
+      return "#6fa7cf"; // blue
+
+    case "order_created":
+      return "#ecbe73"; // orange
+
+    case "user_logged_in":
+      return "#dc9ee6"; // purple
+
+    default:
+      return "#966060";
+  }
+}
+
+// EVENT ANALYTICS (DEBUG)
+
+function groupByEvent(logs) {
+  const grouped = {};
+
+  logs.forEach(log => {
+    grouped[log.event] = (grouped[log.event] || 0) + 1;
+  });
+
+  console.log("Event Stats:", grouped);
+}
+
+// global access
+window.viewPayload = function (index) {
+  const log = allLogs[index];
+
+  payloadData.textContent = JSON.stringify(log.payload, null, 2);
+  payloadPanel.classList.remove("hidden");
+};
+
+closePayload.addEventListener("click", () => {
+  payloadPanel.classList.add("hidden");
+  payloadData.textContent = "";
+});
+
+fetchLogs();

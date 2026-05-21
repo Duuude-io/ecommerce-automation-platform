@@ -1,0 +1,215 @@
+/* automation-dashboard.css */
+
+body {
+  font-family: Roboto, Arial;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.dashboard-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dashboard-controls button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.dashboard-controls button:hover {
+  opacity: 0.9;
+}
+
+.filter-all {
+  background: #222;
+  color: white;
+}
+
+.filter-success {
+  background: #1d4ed8;
+  color: white;
+}
+
+.filter-failed {
+  background: #dc2626;
+  color: white;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.logs-table thead {
+  background: #111827;
+  color: white;
+}
+
+.logs-table th,
+.logs-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.logs-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Event Colors */
+
+.event-user-created {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.event-user-verified {
+  color: #059669;
+  font-weight: bold;
+}
+
+.event-order-created {
+  color: #9333ea;
+  font-weight: bold;
+}
+
+.event-login {
+  color: #ea580c;
+  font-weight: bold;
+}
+
+/* Status */
+
+.status-success {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.status-failed {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ca8a04;
+  font-weight: bold;
+}
+
+/* Payload Button */
+
+.payload-btn {
+  background: #6d4903;
+  color: rgb(234, 234, 163);
+  border: none;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+}
+
+.payload-btn:hover {
+  background: #1f2937;
+}
+
+.payload-panel {
+  margin-top: 20px;
+  background: #141127;
+  color: #e06610;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.payload-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.payload-header button {
+  background: #dc2626;
+  border: none;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.payload-header button:hover {
+  background: #b91c1c;
+}
+
+.hidden {
+  display: none;
+}
+
+#payloadData {
+  background: #0a2662;
+  color: #ffe926;
+  max-width: 55%;
+
+
+  padding: 10px;
+  border-radius: 10px;
+
+  overflow-x: auto;
+
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Close Button */
+
+#closePayload {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  background: #dc2626;
+  color: white;
+
+  border: none;
+  width: 35px;
+  height: 35px;
+
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#closePayload:hover {
+  background: #b91c1c;
+}
+
+/* Loading / Empty States */
+
+.table-message {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+  font-style: italic;
+}
