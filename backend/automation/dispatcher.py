@@ -1,5 +1,5 @@
 from threading import Thread
-from automation.sqlite_logs import already_logged, log_event
+from automation.logs.logger import already_logged, log_event
 
 handlers = {}
 
@@ -22,8 +22,16 @@ def run_handler(handler, payload, event_name):
 
     handler_name = handler.__name__
 
-    if already_logged(event_name, payload, handler_name):
-        print("Duplicate automation ignored")
+    payload = payload or {}
+
+    # normalize userId
+
+    user_id = payload.get("userId") or payload.get("user_id")
+
+    payload["userId"] = user_id
+
+    if user_id is None:
+        print("Skipping log: missing user_id")
         return
 
     try:

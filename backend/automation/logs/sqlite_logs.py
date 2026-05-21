@@ -30,15 +30,28 @@ def log_event(event_name, payload, handler_name, status="success"):
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO automation_logs (event, handler, user_id, payload, status, timestamp)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO automation_logs (
+            event,
+            handler,
+            user_id,
+            payload,
+            status,
+            timestamp,
+            user_name,
+            email,
+            phone
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         event_name,
         handler_name,
         payload.get("userId"),
         json.dumps(payload),
         status,
-        time.time()
+        time.time(),
+        payload.get("name"),
+        payload.get("email"),
+        payload.get("phone")
     ))
 
     conn.commit()

@@ -21,9 +21,14 @@ def init_db():
         user_id TEXT,
         payload TEXT,
         status TEXT,
-        timestamp REAL
+        timestamp REAL,
+        user_name TEXT,
+        email TEXT,
+        phone TEXT
     )
     """)
 
     conn.commit()
     conn.close()
+
+    print(" ⚙️      automation_logs table ready   🛠️")

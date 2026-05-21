@@ -21,6 +21,7 @@ from automation import handlers
 from automation.events import Events
 from contextlib import asynccontextmanager
 from automation_db import init_db
+from automation_db import get_conn
 
 
 @asynccontextmanager
@@ -480,6 +481,7 @@ def verify_otp(data: VerifyOTPRequest):
         if fully_verified:
             dispatch(Events.OTP_VERIFIED, {
                 "userId": user_id,
+                "name": user.get("name"),
                 "email": new_user.get("email"),
                 "phone": new_user.get("phone")
             })
@@ -548,6 +550,7 @@ def verify_otp(data: VerifyOTPRequest):
     if user["verified_email"] and user["verified_phone"]:
         dispatch(Events.USER_FULLY_VERIFIED, {
             "userId": user["id"],
+            "name": user.get("name"),
             "email": user.get("email"),
             "phone": user.get("phone")
         })
@@ -610,10 +613,50 @@ def verify_login_otp(data: VerifyOTPRequest):
     }
 
 
+def safe_json_load(value):
+    try:
+        return json.loads(value) if value else {}
+    except:
+        return {}
+
+
 @app.get("/automation/logs")
 def get_automation_logs():
-    from backend.automation.sqlite_logs import load_logs
-    return load_logs()
+    conn = get_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            event,
+            handler,
+            user_id,
+            payload,
+            status,
+            timestamp,
+            user_name,
+            email,
+            phone
+        FROM automation_logs
+        ORDER BY timestamp DESC
+    """)
+
+    rows = cur.fetchall()
+    conn.close()
+
+    return [
+        {
+            "event": r[0],
+            "handler": r[1],
+            "user_id": r[2],
+            "payload": safe_json_load(r[3]),
+            "status": r[4],
+            "timestamp": r[5],
+            "user_name": r[6],
+            "email": r[7],
+            "phone": r[8]
+        }
+        for r in rows
+    ]
 
 
 @app.get("/auth/session-status")
