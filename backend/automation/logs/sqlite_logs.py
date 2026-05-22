@@ -1,6 +1,7 @@
 import json
 import time
 from automation_db import get_conn
+from automation.logs.normalize_logs import normalize_payload
 
 
 def already_logged(event, payload, handler_name):
@@ -29,6 +30,8 @@ def log_event(event_name, payload, handler_name, status="success"):
     conn = get_conn()
     cur = conn.cursor()
 
+    normalized = normalize_payload(payload)
+
     cur.execute("""
         INSERT INTO automation_logs (
             event,
@@ -45,8 +48,8 @@ def log_event(event_name, payload, handler_name, status="success"):
     """, (
         event_name,
         handler_name,
-        payload.get("userId"),
-        json.dumps(payload),
+        normalized["user"]["userId"],
+        json.dumps(normalized),
         status,
         time.time(),
         payload.get("name"),

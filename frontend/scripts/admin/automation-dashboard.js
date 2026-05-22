@@ -1,3 +1,4 @@
+console.log("Admin Dashboard Loaded")
 const API_URL = "http://127.0.0.1:8000/automation/logs";
 
 const tableBody = document.getElementById("logsTable");
@@ -21,7 +22,7 @@ async function fetchLogs() {
     const logs = await response.json();
 
     if (!Array.isArray(logs) || logs.length === 0) {
-      tableBody.innerHTML = "<tr><td colspan='5'>No logs found</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='6'>No logs found</td></tr>";
       return;
     }
 
@@ -30,7 +31,7 @@ async function fetchLogs() {
 
   } catch (error) {
     console.error("Error fetching logs:", error);
-    tableBody.innerHTML = "<tr><td colspan='5'>Failed to load logs</td></tr>";
+    tableBody.innerHTML = "<tr><td colspan='6'>Failed to load logs</td></tr>";
   }
 }
 
@@ -55,10 +56,7 @@ function drawLogs(logs) {
         <td>${log.event || "-"}</td>
         <td>${log.handler || "-"}</td>
         <td>${formatStatus(log.status)}</td>
-        <td>${log.user_name || "-"}</td>
-        <td>${log.email || "-"}</td>
-        <td>${log.phone || "-"}</td>
-        <td>${log.user_id || "-"}</td>
+        <td>${log.name || "-"}</td>
         <td>${formatTime(log.timestamp)}</td>
 
         <td>
@@ -128,7 +126,36 @@ function groupByEvent(logs) {
 window.viewPayload = function (index) {
   const log = allLogs[index];
 
-  payloadData.textContent = JSON.stringify(log.payload, null, 2);
+  let payload = log.payload || {};
+
+  if (typeof payload === "string") {
+    try {
+      payload = JSON.parse(payload);
+    } catch (e) {
+      console.error("Invalid payload JSON", e);
+      payload = {};
+    }
+  }
+
+  console.log(log.payload);
+  console.log(typeof log.payload);
+
+  payloadData.innerHTML = `
+    <div class="payload-section">
+
+      <div class="payload-meta">
+        <span><strong>Event:</strong> ${log.event}</span>
+        <span><strong>Handler:</strong> ${log.handler}</span>
+        <span><strong>Status:</strong> ${log.status}</span>
+      </div>
+
+      <pre class="payload-json">
+    ${JSON.stringify(payload, null, 2)}
+      </pre>
+
+    </div>
+  `;
+
   payloadPanel.classList.remove("hidden");
 };
 
@@ -136,5 +163,3 @@ closePayload.addEventListener("click", () => {
   payloadPanel.classList.add("hidden");
   payloadData.textContent = "";
 });
-
-fetchLogs();

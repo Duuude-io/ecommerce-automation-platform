@@ -1,12 +1,15 @@
 import { auth } from "./authStore.js";
-import { setAuthState, AuthState } from "./authFlow.js";
+import { AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Add Number loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__ADD_NUMBER_INIT__) return;
+  window.__ADD_NUMBER_INIT__ = true;
 
   initAuthRouter("add-number-page");
 
@@ -93,8 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         authContext.setIdentifier(fullPhone);
 
-        setAuthState(AuthState.VERIFY_ADD_PHONE);
-        navigateAuth();
+        safeNavigate(AuthState.VERIFY_ADD_PHONE);
 
       } catch (err) {
         console.error(err);
@@ -106,8 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (skipLink) {
       skipLink.addEventListener("click", (e) => {
         e.preventDefault();
-        setAuthState(AuthState.AUTHENTICATED);
-        navigateAuth();
+        safeNavigate(AuthState.AUTHENTICATED);
       });
     }
   }

@@ -1,32 +1,55 @@
 import { getAuthState, getAuthRoutes } from "./authFlow.js";
+import { navDebug } from "./navDebug.js";
 
 console.log("NAVIGATOR ACTIVE");
 
 const NAV_KEY = "authNavigating";
 
-export function navigateAuth() {
+export function navigateAuth(source = "unknown") {
 
-  if (sessionStorage.getItem(NAV_KEY)) return;
+  console.trace(`navigateAuth called from: ${source}`);
+
+  if (sessionStorage.getItem(NAV_KEY) === "true") {
+    console.log("Navigation blocked");
+    return;
+  }
 
   const session = getAuthState();
-  if (!session || !session.step) return;
+
+  if (!session?.step) {
+    console.log("No auth session step");
+    return;
+  }
 
   const routes = getAuthRoutes();
   const target = routes[session.step];
 
-  const current = window.location.pathname.split("/").pop();
+  const current =
+    window.location.pathname.split("/").pop();
 
-  console.log("STEP:", session.step);
-  console.log("TARGET:", target);
-  console.log("CURRENT:", current);
+  navDebug("STEP", session.step);
+  navDebug("TARGET", target);
+  navDebug("CURRENT", current);
 
-  if (!target || current === target) return;
+  if (!target) {
+    console.warn("No target route");
+    return;
+  }
+
+  const lastTarget =
+    sessionStorage.getItem("lastAuthTarget");
+
+  if (current === target && lastTarget === target) {
+    console.log("Already on target page");
+    return;
+  }
 
   sessionStorage.setItem(NAV_KEY, "true");
+  sessionStorage.setItem("lastAuthTarget", target);
 
-  console.log("NAVIGATOR:", current, "→", target);
+  console.log(`[NAVIGATE] ${current} → ${target}`);
 
-  window.location.replace(target);
+  window.location.href = target;
 }
 
 window.addEventListener("pageshow", () => {

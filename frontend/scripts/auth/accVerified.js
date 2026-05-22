@@ -6,6 +6,9 @@ console.log("Acc verified page loaded")
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  if (window.__ACC_VERIFIED_INIT__) return;
+  window.__ACC_VERIFIED_INIT__ = true;
+
   initAuthRouter("acc-verified-page");
 
   function initAccountVerified() {

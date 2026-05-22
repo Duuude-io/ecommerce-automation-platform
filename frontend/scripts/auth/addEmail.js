@@ -2,11 +2,14 @@ import { setAuthState, AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Add Email loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__ADD_EMAIL_INIT__) return;
+  window.__ADD_EMAIL_INIT__ = true;
 
   initAuthRouter("add-email-page");
 
@@ -70,10 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         authContext.setIdentifier(email);
 
-        setAuthState(AuthState.VERIFY_ADD_EMAIL, {
+        safeNavigate(AuthState.VERIFY_ADD_EMAIL, {
           userId: auth.getUserId()
         });
-        navigateAuth();
 
       } catch (err) {
         console.error(err);
@@ -83,8 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     skipLink?.addEventListener("click", (e) => {
       e.preventDefault();
 
-      setAuthState(AuthState.AUTHENTICATED);
-      navigateAuth();
+      safeNavigate(AuthState.AUTHENTICATED);
     });
   }
 

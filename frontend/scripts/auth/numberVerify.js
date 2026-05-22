@@ -2,14 +2,17 @@ let cooldownActive = false;
 
 import { verifyOtp } from "./otpService.js";
 import { auth } from "./authStore.js";
-import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
+import { AuthState, getAuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Number verify loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__NUMBER_VERIFY_INIT__) return;
+  window.__NUMBER_VERIFY_INIT__ = true;
 
   initAuthRouter("number-verify-page");
 
@@ -39,19 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Resetting session and returning to login...");
 
         // 1. Clear the temporary "in-progress" session data
-        localStorage.removeItem("authSession");
+        sessionStorage.removeItem("authSession");
         localStorage.removeItem("authContext_identifier");
 
         authContext.clear();
-        setAuthState(AuthState.LOGIN);
-        navigateAuth();
+        safeNavigate(AuthState.LOGIN);
       });
     }
 
     let verifying = false;
 
-    form.addEventListener("submit", handleSubmit);
-
+    if (!form.dataset.bound) {
+      form.dataset.bound = "true";
+      form.addEventListener("submit", handleSubmit);
+    }
     async function handleSubmit(e) {
       e.preventDefault();
       console.log("Submit button clicked!");
@@ -75,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!session) {
           alert("Session expired. Please start over.");
-          setAuthState(AuthState.LOGIN);
+          safeNavigate(AuthState.LOGIN);
           return;
         }
 
@@ -108,14 +112,15 @@ document.addEventListener("DOMContentLoaded", () => {
           userData: data.userData
         });
 
-        console.log("SETTING ACCOUNT_SUCCESS");
+        console.log("OTP VERIFIED");
+        console.log("FULLY VERIFIED:", data.fullyVerified);
+        console.log("CURRENT STEP:", session.step);
 
         if (data.fullyVerified) {
-          setAuthState(AuthState.ACCOUNT_VERIFIED);
+          safeNavigate(AuthState.ACCOUNT_VERIFIED);
         } else {
-          setAuthState(AuthState.ACCOUNT_SUCCESS);
+          safeNavigate(AuthState.ACCOUNT_SUCCESS);
         }
-        navigateAuth();
 
       } catch (err) {
 
@@ -211,7 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   }
 
-  function resetResendBtn(btn) {
+  function resetResendBtn(btn, text = "Resend OTP") {
+
     cooldownActive = false;
 
     if (btn) {

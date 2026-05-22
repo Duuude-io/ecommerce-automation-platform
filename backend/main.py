@@ -651,9 +651,9 @@ def get_automation_logs():
             "payload": safe_json_load(r[3]),
             "status": r[4],
             "timestamp": r[5],
-            "user_name": r[6],
-            "email": r[7],
-            "phone": r[8]
+            "name": safe_json_load(r[3]).get("name"),
+            "email": safe_json_load(r[3]).get("email"),
+            "phone": safe_json_load(r[3]).get("phone")
         }
         for r in rows
     ]

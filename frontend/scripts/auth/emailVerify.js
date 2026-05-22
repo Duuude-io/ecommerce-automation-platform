@@ -1,13 +1,16 @@
 import { verifyOtp } from "./otpService.js";
-import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
+import { AuthState, getAuthState } from "./authFlow.js";
 import { auth } from "./authStore.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Email verify loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__EMAIL_VERIFY_INIT__) return;
+  window.__EMAIL_VERIFY_INIT__ = true;
 
   initAuthRouter("email-verify-page");
 
@@ -35,12 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Resetting session and returning to login...");
 
         // 1. Clear the temporary "in-progress" session data
-        localStorage.removeItem("authSession");
+        sessionStorage.removeItem("authSession");
         localStorage.removeItem("authContext_identifier");
 
         authContext.clear();
-        setAuthState(AuthState.LOGIN);
-        navigateAuth();
+        safeNavigate(AuthState.LOGIN);
       });
     }
 
@@ -97,11 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (data.fullyVerified) {
-          setAuthState(AuthState.ACCOUNT_VERIFIED);
+          safeNavigate(AuthState.ACCOUNT_VERIFIED);
         } else {
-          setAuthState(AuthState.ACCOUNT_SUCCESS);
+          safeNavigate(AuthState.ACCOUNT_SUCCESS);
         }
-        navigateAuth();
 
       } catch (err) {
         console.error("Verification Error:", err);

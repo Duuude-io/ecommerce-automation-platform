@@ -1,8 +1,8 @@
 import { authContext } from "./authContext.js";
-import { setAuthState, getAuthState, AuthState } from "./authFlow.js";
-import { navigateAuth } from "./authNavigator.js";
+import { AuthState } from "./authFlow.js";
 import { initAuthRouter } from "./authRouter.js";
 import { auth } from "./authStore.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Create Account loaded");
 
@@ -10,13 +10,10 @@ const CURRENT_PAGE_ID = "create-account-page";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  if (CURRENT_PAGE_ID !== "login-page") {
-    initAuthRouter(CURRENT_PAGE_ID);
-  }
+  if (window.__CREATE_ACCOUNT_INIT__) return;
+  window.__CREATE_ACCOUNT_INIT__ = true;
 
-  const session = getAuthState();
-
-  console.log("Current Page ID:", CURRENT_PAGE_ID, "Stored Session Step:", session?.step);
+  initAuthRouter(CURRENT_PAGE_ID);
 
   function initUserCreateAcct() {
 
@@ -26,8 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = page.querySelector(".js-email-phone");
     const form = page.querySelector(".create-form");
 
-    const identifier = authContext.getIdentifier();
-    if (!identifier) return;
+    const identifier =
+      authContext.getIdentifier()
+      || getAuthState()?.identifier
+      || localStorage.getItem("identifier");
+
+    console.log("IDENTIFIER:", identifier);
+
+    if (!identifier) {
+      console.error("Missing identifier");
+      return;
+    }
 
     input.value = identifier;
     input.readOnly = true;
@@ -59,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (submitting) return;
       submitting = true;
+      console.log("SUBMIT FIRED");
 
       try {
 
@@ -98,6 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const signupData = await signupResponse.json();
 
+        console.log("SIGNUP RESPONSE:", signupData);
+
         if (!signupData.success) {
           alert(signupData.message || "Signup failed");
           submitting = false;
@@ -105,12 +114,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (signupData.resume) {
-          setAuthState(signupData.nextStep, {
+          safeNavigate(signupData.nextStep, {
             identifier,
             authType: signupData.authType,
             userId: signupData.userId
           });
-          navigateAuth();
           return;
         }
 
@@ -120,16 +128,20 @@ document.addEventListener("DOMContentLoaded", () => {
             ? AuthState.VERIFY_SIGNUP_EMAIL
             : AuthState.VERIFY_SIGNUP_PHONE);
 
-        setAuthState(nextStep, {
+        console.log("NEXT STEP:", nextStep);
+
+        safeNavigate(nextStep, {
           identifier,
           authType,
           userId: signupData.userId
         });
-        navigateAuth();
+        return;
 
       } catch (error) {
         console.error(error);
         alert("Server error");
+      } finally {
+        submitting = false;
       }
     });
   }

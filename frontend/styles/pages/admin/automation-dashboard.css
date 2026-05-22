@@ -213,3 +213,27 @@ h1 {
   color: #6b7280;
   font-style: italic;
 }
+
+.payload-section {
+  margin-bottom: 18px;
+}
+
+.payload-section h4 {
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.payload-section p {
+  margin: 0;
+  color: #d6d6d6;
+  word-break: break-word;
+}
+
+.payload-section pre {
+  background: #111827;
+  padding: 12px;
+  border-radius: 10px;
+  overflow-x: auto;
+  color: #8de38d;
+}

@@ -1,5 +1,5 @@
 from threading import Thread
-from automation.logs.logger import already_logged, log_event
+from automation.logs.sqlite_logs import log_event
 
 handlers = {}
 

@@ -1,11 +1,14 @@
-import { setAuthState, AuthState } from "./authFlow.js";
+import { AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("New user login loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__LOGIN_AUTH_INIT__) return;
+  window.__LOGIN_AUTH_INIT__ = true;
 
   initAuthRouter("login-auth-page");
 
@@ -30,8 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     page.querySelector(".primary-button")?.addEventListener("click", () => {
-      setAuthState(AuthState.CREATE_ACCOUNT);
-      navigateAuth();
+      safeNavigate(AuthState.CREATE_ACCOUNT);
     });
 
     page.querySelectorAll(".js-change-user").forEach(el => {

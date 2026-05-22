@@ -1,8 +1,7 @@
-import { setAuthState, AuthState, getAuthRoutes } from "./authFlow.js";
+import { AuthState, getAuthRoutes } from "./authFlow.js";
 import { authContext } from "./authContext.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 document.body.classList.add("auth-ready");
 
@@ -11,6 +10,9 @@ console.log("Login Page loaded");
 initAuthRouter("login-page");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (window.__LOGIN_INIT__) return;
+  window.__LOGIN_INIT__ = true;
 
   function initLogin() {
 
@@ -49,14 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
         authContext.setIdentifier(identifier);
 
         if (data.userExists) {
-          setAuthState(AuthState.USER_EXISTS, {
+          safeNavigate(AuthState.USER_EXISTS, {
             userId: data.userId
           });
 
         } else {
-          setAuthState(AuthState.NEW_USER_AUTH);
+          safeNavigate(AuthState.NEW_USER_AUTH);
         }
-        navigateAuth();
 
       } catch (apiError) {
         console.error("Network communication error:", apiError);

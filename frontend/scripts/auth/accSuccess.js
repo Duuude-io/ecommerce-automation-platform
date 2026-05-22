@@ -1,14 +1,19 @@
-import { initAuthGuard } from "./authGuard.js";
-import { resumeAuthFlow } from "./resumeAuth.js";
-import { setAuthState, AuthState } from "./authFlow.js";
+console.log("ACC SUCCESS FILE EXECUTED");
+
+import { AuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
 import { initAuthRouter } from "./authRouter.js";
-import { navigateAuth } from "./authNavigator.js";
+import { safeNavigate } from "./safeNavigate.js";
 
 console.log("Acc Success loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("ACC SUCCESS DOM READY");
+
+  if (window.__ACC_SUCCESS_INIT__) return;
+  window.__ACC_SUCCESS_INIT__ = true;
 
   initAuthRouter("acc-success-page");
 
@@ -32,8 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (user && user.fullyVerified) {
         console.log("User is fully verified. Sending home.");
-        setAuthState(AuthState.AUTHENTICATED);
-        navigateAuth();
+        safeNavigate(AuthState.AUTHENTICATED);
         return;
       }
 
@@ -46,13 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentAuthType = authContext.getAuthType();
 
       if (currentAuthType === "email") {
-        setAuthState(AuthState.ADD_PHONE);
+        safeNavigate(AuthState.ADD_PHONE);
       } else {
-        setAuthState(AuthState.ADD_EMAIL);
+        safeNavigate(AuthState.ADD_EMAIL);
       }
-
-      navigateAuth();
-
     });
   }
 
