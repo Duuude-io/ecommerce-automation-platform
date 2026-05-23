@@ -7,9 +7,6 @@ export function safeNavigate(step, context) {
 
   setAuthState(step, context);
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      navigateAuth("safeNavigate");
-    });
-  });
+  navigateAuth("safeNavigate");
+
 }

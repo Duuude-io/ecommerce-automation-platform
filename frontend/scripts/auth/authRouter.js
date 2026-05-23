@@ -6,17 +6,32 @@ export function initAuthRouter(pageName) {
   const session = getAuthState();
   const routes = getAuthRoutes();
 
-  const currentFile = window.location.pathname.split("/").pop();
+  const currentFile =
+    window.location.pathname.split("/").pop();
 
-  if (currentFile === "login.html") {
+  console.log("ROUTER ACTIVE:", {
+    pageName,
+    currentFile,
+    step: session?.step
+  });
+
+  if (!session?.step) {
     return;
   }
 
-  // If no session → allow only login page
-  if (!session?.step && currentFile !== routes.login) {
-    console.log("No session — waiting for navigator");
+  const expectedRoute =
+    routes[session.step];
+
+  if (!expectedRoute) {
+    return;
   }
 
-  document.body.classList.add("auth-ready");
-  return;
+  if (currentFile !== expectedRoute) {
+
+    console.log(
+      `Router correcting route: ${currentFile} → ${expectedRoute}`
+    );
+
+    navigateAuth("authRouter");
+  }
 }

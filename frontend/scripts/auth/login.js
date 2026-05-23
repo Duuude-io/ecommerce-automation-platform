@@ -3,8 +3,6 @@ import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
 import { safeNavigate } from "./safeNavigate.js";
 
-document.body.classList.add("auth-ready");
-
 console.log("Login Page loaded");
 
 initAuthRouter("login-page");

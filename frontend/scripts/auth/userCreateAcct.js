@@ -1,5 +1,5 @@
 import { authContext } from "./authContext.js";
-import { AuthState } from "./authFlow.js";
+import { AuthState, getAuthState } from "./authFlow.js";
 import { initAuthRouter } from "./authRouter.js";
 import { auth } from "./authStore.js";
 import { safeNavigate } from "./safeNavigate.js";
