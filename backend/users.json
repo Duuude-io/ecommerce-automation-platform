@@ -642,5 +642,15 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "75a94329-9365-45bf-a41d-5701fe7ef905",
+    "email": "up3030hands401@gmail.com",
+    "phone": "+16709934508",
+    "password": "$2b$12$nHrzRAFsSNX4bNfs7irXV.X8brqzcxBlw1xQr/ylyhoMcFezPuYGC",
+    "name": "Jude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

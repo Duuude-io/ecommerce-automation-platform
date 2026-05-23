@@ -38,6 +38,29 @@
 
         <h1>Automation Dashboard</h1>
 
+        <!-- METRICS -->
+        <div class="automation-metrics">
+          <div class="metric-card">
+            <h3>Total Events ♨️</h3>
+            <p id="totalEvents">0</p>
+          </div>
+
+          <div class="metric-card success">
+            <h3>Successful 🟢</h3>
+            <p id="successEvents">0</p>
+          </div>
+
+          <div class="metric-card failed">
+            <h3>Failed ⛔</h3>
+            <p id="failedEvents">0</p>
+          </div>
+
+          <div class="metric-card">
+            <h3>Success Rate 💫</h3>
+            <p id="successRate">0%</p>
+          </div>
+        </div>
+
         <!-- FILTER BUTTONS -->
         <div class="automation-button" style="margin-bottom: 15px;">
           <button onclick="filterLogs('all')">All</button>

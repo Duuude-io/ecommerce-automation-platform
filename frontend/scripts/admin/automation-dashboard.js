@@ -28,6 +28,7 @@ async function fetchLogs() {
 
     allLogs = logs;
     drawLogs(logs);
+    updateMetrics(logs);
 
   } catch (error) {
     console.error("Error fetching logs:", error);
@@ -69,6 +70,32 @@ function drawLogs(logs) {
       tableBody.appendChild(row);
     });
 
+}
+
+function updateMetrics(logs) {
+
+  const total = logs.length;
+
+  const success = logs.filter(
+    log => log.status === "success"
+  ).length;
+
+  const failed = logs.filter(
+    log => log.status === "failed"
+  ).length;
+
+  const successRate = total
+    ? ((success / total) * 100).toFixed(1)
+    : 0;
+
+  document.getElementById("totalEvents").textContent = total;
+
+  document.getElementById("successEvents").textContent = success;
+
+  document.getElementById("failedEvents").textContent = failed;
+
+  document.getElementById("successRate").textContent =
+    `${successRate}%`;
 }
 
 // STATUS STYLING
@@ -163,3 +190,19 @@ closePayload.addEventListener("click", () => {
   payloadPanel.classList.add("hidden");
   payloadData.textContent = "";
 });
+
+window.filterLogs = function (status) {
+
+  if (status === "all") {
+    drawLogs(allLogs);
+    updateMetrics(allLogs);
+    return;
+  }
+
+  const filtered = allLogs.filter(
+    log => log.status === status
+  );
+
+  drawLogs(filtered);
+  updateMetrics(filtered);
+}
