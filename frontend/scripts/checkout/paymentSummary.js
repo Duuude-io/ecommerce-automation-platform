@@ -109,6 +109,6 @@ export function renderPaymentSummary() {
       }
       */
 
-      window.location.href = 'paymentpage.html';
+      window.location.href = 'check-out-pages/billdetailspage.html';
     });
 }

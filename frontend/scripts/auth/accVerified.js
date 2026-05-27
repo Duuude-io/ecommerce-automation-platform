@@ -17,11 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const user = auth.getUser();
     const emailDisplay = page.querySelector(".js-display-email");
+    const phoneDisplay = page.querySelector(".js-display-phone");
 
-    if (emailDisplay && user && user.email) {
+    if (emailDisplay && user?.email) {
       emailDisplay.textContent = user.email;
-    } else if (emailDisplay && user && user.phone) {
-      emailDisplay.textContent = user.phone;
+    }
+
+    if (phoneDisplay && user?.phone) {
+      phoneDisplay.textContent = user.phone;
     }
 
     const startBtn = page.querySelector(".js-start-shopping");

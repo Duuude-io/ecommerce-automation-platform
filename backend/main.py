@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI, Header, Depends
+from fastapi import FastAPI, Header, Depends, BackgroundTasks
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 import random
@@ -14,7 +14,7 @@ from pathlib import Path
 from models.order import Order
 from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, IdentifierRequest, SignupRequest
 from auth import verify_password, create_token, hash_password
-from datetime import datetime
+from datetime import datetime, UTC
 from auth import get_current_user
 from automation.dispatcher import dispatch
 from automation import handlers
@@ -781,7 +781,7 @@ def save_orders(orders):
 
 
 @app.post("/orders")
-def create_order(order: Order, current_user=Depends(get_current_user)):
+def create_order(order: Order, background_tasks: BackgroundTasks, current_user=Depends(get_current_user)):
 
     user_id = current_user["id"]
 
@@ -802,15 +802,22 @@ def create_order(order: Order, current_user=Depends(get_current_user)):
     new_order = order.model_dump()
     new_order["id"] = str(uuid.uuid4())
     new_order["userId"] = user_id
-    new_order["orderTime"] = datetime.utcnow().isoformat()
+    new_order["orderTime"] = datetime.now(UTC).isoformat()
 
     orders.append(new_order)
     save_orders(orders)
 
-    dispatch(Events.ORDER_CREATED, {
-        "orderId": new_order["id"],
-        "userId": user_id
-    })
+    background_tasks.add_task(
+        dispatch,
+        Events.ORDER_CREATED,
+        {
+            "orderId": new_order["id"],
+            "userId": user_id,
+            "total": new_order["totalCostCents"],
+            "items": new_order["items"],
+            "billingDetails": new_order["billingDetails"],
+            "orderTime": new_order["orderTime"]
+        })
 
     return {
         "message": "Order created successfully!",
@@ -845,7 +852,8 @@ def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
     dispatch(Events.ORDER_CANCELLED, {
         "orderId": order_id,
-        "userId": current_user["id"]
+        "userId": current_user["id"],
+        "cancelledAt": datetime.now(UTC).isoformat()
     })
 
     return {"message": "Order cancelled successfully"}

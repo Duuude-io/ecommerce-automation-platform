@@ -22,7 +22,7 @@ def run_handler(handler, payload, event_name):
 
     handler_name = handler.__name__
 
-    payload = payload or {}
+    payload = dict(payload or {})
 
     # normalize userId
 

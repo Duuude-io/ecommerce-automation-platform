@@ -1,0 +1,121 @@
+.paypal-option-row {
+  margin: 30px 10px 30px 10px;
+}
+
+.paypal-icon {
+  height: 40px;
+}
+
+.cashapp-option-row {
+  margin-top: -20px;
+  margin-bottom: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.cashapp-icon {
+  height: 70px;
+  margin-left: -25px;
+  width: 210px;
+}
+
+.venmo-option-row {
+  margin: 20px 10px 30px 10px;
+}
+
+.venmo-icon {
+  height: 40px;
+  margin-left: -30px;
+  width: 200px;
+}
+
+.card-option-row {
+  margin: 30px 10px 30px 10px;
+}
+
+.method-label {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.payment-radio-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.payment-radio-wrapper input[type="radio"] {
+  transform: scale(2.5);
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  accent-color: #9a0909;
+}
+
+.payment-method-option {
+  display: block;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-id {
+  font-weight: 500;
+}
+
+.js-order-id {
+  font-size: 17px;
+  font-weight: bold;
+  color: #9a0909;
+}
+
+.order-success-animation {
+  width: 270px;
+  height: 270px;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  object-fit: contain;
+}
+
+.order-success-container {
+  /* Ensures the container itself centers its children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding-bottom: 15px;
+  background-color: rgb(252, 252, 252);
+  border: 1px solid rgb(131, 8, 255);
+  border-radius: 8px;
+  max-width: 320px;
+  margin: 40px auto;
+}
+
+.view-products-link {
+  /* 1. Resetting the link look */
+  text-decoration: none;
+  color: #1814ff;
+  font-size: 15px;
+  text-align: center;
+  display: block;
+  margin-top: 3px;
+  width: 30%;
+  padding: 10px;
+
+  background-color: rgb(79, 197, 146);
+  border-radius: 20px;
+
+  /* 4. Effects */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgb(8, 37, 255);
+  transition: background-color 0.2s;
+}
+
+.primary-button {
+  box-shadow: 0 2px 5px rgb(131, 8, 255);
+  transition: background-color 0.2s;
+}

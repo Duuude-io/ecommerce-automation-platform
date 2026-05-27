@@ -31,8 +31,10 @@ button {
   background-color: rgb(255, 216, 20);
   border: 1px solid rgb(252, 210, 0);
   border-radius: 8px;
+
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 2px 5px rgb(8, 37, 255);
+  transition: background-color 0.2s;
 }
 
 .button-primary:hover {

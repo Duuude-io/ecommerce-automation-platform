@@ -27,4 +27,5 @@ class Order(BaseModel):
     items: List[OrderItem]
     billingDetails: BillingDetails
     totalCostCents: int
+    paymentMethod: Optional[str] = None
     status: str = "processing"

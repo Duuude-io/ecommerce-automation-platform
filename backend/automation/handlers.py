@@ -1,6 +1,7 @@
-from automation.dispatcher import register, listen
+from automation.dispatcher import register, listen, dispatch
 from automation.events import Events
 import time
+from utils.storage import update_order_status
 
 
 @listen(Events.USER_CREATED)
@@ -25,11 +26,6 @@ def send_welcome_email(data):
         print("⚠️ No contact method found")
 
 
-@listen(Events.ORDER_CREATED)
-def order_received(data):
-    print(f"Automation: Order {data['orderId']} received")
-
-
 @listen(Events.OTP_VERIFIED)
 def handle_otp_verified(data):
     print("🔥 OTP VERIFIED AUTOMATION")
@@ -49,3 +45,70 @@ def user_onboarding(data):
 @listen(Events.USER_LOGGED_IN)
 def login_analytics(data):
     print("User logged in:", data["userId"])
+
+
+@listen(Events.ORDER_CREATED)
+def order_received(data):
+    print(f"Automation: Order {data['orderId']} received")
+
+
+@listen(Events.ORDER_CREATED)
+def start_order_workflow(data):
+
+    order_id = data["orderId"]
+
+    print(f"📦 Processing order {order_id}")
+
+
+"""
+@listen(Events.ORDER_PAID)
+def pack_order(data):
+
+    update_order_status(data["orderId"], "paid")
+
+    print(f"📦 Packing order {data['orderId']}")
+
+    time.sleep(5)
+
+    dispatch(Events.ORDER_PACKED, data)
+
+
+@listen(Events.ORDER_PACKED)
+def ship_order(data):
+
+    update_order_status(data["orderId"], "packed")
+
+    print(f"🚚 Shipping order {data['orderId']}")
+
+    time.sleep(5)
+
+    dispatch(Events.ORDER_SHIPPED, data)
+
+
+@listen(Events.ORDER_SHIPPED)
+def deliver_order(data):
+
+    update_order_status(data["orderId"], "shipped")
+
+    print(f"✈️ Delivered {data['orderId']}")
+
+    dispatch(Events.ORDER_DELIVERED, data)
+
+
+@listen(Events.ORDER_DELIVERED)
+def complete_order(data):
+
+    update_order_status(data["orderId"], "delivered")
+
+    print(f"🎉 Order completed")
+"""
+
+
+@listen(Events.ORDER_CANCELLED)
+def cancel_order_workflow(data):
+
+    update_order_status(data["orderId"], "cancelled")
+
+    print(f"❌ Order {data['orderId']} cancelled")
+
+    dispatch(Events.ORDER_REFUND_INITIATED, data)

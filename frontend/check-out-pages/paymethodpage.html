@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Payment Method</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../styles/shared/general.css ">
+  <link rel="stylesheet" href="../styles/shared/amazon-header.css">
+
+  <!-- Signin Page CSS -->
+  <link rel="stylesheet" href="../styles/pages/login.css">
+
+  <link rel="stylesheet" href="../styles/pages/check-out-flow/checkoutflow.css ">
+</head>
+
+<body class="pay-method-page">
+
+  <!-- Header -->
+  <header class="signin-header">
+    <img src="../images/amazon-logo-black.png" class="amazon-logo-dark">
+  </header>
+
+  <!-- Main -->
+  <main class="auth-container">
+
+    <div class="auth-card">
+
+      <h2>Select Payment Method</h2>
+
+      <label class="payment-method-option">
+        <div class="card-option-row">
+          <div class="payment-radio-wrapper">
+            <input type="radio" name="payment-method" value="card" checked>
+            <span class="method-label">
+              Credit or Debit Card
+            </span>
+          </div>
+        </div>
+      </label>
+
+      <label class="payment-method-option">
+        <div class="paypal-option-row">
+          <div class="payment-radio-wrapper">
+            <input type="radio" name="payment-method" value="paypal">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="paypal-icon">
+          </div>
+        </div>
+      </label>
+
+      <label class="payment-method-option">
+        <div class="cashapp-option-row">
+          <div class="payment-radio-wrapper">
+            <input type="radio" name="payment-method" value="cashapp">
+            <img src="../images/Cash_App-Full-Logo.wine.svg" alt="cashapp" class="cashapp-icon">
+          </div>
+        </div>
+      </label>
+
+      <label class="payment-method-option">
+        <div class="venmo-option-row">
+          <div class="payment-radio-wrapper">
+            <input type="radio" name="payment-method" value="venmo">
+            <img src="../images/Venmo-Logo.wine.svg" alt="venmo" class="venmo-icon">
+          </div>
+        </div>
+      </label>
+
+      <button type="button" class="primary-button">Continue</button>
+
+      <div class="divider"></div>
+
+      <p class="signin-info">
+        By continuing, you agree to Amazon's
+        <a href="#">Conditions of Use</a> and
+        <a href="#">Privacy Notice</a>
+      </p>
+
+      <a class="help-link" href="#">Need help?</a>
+
+    </div>
+  </main>
+
+
+  <div class="divider-2"></div>
+
+  <footer class="signin-footer">
+
+    <div class="footer-links">
+      <a href="#">Conditions of Use</a>
+      <a href="#">Privacy Notice</a>
+      <a href="#">Help</a>
+    </div>
+
+    <div class="footer-copyright">
+      © 1996-2026, Amazon.com, Inc. or its affiliates
+    </div>
+
+  </footer>
+
+  <script type="module" src="../scripts//check-out-flow/payMethodPage.js"></script>
+
+</body>
+
+</html>

@@ -652,5 +652,45 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "6e901309-205a-4e87-9baa-11c8f950d9e2",
+    "email": "guugfgdd@gmail.com",
+    "phone": "08051586807",
+    "password": "$2b$12$oT9DueHdKqi705HSs92dyuCPjN3xxxChkJbWetx/oSRoeAj6fgChe",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "30c65dd7-189a-4fa0-b52f-a3b1b44f82ee",
+    "email": "kjhgfghjk@gmail.com",
+    "phone": "08076783807",
+    "password": "$2b$12$YOQ.UzwY0o3ewj7gEOFReOX/4k1Z65OD8fJs5I1vtg1gGnD3ttmtG",
+    "name": "kjhg",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "0c4eb5d4-1705-4853-8a10-19bf0dae7fbb",
+    "email": "gigan@gmail.com",
+    "phone": "08051583333",
+    "password": "$2b$12$aJwXQLEK2wLJnr2H7aOSVOVjVNrgTUJUPoW.kj3PDYGwUsddm0Zj6",
+    "name": "kjhgf",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "0278787b-7ff8-46d3-9c03-0dc2636004d6",
+    "email": "uphands00401@gmail.com",
+    "phone": "+14558679901",
+    "password": "$2b$12$jiDQcbPabPmcy1ZaHPUqHe28uZrkDWFbr.weSwD5AhdWP/Doat0Ca",
+    "name": "Testing",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

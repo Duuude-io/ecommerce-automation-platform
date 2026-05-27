@@ -5,18 +5,47 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 USERS_FILE = BASE_DIR / "users.json"
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+ORDERS_FILE = BASE_DIR / "orders.json"
+
+
 def load_users():
     if not USERS_FILE.exists():
         return []
 
     with open(USERS_FILE, "r") as f:
-        return json.load(f)
+        users = json.load(f)
+
     for user in users:
-        # Using the string directly to avoid circular imports with AuthState
         user.setdefault("auth_state", "CREATE_ACCOUNT")
+
     return users
 
 
 def save_users(users):
     with open(USERS_FILE, "w") as f:
         json.dump(users, f, indent=2)
+
+
+def load_orders():
+    if not ORDERS_FILE.exists():
+        return []
+
+    with open(ORDERS_FILE, "r") as f:
+        return json.load(f)
+
+
+def save_orders(orders):
+    with open(ORDERS_FILE, "w") as f:
+        json.dump(orders, f, indent=2)
+
+
+def update_order_status(order_id, status):
+
+    orders = load_orders()
+
+    for order in orders:
+        if order["id"] == order_id:
+            order["status"] = status
+
+    save_orders(orders)
