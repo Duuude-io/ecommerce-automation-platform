@@ -692,5 +692,55 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "a6fefb59-8dd7-4fc0-b2bd-fa6b3b98f525",
+    "email": "kdhwufq@gmail.com",
+    "phone": "08051587622",
+    "password": "$2b$12$HJ.oNAD36gJv/5a7f8D/1e0fwxsqhUm6IWYqSSfsvd83H5x2U2rFC",
+    "name": "Dare",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "23486aad-9a1e-43e8-9b89-e9cb2c065795",
+    "email": "julius@gmail.com",
+    "phone": "08051522307",
+    "password": "$2b$12$cLQXhWYKgFc6MRqJXycLfOEtE9pulU8eQdFLAQIXQcapbLLgioXHC",
+    "name": "oiuilkj",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "ff4f1bc1-7ad9-4482-b1b2-e0f2b019d321",
+    "email": "uphands4089001@gmail.com",
+    "phone": "+15905643266",
+    "password": "$2b$12$iljcycfBEBnC113ffip1qu1EH6H.dRqthFt/1glBJ5GNjQuTZyyaW",
+    "name": "uytrertgyh",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "5c993232-941e-4787-ad74-35bac097ac1e",
+    "email": "fghjklkjh@gmail.com",
+    "phone": "08051587700",
+    "password": "$2b$12$MSt2aj3/fTKKQT1AXpPoPu/Yt5Wm1KsDZjYFyBV.Lter7NUOOXq8K",
+    "name": "Ade",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "420065ad-25ff-4399-9b46-f19f3f9fe7d2",
+    "email": "up564hands401@gmail.com",
+    "phone": "+19785468875",
+    "password": "$2b$12$1OpgJqAJJPS.ZsaecFDMwOlFTtTB/rcohaCwunHnqt9eDy.KEJM9i",
+    "name": "aDE",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

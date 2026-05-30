@@ -46,7 +46,6 @@ async function handleSubmit(event, page) {
     const orderData = buildOrderData(
       cart.cartItems,
       session.billingDetails,
-      calculateCartTotal()
     );
 
     const result = await createOrder(orderData);

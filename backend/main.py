@@ -1,12 +1,11 @@
 
-from fastapi import FastAPI, Header, Depends, BackgroundTasks
+from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 import random
 import time
 from auth_states import AuthState
-from fastapi import HTTPException
-from utils.storage import load_users, save_users
+from utils.storage import load_users, save_users, load_receipts
 
 import json
 import uuid
@@ -644,17 +643,19 @@ def get_automation_logs():
     conn.close()
 
     return [
-        {
-            "event": r[0],
-            "handler": r[1],
-            "user_id": r[2],
-            "payload": safe_json_load(r[3]),
-            "status": r[4],
-            "timestamp": r[5],
-            "name": safe_json_load(r[3]).get("name"),
-            "email": safe_json_load(r[3]).get("email"),
-            "phone": safe_json_load(r[3]).get("phone")
-        }
+        (
+            lambda payload: {
+                "event": r[0],
+                "handler": r[1],
+                "user_id": r[2],
+                "payload": payload,
+                "status": r[4],
+                "timestamp": r[5],
+                "name": r[6],
+                "email": r[7],
+                "phone": r[8]
+            }
+        )(safe_json_load(r[3]))
         for r in rows
     ]
 
@@ -804,7 +805,15 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
     new_order["userId"] = user_id
     new_order["orderTime"] = datetime.now(UTC).isoformat()
 
+    new_order["subTotalCents"] = order.subTotalCents
+    new_order["taxCents"] = order.taxCents
+    new_order["shippingCents"] = order.shippingCents
+    new_order["totalCostCents"] = order.totalCostCents
+
     orders.append(new_order)
+
+    print("NEW ORDER:", new_order)
+
     save_orders(orders)
 
     background_tasks.add_task(
@@ -813,7 +822,16 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
         {
             "orderId": new_order["id"],
             "userId": user_id,
-            "total": new_order["totalCostCents"],
+
+            "name": current_user.get("name"),
+            "email": current_user.get("email"),
+            "phone": current_user.get("phone"),
+
+            "subTotalCents": new_order["subTotalCents"],
+            "taxCents": new_order["taxCents"],
+            "shippingCents": new_order["shippingCents"],
+            "totalCostCents": new_order["totalCostCents"],
+
             "items": new_order["items"],
             "billingDetails": new_order["billingDetails"],
             "orderTime": new_order["orderTime"]
@@ -858,5 +876,30 @@ def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
     return {"message": "Order cancelled successfully"}
 
+
+@app.get("/orders/{order_id}/receipt")
+def get_order_receipt(
+    order_id: str,
+    current_user=Depends(get_current_user)
+):
+
+    receipts = load_receipts()
+
+    receipt = next(
+        (
+            r for r in receipts
+            if r["orderId"] == order_id
+            and r["userId"] == current_user["id"]
+        ),
+        None
+    )
+
+    if not receipt:
+        raise HTTPException(
+            status_code=404,
+            detail="Receipt not found"
+        )
+
+    return receipt
 
 # auth flow >>>>

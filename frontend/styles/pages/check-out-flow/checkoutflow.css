@@ -119,3 +119,71 @@
   box-shadow: 0 2px 5px rgb(131, 8, 255);
   transition: background-color 0.2s;
 }
+
+.state-select {
+  display: block;
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  border: 1px solid #aaa;
+  border-radius: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #797575;
+  /* Removes default arrow in some browsers to allow custom styling */
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+  box-shadow: inset 0 1px 6px rgb(0, 0, 0);
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  padding-left: 13px;
+  background-color: rgb(255, 255, 255);
+}
+
+.state-select option {
+  padding-right: 10px;
+}
+
+.state-select:focus {
+  outline: none;
+  border-color: #000c09;
+  background-color: rgb(250, 254, 255);
+  box-shadow: inset 0 1px 6px rgba(31, 167, 204, 0.15), 0 0 0 4px rgba(195, 243, 247, 0.926);
+  padding-left: 20px;
+}
+
+.create-form input {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 14px;
+  border: 1px solid #aaa;
+  height: 46px;
+  border-radius: 15px;
+  font-size: 20px;
+  box-shadow: inset 0 1px 6px rgb(0, 0, 0);
+  transition: all 0.2s ease;
+  padding: 0 12px;
+}
+
+.create-form input:focus {
+  outline: none;
+  border-color: #000c09;
+  background-color: rgb(250, 254, 255);
+  box-shadow: inset 0 1px 6px rgba(31, 167, 204, 0.15), 0 0 0 4px rgba(195, 243, 247, 0.926);
+  padding-left: 20px;
+}
+
+.view-receipt-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 5px 10px;
+  background: #8a6d6d;
+  color: rgb(244, 242, 255);
+  text-decoration: none;
+  border-radius: 15px;
+  font-weight: 300;
+}

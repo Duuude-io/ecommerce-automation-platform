@@ -1,10 +1,13 @@
 import { checkoutSession } from './checkoutSession.js';
+import { states } from '../../data/state.js';
 
 console.log("Billing Details Page Loaded")
 
 document.addEventListener('DOMContentLoaded', initPage);
 
 function initPage() {
+
+  renderStateList();
 
   const page = document.querySelector('.bill-details-page');
 
@@ -40,4 +43,34 @@ function handleSubmit(event) {
   });
 
   window.location.href = 'paymethodpage.html';
+}
+
+function renderStateList() {
+  const stateSelect = document.querySelector('.js-state');
+
+  if (!stateSelect) {
+    console.error("HTML element .js-state not found!");
+    return;
+  }
+
+  let statesHTML = `
+    <option value="" selected hidden>
+      Select State
+    </option>
+  `;
+
+  if (states && states.length > 0) {
+    states.forEach((state) => {
+      statesHTML += `
+        <option value="${state.abbrev}">
+          ${state.name}
+        </option>
+      `;
+    });
+
+    stateSelect.innerHTML = statesHTML;
+    console.log("Successfully injected states!");
+  } else {
+    console.error("The states array is empty.");
+  }
 }

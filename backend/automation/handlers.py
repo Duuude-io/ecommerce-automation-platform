@@ -1,7 +1,9 @@
 from automation.dispatcher import register, listen, dispatch
 from automation.events import Events
 import time
-from utils.storage import update_order_status
+from utils.storage import update_order_status, load_receipts, save_receipts
+
+import uuid
 
 
 @listen(Events.USER_CREATED)
@@ -112,3 +114,39 @@ def cancel_order_workflow(data):
     print(f"❌ Order {data['orderId']} cancelled")
 
     dispatch(Events.ORDER_REFUND_INITIATED, data)
+
+
+@listen(Events.ORDER_CREATED)
+def generate_order_receipt(data):
+
+    receipts = load_receipts()
+
+    receipt = {
+        "receiptId": str(uuid.uuid4()),
+        "orderId": data["orderId"],
+        "userId": data["userId"],
+
+        "name": data.get("name"),
+        "email": data.get("email"),
+        "phone": data.get("phone"),
+
+        "items": data.get("items", []),
+        "billingDetails": data.get("billingDetails"),
+        "createdAt": data.get("orderTime"),
+
+        "subTotalCents": data.get("subTotalCents"),
+        "shippingCents": data.get("shippingCents"),
+        "taxCents": data.get("taxCents"),
+        "total": data.get("totalCostCents")
+    }
+
+    receipts.append(receipt)
+
+    save_receipts(receipts)
+
+    print(f"🧾 Receipt generated: {receipt['receiptId']}")
+
+    dispatch(
+        Events.ORDER_RECEIPT_GENERATED,
+        receipt
+    )

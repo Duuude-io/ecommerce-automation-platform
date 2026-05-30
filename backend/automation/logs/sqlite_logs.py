@@ -52,9 +52,9 @@ def log_event(event_name, payload, handler_name, status="success"):
         json.dumps(normalized),
         status,
         time.time(),
-        payload.get("name"),
-        payload.get("email"),
-        payload.get("phone")
+        normalized["user"].get("name"),
+        normalized["user"].get("email"),
+        normalized["user"].get("phone")
     ))
 
     conn.commit()

@@ -44,7 +44,11 @@ function drawLogs(logs) {
     .sort((a, b) => b.timestamp - a.timestamp)
     .forEach((log, index) => {
 
+      console.log(log);
+
       const row = document.createElement("tr");
+
+      console.log("EVENT:", log.event);
 
       row.style.backgroundColor = getRowColor(log.event);
 
@@ -57,7 +61,7 @@ function drawLogs(logs) {
         <td>${log.event || "-"}</td>
         <td>${log.handler || "-"}</td>
         <td>${formatStatus(log.status)}</td>
-        <td>${log.name || "-"}</td>
+        <td>${log.user_name || log.name || "-"}</td>
         <td>${formatTime(log.timestamp)}</td>
 
         <td>
@@ -118,22 +122,28 @@ function formatTime(timestamp) {
 }
 
 // ROW COLORS (EVENT TYPES)
-function getRowColor(event) {
-  switch (event) {
+function getRowColor(event = "") {
+
+  const normalized = event
+    .trim()
+    .toLowerCase();
+
+  switch (normalized) {
+
     case "user_created":
       return "#a7db47"; // green
 
     case "user_fully_verified":
-      return "#6fa7cf"; // blue
+      return "#ffb300"; // blue
 
     case "order_created":
-      return "#ecbe73"; // orange
+      return "#1debde"; // orange
 
     case "user_logged_in":
-      return "#dc9ee6"; // purple
+      return "#af3dc0"; // purple
 
     default:
-      return "#966060";
+      return "#22e7e3";
   }
 }
 

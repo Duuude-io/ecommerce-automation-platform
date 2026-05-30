@@ -17,13 +17,16 @@
 
   <!-- Signin Page CSS -->
   <link rel="stylesheet" href="../styles/pages/login.css">
+  <link rel="stylesheet" href="../styles/pages/check-out-flow/checkoutflow.css">
 </head>
 
 <body class="bill-details-page">
 
   <!-- Header -->
   <header class="signin-header">
-    <img src="../images/amazon-logo-black.png" class="amazon-logo-dark">
+    <a href="../amazon.html">
+      <img src="../images/amazon-logo-black.png" class="amazon-logo-dark">
+    </a>
   </header>
 
   <!-- Main -->
@@ -48,7 +51,11 @@
 
             <input type="text" class="js-city" placeholder="Town/City">
 
-            <input type="text" class="js-state" placeholder="State">
+
+            <select class="state-select js-state" id="state" required>
+              <option value="" selected hidden>State Select</option>
+            </select>
+
 
             <input type="text" class="js-zip" placeholder="Zip">
 
@@ -65,18 +72,15 @@
 
       <div class="divider"></div>
 
-      <div class="already-customer">
-        <div class="already-customer-2">Already a customer?</div>
-        <a href="#" class="js-signin-link">Sign in instead</a>
-        </p>
+      <p class="signin-info">
+        By continuing, you agree to Amazon's
+        <a href="#">Conditions of Use</a> and
+        <a href="#">Privacy Notice</a>
+      </p>
 
-        <p class="create-signin-info">
-          By creating an account, you agree to Amazon's
-          <a href="#">Conditions of Use</a> and
-          <a href="#">Privacy Notice</a>.
-        </p>
+      <a class="help-link" href="#">Need help?</a>
 
-      </div>
+    </div>
 
   </main>
 

@@ -19,8 +19,9 @@ function initPage() {
 
 function displayOrderId(page) {
 
-  const orderIdElement =
-    page.querySelector('.js-order-id');
+  const orderIdElement = page.querySelector('.js-order-id');
+
+  const receiptLink = page.querySelector('.js-receipt-link');
 
   if (!orderIdElement) return;
 
@@ -30,6 +31,18 @@ function displayOrderId(page) {
     session.lastOrderId || 'Unavailable';
 
   orderIdElement.textContent = orderId;
+
+  if (receiptLink) {
+
+    receiptLink.innerHTML = `
+      <a
+        href="../receipts.html?orderId=${orderId}"
+        class="view-receipt-btn"
+      >
+        View Receipt
+      </a>
+    `;
+  }
 }
 
 function setupContinueButton(page) {

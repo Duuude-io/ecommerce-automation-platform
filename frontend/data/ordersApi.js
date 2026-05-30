@@ -1,5 +1,6 @@
 import { cart } from './cart-class.js'
 import { getDeliveryOption, calculateDeliveryDate } from './deliveryOptions.js';
+import { getProduct } from './products.js';
 
 export async function createOrder(orderData) {
 
@@ -39,7 +40,7 @@ export async function fetchOrders() {
   return await response.json();
 }
 
-export function buildOrderData(cartItems, billingDetails, totalCents) {
+export function buildOrderData(cartItems, billingDetails) {
   const items = cartItems.map(item => ({
     productId: item.productId,
     quantity: item.quantity,
@@ -50,10 +51,45 @@ export function buildOrderData(cartItems, billingDetails, totalCents) {
       )
   }));
 
+
+  let subTotalCents = 0;
+  let shippingCents = 0;
+
+  cartItems.forEach(item => {
+    const product = getProduct(item.productId);
+
+    subTotalCents += product.priceCents * item.quantity;
+
+    const deliveryOption = getDeliveryOption(item.deliveryOptionId);
+    shippingCents += deliveryOption.priceCents;
+  });
+
+  const totalBeforeTaxCents =
+    subTotalCents + shippingCents;
+
+  const taxCents =
+    Math.round(totalBeforeTaxCents * 0.10);
+
+  const totalCostCents =
+    subTotalCents +
+    shippingCents +
+    taxCents;
+
+  console.log({
+    subTotalCents,
+    shippingCents,
+    taxCents,
+    totalCostCents
+  });
+
   return {
     items,
     billingDetails,
-    totalCostCents: totalCents
+
+    subTotalCents,
+    shippingCents,
+    taxCents,
+    totalCostCents
   };
 }
 

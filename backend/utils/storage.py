@@ -9,6 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ORDERS_FILE = BASE_DIR / "orders.json"
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+RECEIPTS_FILE = BASE_DIR / "receipts.json"
+
+
 def load_users():
     if not USERS_FILE.exists():
         return []
@@ -49,3 +53,18 @@ def update_order_status(order_id, status):
             order["status"] = status
 
     save_orders(orders)
+
+
+def load_receipts():
+
+    if not RECEIPTS_FILE.exists():
+        return []
+
+    with open(RECEIPTS_FILE, "r") as f:
+        return json.load(f)
+
+
+def save_receipts(receipts):
+
+    with open(RECEIPTS_FILE, "w") as f:
+        json.dump(receipts, f, indent=2)

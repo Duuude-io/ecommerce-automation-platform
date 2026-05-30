@@ -61,38 +61,6 @@
     "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
     "items": [
       {
-        "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-        "quantity": 2,
-        "deliveryOptionId": "1",
-        "estimatedDeliveryTime": "Tuesday, June 2"
-      },
-      {
-        "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-        "quantity": 1,
-        "deliveryOptionId": "2",
-        "estimatedDeliveryTime": "Wednesday, May 27"
-      }
-    ],
-    "billingDetails": {
-      "firstName": "Dude",
-      "lastName": "k1ojr1",
-      "apartment": "k23mpo23",
-      "streetAddress": "mwmfo",
-      "city": "lagos",
-      "state": "ME",
-      "zipCode": "83494",
-      "phone": "814-093-5783",
-      "email": "uphands401@gmail.com"
-    },
-    "totalCostCents": 4275,
-    "status": "delivered",
-    "id": "cc760295-9887-4e42-837b-5fb7d20379f3",
-    "orderTime": "2026-05-23T17:43:01.907464"
-  },
-  {
-    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
-    "items": [
-      {
         "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
         "quantity": 1,
         "deliveryOptionId": "1",
@@ -550,5 +518,720 @@
     "status": "processing",
     "id": "ca53744e-7b3c-464c-877e-148202200adc",
     "orderTime": "2026-05-27T08:28:13.547473+00:00"
+  },
+  {
+    "userId": "a6fefb59-8dd7-4fc0-b2bd-fa6b3b98f525",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 2,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 1598,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "1e866b8d-d453-4090-839b-623b8727a2ab",
+    "orderTime": "2026-05-28T07:29:59.324187+00:00"
+  },
+  {
+    "userId": "23486aad-9a1e-43e8-9b89-e9cb2c065795",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 799,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "6bd3611e-c866-4c02-8032-ffe1828360b8",
+    "orderTime": "2026-05-28T09:54:32.784490+00:00"
+  },
+  {
+    "userId": "23486aad-9a1e-43e8-9b89-e9cb2c065795",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      },
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "IA",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 2698,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "6cd868e9-8473-4379-9a34-6350dabd1383",
+    "orderTime": "2026-05-28T10:08:39.529088+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "ewrfghj",
+      "lastName": "qwertgh",
+      "apartment": "qwertyh",
+      "streetAddress": "qwertyhjk",
+      "city": "ertyu",
+      "state": "LA",
+      "zipCode": "34553",
+      "phone": "3456786543333",
+      "email": ""
+    },
+    "totalCostCents": 799,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "050abd29-51c7-48de-9f48-1ad69ada135a",
+    "orderTime": "2026-05-28T11:08:03.682349+00:00"
+  },
+  {
+    "userId": "5c993232-941e-4787-ad74-35bac097ac1e",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      },
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Monday, June 8"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "Ade",
+      "lastName": "Para",
+      "apartment": "12",
+      "streetAddress": "IUYTRYUIO",
+      "city": "oiuytyuiop",
+      "state": "MA",
+      "zipCode": "987609",
+      "phone": "090876546783",
+      "email": "JHGFGHJK@GMAIL.COM"
+    },
+    "totalCostCents": 2698,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "08d55033-35de-4356-a2f6-04bc403eb137",
+    "orderTime": "2026-05-28T11:51:38.882304+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "ADE",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "83bc6511-6bc3-467f-b799-7d5271f7341b",
+    "orderTime": "2026-05-29T14:39:40.715043+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "KS",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 799,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "2fdadd0e-fc40-4908-adaa-4f309bf0c0c3",
+    "orderTime": "2026-05-29T15:13:46.312585+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "jhgfds",
+      "lastName": "ertyui",
+      "apartment": "wertyu",
+      "streetAddress": "wertyuio",
+      "city": "ertyuiq",
+      "state": "IA",
+      "zipCode": "78667",
+      "phone": "09099887766",
+      "email": "dfghjklkjhgf"
+    },
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "3cc11558-f2e1-4d45-b7a9-0476995ab0ca",
+    "orderTime": "2026-05-29T15:22:23.818086+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "58f9c5e6-3d9b-4c05-b978-762bab79b971",
+    "orderTime": "2026-05-29T16:44:29.551725+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 4,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 7,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+        "quantity": 4,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "Dude",
+      "lastName": "Ade",
+      "apartment": "12",
+      "streetAddress": "ajanlekoko",
+      "city": "iware",
+      "state": "IN",
+      "zipCode": "34678",
+      "phone": "09088990099",
+      "email": "ewradd@gmail.com"
+    },
+    "totalCostCents": 25959,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "de58f241-c28a-4234-87d6-f5c9d8c802f5",
+    "orderTime": "2026-05-29T17:23:14.176547+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "sdfghwer",
+      "lastName": "wertyui",
+      "apartment": "wertyui",
+      "streetAddress": "wertyuio",
+      "city": "wertyuio",
+      "state": "ID",
+      "zipCode": "567890",
+      "phone": "9876543456789",
+      "email": "rftyuiolkjhgfdd"
+    },
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "12ce0f10-c143-484e-ae35-3f0f109a4c99",
+    "orderTime": "2026-05-29T17:54:00.579780+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [],
+    "billingDetails": {
+      "firstName": "sdfghwer",
+      "lastName": "wertyui",
+      "apartment": "wertyui",
+      "streetAddress": "wertyuio",
+      "city": "wertyuio",
+      "state": "ID",
+      "zipCode": "567890",
+      "phone": "9876543456789",
+      "email": "rftyuiolkjhgfdd"
+    },
+    "totalCostCents": 0,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "ca12123d-e4fe-4d2b-8cd3-6df840b64e10",
+    "orderTime": "2026-05-29T17:55:25.597380+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "kjhgrfd",
+      "lastName": "wertyuio",
+      "apartment": "wertyu",
+      "streetAddress": "wertyu",
+      "city": "qwertyu",
+      "state": "ID",
+      "zipCode": "456789",
+      "phone": "09876543456",
+      "email": "SDFGHJKL;LKHGF@FGHJKLKJH"
+    },
+    "totalCostCents": 1889,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "f8185fcf-a6d6-4e9c-9dac-46317d0b3c44",
+    "orderTime": "2026-05-29T17:58:57.746132+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "Dele",
+      "lastName": "koko",
+      "apartment": "13",
+      "streetAddress": "fsgdhfryyy",
+      "city": "vtgvhjkl;l,kmn",
+      "state": "ID",
+      "zipCode": "67890",
+      "phone": "080987656789",
+      "email": "fghjklkj@@hsghsjm"
+    },
+    "totalCostCents": 5883,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "7e00e73a-56da-4dbb-b4fd-9ee0f4ea8979",
+    "orderTime": "2026-05-30T03:57:24.437960+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "Dudu",
+      "lastName": "ade",
+      "apartment": "232",
+      "streetAddress": "fghjkl;",
+      "city": "tyuiop",
+      "state": "ID",
+      "zipCode": "09876",
+      "phone": "098098878787",
+      "email": "yuiop[poiuy@gmail.com"
+    },
+    "subTotalCents": 1899,
+    "taxCents": 190,
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "1c58d576-6192-4b1c-80f4-8eae39ffaca2",
+    "orderTime": "2026-05-30T06:43:20.664980+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "77919bbe-0e56-475b-adde-4f24dfed3a04",
+        "quantity": 1,
+        "deliveryOptionId": "3",
+        "estimatedDeliveryTime": "Monday, June 1"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "ertyuf",
+      "lastName": "dfghj",
+      "apartment": "rtyui",
+      "streetAddress": "fghjk",
+      "city": "fghjkl",
+      "state": "HI",
+      "zipCode": "fghjkl;",
+      "phone": "yuiop",
+      "email": "fghjkl;'"
+    },
+    "subTotalCents": 3599,
+    "taxCents": 460,
+    "totalCostCents": 3599,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "1077ddbc-faea-440b-a2c0-d9265d19be07",
+    "orderTime": "2026-05-30T06:47:15.344341+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "77919bbe-0e56-475b-adde-4f24dfed3a04",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Wednesday, June 3"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "fyuio",
+      "lastName": "rtyuio",
+      "apartment": "tyuiop[",
+      "streetAddress": "tyuiop[]",
+      "city": "guiop[]",
+      "state": "HI",
+      "zipCode": "yuiop[]",
+      "phone": "tyuio0p-",
+      "email": "yuiop[]"
+    },
+    "subTotalCents": 3599,
+    "taxCents": 410,
+    "totalCostCents": 3599,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "6b3c93a2-ce6d-445d-bb88-4b93b903eba8",
+    "orderTime": "2026-05-30T06:51:07.784923+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "77919bbe-0e56-475b-adde-4f24dfed3a04",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Wednesday, June 3"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "fghjkl;'",
+      "lastName": "rtyuiop[",
+      "apartment": "dftgyhujiop",
+      "streetAddress": "tgyuiop",
+      "city": "fyhujikop[",
+      "state": "GA",
+      "zipCode": "hjkl;'",
+      "phone": "hjikolp;'[]",
+      "email": "yuiop[]\\"
+    },
+    "subTotalCents": 3599,
+    "taxCents": 410,
+    "totalCostCents": 3599,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "fd53d088-97bd-442e-a73c-2cb9e779f9af",
+    "orderTime": "2026-05-30T06:53:08.294021+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "IA",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "subTotalCents": 1899,
+    "taxCents": 190,
+    "shippingCents": 0,
+    "totalCostCents": 1899,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "ee849759-49de-4af8-a0bc-2b451f986849",
+    "orderTime": "2026-05-30T07:29:58.670702+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 2,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      },
+      {
+        "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "Ade",
+      "lastName": "Ola",
+      "apartment": "456",
+      "streetAddress": "alayerrewee",
+      "city": "ilobe",
+      "state": "ID",
+      "zipCode": "76322",
+      "phone": "90989876543",
+      "email": "fghjkl;'"
+    },
+    "subTotalCents": 2688,
+    "taxCents": 269,
+    "shippingCents": 0,
+    "totalCostCents": 2688,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "c429b2d9-8ebe-4def-aba6-a06b91778c00",
+    "orderTime": "2026-05-30T07:31:26.300855+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Wednesday, June 3"
+      },
+      {
+        "productId": "5968897c-4d27-4872-89f6-5bcb052746d7",
+        "quantity": 1,
+        "deliveryOptionId": "3",
+        "estimatedDeliveryTime": "Monday, June 1"
+      },
+      {
+        "productId": "aad29d11-ea98-41ee-9285-b916638cac4a",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "lade",
+      "lastName": "jatyw",
+      "apartment": "654",
+      "streetAddress": "ghjkloiuytrrrrt",
+      "city": "Jaleye",
+      "state": "KS",
+      "zipCode": "67908",
+      "phone": "9098263836482",
+      "email": "fghjkl;lkjhg@gmaol.com"
+    },
+    "subTotalCents": 4429,
+    "taxCents": 593,
+    "shippingCents": 1498,
+    "totalCostCents": 4429,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "b6f36f66-014f-4c4a-bcb3-161c9f2a564b",
+    "orderTime": "2026-05-30T07:34:04.215390+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "1",
+        "estimatedDeliveryTime": "Tuesday, June 9"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "MN",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "subTotalCents": 799,
+    "taxCents": 80,
+    "shippingCents": 0,
+    "totalCostCents": 879,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "7016a991-2bba-43e3-974b-07680eadfbec",
+    "orderTime": "2026-05-30T07:52:34.154443+00:00"
+  },
+  {
+    "userId": "72d412a4-46b8-4ddf-bdd9-509353400623",
+    "items": [
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Wednesday, June 3"
+      },
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 1,
+        "deliveryOptionId": "3",
+        "estimatedDeliveryTime": "Monday, June 1"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "subTotalCents": 2698,
+    "taxCents": 420,
+    "shippingCents": 1498,
+    "totalCostCents": 4616,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "a5d56167-1710-471c-a0ed-1bcc00d79f2a",
+    "orderTime": "2026-05-30T07:53:22.681880+00:00"
   }
 ]
