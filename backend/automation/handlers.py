@@ -125,10 +125,11 @@ def generate_order_receipt(data):
         "receiptId": str(uuid.uuid4()),
         "orderId": data["orderId"],
         "userId": data["userId"],
+        "orderNumber": data["orderNumber"],
 
         "name": data.get("name"),
-        "email": data.get("email"),
-        "phone": data.get("phone"),
+        "email": data["billingDetails"]["email"],
+        "phone": data["billingDetails"]["phone"],
 
         "items": data.get("items", []),
         "billingDetails": data.get("billingDetails"),

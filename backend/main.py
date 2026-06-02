@@ -3,6 +3,7 @@ from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 import random
+from random import randint
 import time
 from auth_states import AuthState
 from utils.storage import load_users, save_users, load_receipts
@@ -781,6 +782,14 @@ def save_orders(orders):
         json.dump(orders, file, indent=2)
 
 
+def generate_order_number():
+    return (
+        f"{randint(100, 999)}-"
+        f"{randint(1000000, 9999999)}-"
+        f"{randint(1000000, 9999999)}"
+    )
+
+
 @app.post("/orders")
 def create_order(order: Order, background_tasks: BackgroundTasks, current_user=Depends(get_current_user)):
 
@@ -803,6 +812,8 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
     new_order = order.model_dump()
     new_order["id"] = str(uuid.uuid4())
     new_order["userId"] = user_id
+
+    new_order["orderNumber"] = generate_order_number()
     new_order["orderTime"] = datetime.now(UTC).isoformat()
 
     new_order["subTotalCents"] = order.subTotalCents
@@ -827,6 +838,7 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
             "email": current_user.get("email"),
             "phone": current_user.get("phone"),
 
+            "orderNumber": new_order["orderNumber"],
             "subTotalCents": new_order["subTotalCents"],
             "taxCents": new_order["taxCents"],
             "shippingCents": new_order["shippingCents"],

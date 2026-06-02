@@ -90,9 +90,9 @@ function renderReceipt(receipt) {
 
   receiptContent.innerHTML = `
 
-    <div class="receipt-section receipt-id">
-      <strong>Receipt ID:</strong>
-      ${receipt.receiptId}
+    <div class="receipt-section order-number">
+      <strong>Order Number:</strong>
+      ${receipt.orderNumber}
     </div>
 
     <div class="receipt-section">
