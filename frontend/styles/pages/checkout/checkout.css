@@ -303,3 +303,25 @@
   background-color: rgb(231, 189, 0);
   box-shadow: none;
 }
+
+.global-delivery-option {
+  display: flex;
+  margin: 8px;
+  padding: 8px;
+  border-radius: 50px;
+  max-width: 50%;
+  cursor: pointer;
+}
+
+.global-delivery-option input {
+  width: 20px;
+  cursor: pointer;
+}
+
+.global-delivery-options {
+  border: 1px solid rgb(218, 217, 217);
+  padding-top: 8px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}

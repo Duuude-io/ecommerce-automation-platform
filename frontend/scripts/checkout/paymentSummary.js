@@ -5,9 +5,8 @@ import { formatCurrency } from '../utils/money.js';
 import { createOrder } from '../../data/ordersApi.js';
 
 export function renderPaymentSummary() {
-  let productPriceCents = 0;
-  let shippingPriceCents = 0;
 
+  let productPriceCents = 0;
   let cartQuantity = 0;
 
   cart.cartItems.forEach((cartItem) => {
@@ -20,10 +19,18 @@ export function renderPaymentSummary() {
       console.warn('product missing:', cartItem.productId);
       return '';
     }
-    productPriceCents += product.priceCents * cartItem.quantity;
 
-    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
-    shippingPriceCents += deliveryOption.priceCents;
+    productPriceCents +=
+      product.priceCents * cartItem.quantity;
+  });
+
+  const selectedDeliveryOption = getDeliveryOption(cart.cartItems[0]?.deliveryOptionId || '1');
+
+  const shippingPriceCents = selectedDeliveryOption.priceCents;
+
+  console.log({
+    deliveryOption: selectedDeliveryOption.id,
+    shippingPriceCents
   });
 
   const totalBeforeTaxCents = productPriceCents + shippingPriceCents;

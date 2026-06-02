@@ -187,3 +187,104 @@
   border-radius: 15px;
   font-weight: 300;
 }
+
+.receipt-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.receipt-header h5 {
+  margin: 2px;
+  font-size: 20px;
+}
+
+.receipt-header h6 {
+  font-size: 15px;
+  font-weight: 100;
+  margin: 2px;
+}
+
+.receipt-header p {
+  margin: 2px;
+}
+
+.divider-4 {
+  height: 1px;
+  background: #838080;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.broken-divider {
+  border-top: 1px dashed #999;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+}
+
+.receipts-page-auth-container {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  margin-top: 15px;
+}
+
+.receipts-page-auth-card {
+  width: 300px;
+  border: 1px solid rgb(178, 177, 185);
+  border-radius: 8px;
+  padding: 5px 10px 5px 10px;
+  background: white;
+}
+
+.receipt-id {
+  display: flex;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.receipt-section {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  margin: 5px;
+}
+
+.item-receipt-section {
+  display: grid;
+}
+
+.item-row {
+  display: flex;
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 13px;
+  font-style: italic;
+}
+
+.item-qty {
+  font-size: 15px;
+  color: #666;
+  font-style: italic;
+}
+
+.item-price {
+  margin-left: 30px;
+  font-style: italic;
+  padding-bottom: 15px;
+}
+
+.receipt-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 5px;
+}

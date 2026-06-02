@@ -53,16 +53,19 @@ export function buildOrderData(cartItems, billingDetails) {
 
 
   let subTotalCents = 0;
-  let shippingCents = 0;
 
   cartItems.forEach(item => {
     const product = getProduct(item.productId);
 
     subTotalCents += product.priceCents * item.quantity;
-
-    const deliveryOption = getDeliveryOption(item.deliveryOptionId);
-    shippingCents += deliveryOption.priceCents;
   });
+
+  const selectedDeliveryOption =
+    getDeliveryOption(
+      cartItems[0]?.deliveryOptionId || '1');
+
+  const shippingCents =
+    selectedDeliveryOption.priceCents;
 
   const totalBeforeTaxCents =
     subTotalCents + shippingCents;

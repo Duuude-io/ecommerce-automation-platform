@@ -68,24 +68,29 @@ function renderReceipt(receipt) {
     const product = getProduct(item.productId);
 
     return `
-      <div class="item-row">
+      <div class="receipt-section item-row">
 
-        <div>
-          <div>${product.name}</div>
-          <div>Qty: ${item.quantity}</div>
+        <div class="item-info">
+          <div class="item-name">
+            ${product.name}
+          </div>
+
+          <div class="item-qty">
+            Qty: ${item.quantity}
+          </div>
         </div>
 
-        <div>
+        <div class="item-price">
           $${(product.priceCents / 100).toFixed(2)}
         </div>
 
       </div>
     `;
-  }).join("");
+  }).join('');
 
   receiptContent.innerHTML = `
 
-    <div class="receipt-section">
+    <div class="receipt-section receipt-id">
       <strong>Receipt ID:</strong>
       ${receipt.receiptId}
     </div>
@@ -98,20 +103,22 @@ function renderReceipt(receipt) {
     <div class="broken-divider"></div>
 
     <div class="receipt-section">
-      <strong>Shipping Address:</strong>
+      <div class="address-receipt-section">
+        <strong>Shipping Address:</strong>
 
-      <div>
-        ${receipt.billingDetails.firstName}
-        ${receipt.billingDetails.lastName}
-      </div>
-      <div>
-        ${receipt.billingDetails.apartment}
-        ${receipt.billingDetails.streetAddress}
-      </div>
-      <div>
-        ${receipt.billingDetails.city},
-        ${receipt.billingDetails.state}
-        ${receipt.billingDetails.zipCode}
+        <div>
+          ${receipt.billingDetails.firstName}
+          ${receipt.billingDetails.lastName}
+        </div>
+        <div>
+          ${receipt.billingDetails.apartment}
+          ${receipt.billingDetails.streetAddress}
+        </div>
+        <div>
+          ${receipt.billingDetails.city},
+          ${receipt.billingDetails.state}
+          ${receipt.billingDetails.zipCode}
+        </div>
       </div>
     </div>
 
@@ -131,31 +138,41 @@ function renderReceipt(receipt) {
     <div class="broken-divider"></div>
 
     <div class="receipt-section">
-      <strong>Items:</strong>
-
-      ${itemsHtml}
+      <div class="item-receipt-section">
+        <strong>Items:</strong>
+    
+        ${itemsHtml}
+      </div>
     </div>
 
     <div class="broken-divider"></div>
 
     <div class="receipt-section">
-      <strong>SUBTOTAL:</strong>
+      <strong>SubTotal:</strong>
       $${(receipt.subTotalCents / 100).toFixed(2)}
     </div>
 
     <div class="receipt-section">
+      <strong>Tax:</strong>
+      <span>
+        $${(receipt.taxCents / 100).toFixed(2)}
+      </span>
+    </div>
+
+    <div class="receipt-section">
       <strong>Shipping:</strong>
-      $${(receipt.shippingCents / 100).toFixed(2)}
+      <span>
+        $${(receipt.shippingCents / 100).toFixed(2)}
+      </span>
     </div>
 
-    <div class="receipt-section">
-      <strong>TAX:</strong>
-      $${(receipt.taxCents / 100).toFixed(2)}
-    </div>
+    <div class="divider-4"></div>
 
-    <div class="receipt-section">
+    <div class="receipt-section receipt-total">
       <strong>Total:</strong>
-      $${(receipt.total / 100).toFixed(2)}
+      <span>
+        $${(receipt.total / 100).toFixed(2)}
+      </span>
     </div>
 
   `;

@@ -85,6 +85,23 @@ class Cart {
     this.saveToStorage();
   }
 
+  updateAllDeliveryOptions(deliveryOptionId) {
+
+    if (
+      deliveryOptionId !== '1' &&
+      deliveryOptionId !== '2' &&
+      deliveryOptionId !== '3'
+    ) {
+      return;
+    }
+
+    this.cartItems.forEach(cartItem => {
+      cartItem.deliveryOptionId = deliveryOptionId;
+    });
+
+    this.saveToStorage();
+  }
+
   updateDeliveryOption(productId, deliveryOptionId) {
     if (deliveryOptionId !== '1' && deliveryOptionId !== '2' && deliveryOptionId !== '3') {
       return;
