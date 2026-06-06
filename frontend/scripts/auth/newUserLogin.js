@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll(".js-change-user").forEach(el => {
       el.addEventListener("click", (e) => {
         e.preventDefault();
+
+        sessionStorage.removeItem("authSession")
         localStorage.removeItem("identifier");
         window.location.href = "login.html";
       });

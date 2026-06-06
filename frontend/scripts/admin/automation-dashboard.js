@@ -3,21 +3,15 @@ const API_URL = "http://127.0.0.1:8000/automation/logs";
 
 const tableBody = document.getElementById("logsTable");
 
-const payloadPanel = document.getElementById("payloadPanel");
-const payloadData = document.getElementById("payloadData");
-const closePayload = document.getElementById("closePayload");
-
-let allLogs = [];
-
-let payloadStore = {};
-
 // AUTO LOAD + AUTO REFRESH
 fetchLogs();
 setInterval(fetchLogs, 60000);
 
 //  FETCH LOGS
 async function fetchLogs() {
+
   try {
+
     const response = await fetch(API_URL);
     const logs = await response.json();
 
@@ -26,8 +20,6 @@ async function fetchLogs() {
       return;
     }
 
-    allLogs = logs;
-    drawLogs(logs);
     updateMetrics(logs);
 
   } catch (error) {
@@ -79,140 +71,90 @@ function drawLogs(logs) {
 function updateMetrics(logs) {
 
   const total = logs.length;
-
-  const success = logs.filter(
-    log => log.status === "success"
+  const success = logs.filter(log => log.status === "success"
   ).length;
-
-  const failed = logs.filter(
-    log => log.status === "failed"
+  const failed = logs.filter(log => log.status === "failed"
   ).length;
-
   const successRate = total
     ? ((success / total) * 100).toFixed(1)
     : 0;
 
-  document.getElementById("totalEvents").textContent = total;
+  const ordersCreated = logs.filter(
+    log => log.event?.toUpperCase() === "ORDER_CREATED").length;
+  const usersCreated = logs.filter(
+    log => log.event?.toUpperCase() === "USER_CREATED").length;
+  const usersVerified = logs.filter(
+    log => log.event?.toUpperCase() === "uSER_FULLY_VERIFIED").length;
+  const ordersCancelled = logs.filter(
+    log => log.event?.toUpperCase() === "ORDER_CANCELLED").length;
+  const usersLoggedIn = logs.filter(
+    log => log.event?.toUpperCase() === "USER_LOGGED_IN").length;
 
+  console.log(logs[0]);
+
+  document.getElementById("totalEvents").textContent = total;
   document.getElementById("successEvents").textContent = success;
 
   document.getElementById("failedEvents").textContent = failed;
 
   document.getElementById("successRate").textContent =
     `${successRate}%`;
+
+  document.getElementById("orderCreated").textContent =
+    logs.filter(
+      log => log.event?.toUpperCase() === "ORDER_CREATED"
+    ).length;
+
+  document.getElementById("orderCancelled").textContent =
+    logs.filter(
+      log => log.event?.toUpperCase() === "ORDER_CANCELLED"
+    ).length;
+
+  document.getElementById("userCreated").textContent =
+    logs.filter(
+      log => log.event?.toUpperCase() === "USER_CREATED"
+    ).length;
+
+  document.getElementById("userVerified").textContent =
+    logs.filter(
+      log => log.event?.toUpperCase() === "USER_FULLY_VERIFIED"
+    ).length;
+
+  document.getElementById("userLoggedIn").textContent =
+    logs.filter(
+      log => log.event?.toUpperCase() === "USER_LOGGED_IN"
+    ).length;
+
+  document.getElementById("viewAllLogs").textContent =
+    logs.length;
 }
 
-// STATUS STYLING
-function formatStatus(status) {
-  if (status === "success") {
-    return `<span style="color: green; font-weight: bold;">🫦 success</span>`;
-  }
+document.querySelectorAll(".metric-card").forEach(card => {
+  card.addEventListener("click", () => {
 
-  if (status === "failed") {
-    return `<span style="color: red; font-weight: bold;">♨️ failed</span>`;
-  }
+    const event = card.dataset.event;
+    const status = card.dataset.status;
+    const viewLogs = card.dataset.view;
 
-  return `<span style="color: gray;">${status || "-"}</span>`;
-}
+    if (viewLogs === "view_all_logs") {
 
-// TIME FORMAT
-function formatTime(timestamp) {
-  if (!timestamp) return "-";
-  return new Date(timestamp * 1000).toLocaleString();
-}
+      window.location.href = "autoeventlogs.html";
 
-// ROW COLORS (EVENT TYPES)
-function getRowColor(event = "") {
-
-  const normalized = event
-    .trim()
-    .toLowerCase();
-
-  switch (normalized) {
-
-    case "user_created":
-      return "#a7db47"; // green
-
-    case "user_fully_verified":
-      return "#ffb300"; // blue
-
-    case "order_created":
-      return "#1debde"; // orange
-
-    case "user_logged_in":
-      return "#af3dc0"; // purple
-
-    default:
-      return "#22e7e3";
-  }
-}
-
-// EVENT ANALYTICS (DEBUG)
-
-function groupByEvent(logs) {
-  const grouped = {};
-
-  logs.forEach(log => {
-    grouped[log.event] = (grouped[log.event] || 0) + 1;
-  });
-
-  console.log("Event Stats:", grouped);
-}
-
-// global access
-window.viewPayload = function (index) {
-  const log = allLogs[index];
-
-  let payload = log.payload || {};
-
-  if (typeof payload === "string") {
-    try {
-      payload = JSON.parse(payload);
-    } catch (e) {
-      console.error("Invalid payload JSON", e);
-      payload = {};
+      return;
     }
-  }
 
-  console.log(log.payload);
-  console.log(typeof log.payload);
+    if (status) {
+      window.location.href =
+        `autoeventlogs.html?status=${status}`;
 
-  payloadData.innerHTML = `
-    <div class="payload-section">
+      return;
+    }
 
-      <div class="payload-meta">
-        <span><strong>Event:</strong> ${log.event}</span>
-        <span><strong>Handler:</strong> ${log.handler}</span>
-        <span><strong>Status:</strong> ${log.status}</span>
-      </div>
+    if (event) {
+      window.location.href =
+        `autoeventlogs.html?event=${event}`;
 
-      <pre class="payload-json">
-    ${JSON.stringify(payload, null, 2)}
-      </pre>
-
-    </div>
-  `;
-
-  payloadPanel.classList.remove("hidden");
-};
-
-closePayload.addEventListener("click", () => {
-  payloadPanel.classList.add("hidden");
-  payloadData.textContent = "";
+      return;
+    }
+  });
 });
-
-window.filterLogs = function (status) {
-
-  if (status === "all") {
-    drawLogs(allLogs);
-    updateMetrics(allLogs);
-    return;
-  }
-
-  const filtered = allLogs.filter(
-    log => log.status === status
-  );
-
-  drawLogs(filtered);
-  updateMetrics(filtered);
-}

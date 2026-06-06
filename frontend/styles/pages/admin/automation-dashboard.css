@@ -1,114 +1,29 @@
-/* automation-dashboard.css */
-
-body {
-  font-family: Roboto, Arial;
-  background-color: #f4f6f8;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  margin-bottom: 20px;
-  color: #000906;
-}
-
-.dashboard-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.dashboard-controls button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.dashboard-controls button:hover {
-  opacity: 0.9;
-}
-
-.filter-all {
-  background: #222;
-  color: white;
-}
-
-.filter-success {
-  background: #1d4ed8;
-  color: white;
-}
-
-.filter-failed {
-  background: #dc2626;
-  color: white;
-}
-
-.logs-table {
-  width: 100%;
-  border-collapse: collapse;
+.dashboard-header {
+  width: 400px;
+  border-radius: 50px;
+  padding-left: 35px;
+  padding-right: 35px;
   background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding-bottom: 5px;
+  border: 1px solid rgb(230, 10, 10);
+  box-shadow: 0 4px 12px rgb(88, 6, 6);
 }
 
-.logs-table thead {
-  background: #111827;
-  color: white;
+.dashboard-header h1 {
+  font-weight: 500;
+  font-style: italic;
+  color: #17adb5;
+  text-align: center;
+  border-radius: 25px;
+  padding: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+  background-color: white;
+  box-shadow: inset 0 4px 12px rgb(255, 0, 0);
 }
 
-.logs-table th,
-.logs-table td {
-  padding: 14px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 14px;
-}
-
-.logs-table tbody tr:hover {
-  background-color: #f9fafb;
-}
-
-/* Event Colors */
-
-.event-user-created {
-  color: #2563eb;
-  font-weight: bold;
-}
-
-.event-user-verified {
-  color: #059669;
-  font-weight: bold;
-}
-
-.event-order-created {
-  color: #9333ea;
-  font-weight: bold;
-}
-
-.event-login {
-  color: #ea580c;
-  font-weight: bold;
-}
-
-/* Status */
-
-.status-success {
-  color: #2563eb;
-  font-weight: bold;
-}
-
-.status-failed {
-  color: #dc2626;
-  font-weight: bold;
-}
-
-.status-pending {
-  color: #ca8a04;
-  font-weight: bold;
+.dashboard-header :hover {
+  color: #b91c1c;
 }
 
 /* Payload Button */
@@ -125,11 +40,12 @@ h1 {
 }
 
 .payload-btn:hover {
-  background: #1f2937;
+  background: #0de1ec;
+  color: #000906;
 }
 
 .payload-panel {
-  margin-top: 20px;
+  margin-top: 10px;
   background: #141127;
   color: #e06610;
   border-radius: 12px;
@@ -242,33 +158,129 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
+  padding: 12px;
+  border-radius: 45px;
   margin-bottom: 20px;
+  box-shadow: 0px 5px 10px 5px rgb(197, 82, 89);
+  background-color: #17adb5;
+
+  transition: all 0.4s ease;
+  transform-origin: center;
+}
+
+.automation-metrics :hover {
+  color: #17adb5;
+  cursor: pointer;
+  transform: scale(1.05);
+  border-color: #ff0000;
 }
 
 .metric-card {
-
+  background-color: #ffffff;
   border: 1px solid #d5d9d9;
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  padding: 12px;
+  box-shadow: -5px 10px 25px rgb(0, 0, 0);
+}
+
+.metric-card :hover {
+  color: #d61616;
+  cursor: pointer;
 }
 
 .metric-card h3 {
   font-size: 20px;
-  color: #565959;
+  color: #585659;
   margin-bottom: 10px;
 }
 
-.metric-card p {
-  font-size: 28px;
-  font-weight: bold;
-  color: #111;
-}
-
 .metric-card.success p {
-  color: green;
+  color: rgb(10, 216, 10);
 }
 
 .metric-card.failed p {
   color: red;
+}
+
+.total-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  padding-left: 15px;
+}
+
+.rate-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f15c5;
+  padding-left: 15px;
+}
+
+.success-count,
+.failed-count {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+.orders-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0fbcc5;
+  padding-left: 15px;
+}
+
+.users-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #b1df3d;
+  padding-left: 15px;
+}
+
+.verified-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffaf02;
+  padding-left: 15px;
+}
+
+.cancelled-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #12beb5;
+  padding-left: 15px;
+}
+
+.loggedin-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #d102ff;
+  padding-left: 15px;
+}
+
+.logs-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #371c01;
+  padding-left: 15px;
+}
+
+.events-container {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.events-page-container {
+  max-width: 100%;
+  padding: 15px;
+  background: rgb(60, 179, 239);
+  box-shadow: -7px 15px 30px rgb(0, 5, 2);
+}
+
+.automation-table {
+  border: 1px solid rgb(85, 20, 20);
+  width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 10px 15px rgb(189, 8, 8);
 }

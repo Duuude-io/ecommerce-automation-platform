@@ -1,7 +1,6 @@
 .signin-page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 85vh;
 }
 
 .signin-container {
@@ -25,13 +24,12 @@
 
 .signin-card {
   width: 400px;
-  border: 1px solid #ddd;
   border-radius: 10px;
   padding-left: 35px;
   padding-right: 35px;
   background: white;
   padding-bottom: 5px;
-  border: 1px solid rgb(178, 177, 185);
+  border: 1px solid rgb(185, 177, 178);
 }
 
 .signin-card h1 {
@@ -239,8 +237,8 @@
 }
 
 .auth-card {
-  width: 425px;
-  border: 1px solid rgb(178, 177, 185);
+  width: 400px;
+  border: 1px solid rgb(185, 177, 179);
   border-radius: 8px;
   margin: 5px 5px;
   padding: 20px 40px 20px 40px;

@@ -742,5 +742,35 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "55dd9598-c34c-4022-b08c-cc411f56ee49",
+    "email": null,
+    "phone": "08088990007",
+    "password": "$2b$12$CfVZahCBeWqgeVCVm3NvKu7v54V0pVZTourc4B1OAxBqS2qhTxY2W",
+    "name": "dagbana",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "b0687762-ebd7-407e-9639-dddf8803a9a7",
+    "email": "upha5454nds401@gmail.com",
+    "phone": "+234091111114543",
+    "password": "$2b$12$i7rQtYsrfcef1huTtyFEz.yK3VDn5XKyVGFSsr9Q5IJYp8Trv9aGe",
+    "name": "golayat",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "2938244a-7615-4057-890e-64971105f18d",
+    "email": "carrygo@gmail.com",
+    "phone": "08051660807",
+    "password": "$2b$12$kvqVESRPV.7e1acebwTECesjvjjgwStSCYOdYqTe6W6eRdLHwRTDq",
+    "name": "Darego",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

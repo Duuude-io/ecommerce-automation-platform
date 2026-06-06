@@ -4,7 +4,7 @@
 <head>
   <title>Automation Dashboard</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=0.72">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,6 @@
 </head>
 
 <body class="login-page">
-
   <div class="signin-page-wrapper">
 
     <!-- HEADER -->
@@ -34,65 +33,62 @@
     <!-- CENTERED CONTENT -->
     <main class="signin-container">
 
-      <div class="signin-card" style="max-width: 1100px; width: 100%;">
+      <div class="dashboard-header">
 
         <h1>Automation Dashboard</h1>
 
         <!-- METRICS -->
         <div class="automation-metrics">
           <div class="metric-card">
-            <h3>Total Events ♨️</h3>
-            <p id="totalEvents">0</p>
-          </div>
-
-          <div class="metric-card success">
-            <h3>Successful 🟢</h3>
-            <p id="successEvents">0</p>
-          </div>
-
-          <div class="metric-card failed">
-            <h3>Failed ⛔</h3>
-            <p id="failedEvents">0</p>
+            <h3>Total Events♨️</h3>
+            <p class="total-count" id="totalEvents">0</p>
           </div>
 
           <div class="metric-card">
-            <h3>Success Rate 💫</h3>
-            <p id="successRate">0%</p>
-          </div>
-        </div>
-
-        <!-- FILTER BUTTONS -->
-        <div class="automation-button" style="margin-bottom: 15px;">
-          <button onclick="filterLogs('all')">All</button>
-          <button onclick="filterLogs('success')">Success</button>
-          <button onclick="filterLogs('failed')">Failed</button>
-        </div>
-
-        <!-- TABLE -->
-        <div class="automation-table">
-          <table border="1" style="width: 100%;">
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Handler</th>
-                <th>Status</th>
-                <th>Name</th>
-                <th>Timestamp</th>
-                <th>Payload</th>
-              </tr>
-            </thead>
-
-            <tbody id="logsTable"></tbody>
-          </table>
-        </div>
-
-        <div id="payloadPanel" class="payload-panel hidden">
-          <div class="payload-header">
-            <h3>Payload Viewer</h3>
-            <button id="closePayload">✖</button>
+            <h3>SuccessRate💫</h3>
+            <p class="rate-count" id="successRate">0%</p>
           </div>
 
-          <div id="payloadData"></div>
+          <div class="metric-card failed" data-status="failed">
+            <h3>FailedEvents⛔</h3>
+            <p class="failed-count" id="failedEvents">0</p>
+          </div>
+
+          <div class="metric-card success" data-status="success">
+            <h3>Successful 🟢</h3>
+            <p class="success-count" id="successEvents">0</p>
+          </div>
+
+          <div class="metric-card" data-event="order_created">
+            <h3>OrdersCreated</h3>
+            <p class="orders-count" id="orderCreated">0</p>
+          </div>
+
+          <div class="metric-card" data-event="user_created">
+            <h3>Users Created</h3>
+            <p class="users-count" id="userCreated">0</p>
+          </div>
+
+          <div class="metric-card" data-event="user_fully_verified">
+            <h3>UsersVerified</h3>
+            <p class="verified-count" id="userVerified">0</p>
+          </div>
+
+          <div class="metric-card" data-event="order_cancelled">
+            <h3>OrdersCancelled</h3>
+            <p class="cancelled-count" id="orderCancelled">0</p>
+          </div>
+
+          <div class="metric-card" data-event="user_logged_in">
+            <h3>UserLoggedIn</h3>
+            <p class="loggedin-count" id="userLoggedIn">0</p>
+          </div>
+
+          <div class="metric-card" data-view="view_all_logs">
+            <h3>View All Logs</h3>
+            <p class="logs-count" id="viewAllLogs">0</p>
+          </div>
+
         </div>
 
       </div>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Events Logs</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=0.8">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../styles/shared/general.css">
+  <link rel="stylesheet" href="../styles/shared/amazon-header.css">
+
+  <!-- Signin Page CSS -->
+  <link rel="stylesheet" href="../styles/pages/login.css">
+  <link rel="stylesheet" href="../styles/pages/admin/automation-dashboard.css">
+</head>
+
+<body class="events-page">
+  <div class="signin-page-wrapper">
+
+    <header class="signin-header">
+      <a href="../amazon.html">
+        <img class="amazon-logo-dark" src="../images/amazon-logo-black.png">
+      </a>
+    </header>
+
+    <main class="events-container">
+
+      <div class="events-page-container">
+
+        <h2 id="pageTitle">Event Logs</h2>
+
+        <!-- TABLE -->
+        <div class="automation-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Handler</th>
+                <th>Status</th>
+                <th>Name</th>
+                <th>Timestamp</th>
+                <th>Payload</th>
+              </tr>
+            </thead>
+
+            <tbody id="logsTable"></tbody>
+          </table>
+        </div>
+
+        <div id="payloadPanel" class="payload-panel hidden">
+          <div class="payload-header">
+            <h3>Payload Viewer</h3>
+            <button id="closePayload">✖</button>
+          </div>
+
+          <div id="payloadData"></div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <div class="divider-2"></div>
+
+    <footer class="signin-footer">
+      <div class="footer-links">
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
+      </div>
+
+      <div class="footer-copyright">
+        © 1996-2026, Amazon.com, Inc. or its affiliates
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="module" src="../scripts/admin/autoEventsLog.js"></script>
+
+</body>
+
+</html>
