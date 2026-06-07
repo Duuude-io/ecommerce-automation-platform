@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await res.json();
 
+        console.log("LOGIN RESPONSE:", data);
+
         if (!data.success) {
           alert(data.message || "Login failed");
           return;
@@ -76,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         auth.login({
           token: data.token,
-          userId: data.userId
+          userId: data.userId,
+          userData: data.userData
         });
 
         console.log("SETTING AUTHENTICATED");

@@ -262,6 +262,16 @@ def login(data: LoginRequest):
         "message": "Login successful",
         "token": token,
         "userId": user["id"],
+        "userData": {
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "phone": user.get("phone"),
+            "fullyVerified": (
+                user["verified_email"]
+                and user["verified_phone"]
+            )
+        },
+
         "next_page": user["auth_state"]
     }
 
@@ -492,6 +502,7 @@ def verify_otp(data: VerifyOTPRequest):
             "userId": user_id,
             "fullyVerified": fully_verified,
             "userData": {
+                "name": new_user["name"],
                 "email": new_user["email"],
                 "phone": new_user["phone"],
                 "fullyVerified": fully_verified
@@ -561,6 +572,7 @@ def verify_otp(data: VerifyOTPRequest):
         "userId": user_id,
         "fullyVerified": user["verified_email"] and user["verified_phone"],
         "userData": {
+            "name": user.get("name"),
             "email": user.get("email"),
             "phone": user.get("phone"),
             "fullyVerified": user["verified_email"] and user["verified_phone"]
@@ -607,6 +619,15 @@ def verify_login_otp(data: VerifyOTPRequest):
         "success": True,
         "token": create_token(user_id),
         "userId": user_id,
+        "userData": {
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "phone": user.get("phone"),
+            "fullyVerified": (
+                user["verified_email"]
+                and user["verified_phone"]
+            )
+        },
         "verifiedEmail": user["verified_email"],
         "verifiedPhone": user["verified_phone"],
         "next_page": "accsuccess.html"

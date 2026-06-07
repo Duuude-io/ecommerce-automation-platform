@@ -77,7 +77,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         auth.login({
           token: data.token,
-          userId: data.userId
+          userId: data.userId,
+          userData: data.userData
         });
 
         setAuthState(AuthState.AUTHENTICATED, {

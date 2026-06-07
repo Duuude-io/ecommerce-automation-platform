@@ -3,8 +3,9 @@ import { navDebug } from "./navDebug.js";
 
 console.log("NAVIGATOR ACTIVE");
 
-const NAV_KEY = "authNavigating";
 const LAST_TARGET_KEY = "lastAuthTarget";
+
+let navigating = false;
 
 export function navigateAuth(source = "unknown") {
 
@@ -13,6 +14,7 @@ export function navigateAuth(source = "unknown") {
   const session = getAuthState();
   if (!session?.step) {
     console.log("No auth session step");
+    navigating = false;
     return;
   }
 
@@ -21,8 +23,19 @@ export function navigateAuth(source = "unknown") {
 
   if (!target) {
     console.warn("No target route");
+    navigating = false;
     return;
   }
+
+  console.log("navigating =", navigating);
+
+  if (navigating) {
+    console.log("Navigation blocked");
+    navigating = false;
+    return;
+  }
+
+  navigating = true;
 
   const current = window.location.pathname.split("/").pop();
 
@@ -34,26 +47,13 @@ export function navigateAuth(source = "unknown") {
 
   if (current === target && lastTarget === target) {
     console.log("Already on target page");
+    navigating = false;
     return;
   }
 
-  if (sessionStorage.getItem(NAV_KEY) === "true") {
-    console.log("Navigation blocked");
-    return;
-  }
-
-  sessionStorage.setItem(NAV_KEY, "true");
   sessionStorage.setItem(LAST_TARGET_KEY, target);
 
   console.log(`[NAVIGATE] ${current} → ${target}`);
 
   window.location.href = target;
 }
-
-window.addEventListener("pageshow", () => {
-  sessionStorage.removeItem(NAV_KEY);
-});
-
-window.addEventListener("load", () => {
-  sessionStorage.removeItem(NAV_KEY);
-});

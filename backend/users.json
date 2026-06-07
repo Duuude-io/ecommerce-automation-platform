@@ -772,5 +772,75 @@
     "verified_email": true,
     "verified_phone": true,
     "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "65c85dbb-7c94-49c0-8b92-cd1ca868da94",
+    "email": null,
+    "phone": "08051543307",
+    "password": "$2b$12$gk/rP63ETQbabKCuscpWIu7hpocKzd169sG7oFS0VZCgsZdBN1u42",
+    "name": "Alaye",
+    "verified_email": false,
+    "verified_phone": true,
+    "auth_state": "ADD_EMAIL_OPTIONAL"
+  },
+  {
+    "id": "1ad7ca4b-24a7-4245-963e-5b33f4eaedfc",
+    "email": "up7hand@gmail.com",
+    "phone": "+13542895436",
+    "password": "$2b$12$qHGM9.Q1j12R/cKG93o.xevLxNBCbaGJYBuK4n/VCQ1Oi6HUf0o9K",
+    "name": "Alfa",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "260daa35-7524-46cb-97c0-66fd9e186958",
+    "email": "uphands77@gmail.com",
+    "phone": "+16764328877",
+    "password": "$2b$12$4mUb3WDe9PpOUY8l48Y09e2MtA8E4YjVqVDfvslGiGUvT6mFNAbVS",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "28aef7af-b5e9-4fa0-adbf-13bff13582d8",
+    "email": "fghjklkjh@gmai.com",
+    "phone": "08088683807",
+    "password": "$2b$12$ioPzWh1V1PiVK./HLmKTOO7xpxO8bNshSym8azPl0oX5HUGX3SSOq",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "86f79a07-81db-4d25-8333-27aea5875cc5",
+    "email": "apal22ara@gmail.com",
+    "phone": "+16578769908",
+    "password": "$2b$12$sBp69Ozm5tsW24ME3lHjh.cbMgBpsFKcQRqhrdklCauwJ6gtFmeRu",
+    "name": "Apa",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "6436e0d4-b502-4d6e-9491-c94055e0ebad",
+    "email": "kjhgfdfghjkl@gmail.com",
+    "phone": "+13357659987",
+    "password": "$2b$12$RoQodrCW9uth2hbqEsB8wO436PZvI/4J2YP7p55/fN1P75gukigTG",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
+  },
+  {
+    "id": "7a1c7a37-c291-4ca8-8f82-3aa733b73172",
+    "email": "uphands10@gmail.com",
+    "phone": "+15649870955",
+    "password": "$2b$12$tR1j2JERlSXAg.TM3T708ee97bibuDATgnKnQlSujr2EVtLeY1yFu",
+    "name": "Dude",
+    "verified_email": true,
+    "verified_phone": true,
+    "auth_state": "AUTHENTICATED"
   }
 ]

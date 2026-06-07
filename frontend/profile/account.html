@@ -2,9 +2,9 @@
 <html>
 
 <head>
-  <title>Events Logs</title>
+  <title>Profile</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=0.65">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,10 +17,10 @@
 
   <!-- Signin Page CSS -->
   <link rel="stylesheet" href="../styles/pages/login.css">
-  <link rel="stylesheet" href="../styles/pages/admin/automation-dashboard.css">
+  <link rel="stylesheet" href="../styles/pages/account.css">
 </head>
 
-<body class="events-page">
+<body class="account-page">
   <div class="signin-page-wrapper">
 
     <header class="signin-header">
@@ -29,42 +29,44 @@
       </a>
     </header>
 
-    <main class="events-container">
+    <main class="auth-container">
 
-      <div class="events-page-container">
+      <div class="auth-card">
 
-        <h2 class="page-title" id="pageTitle">Event Logs</h2>
+        <h1 class="account-title">Account Center</h1>
 
-        <!-- TABLE -->
-        <div class="automation-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Handler</th>
-                <th>Status</th>
-                <th>Name</th>
-                <th>Timestamp</th>
-                <th>Payload</th>
-              </tr>
-            </thead>
+        <p class="account-subtitle js-account-greeting">
+          Welcome back
+        </p>
 
-            <tbody id="logsTable"></tbody>
-          </table>
-        </div>
+        <div class="account-grid">
 
-        <div id="payloadPanel" class="payload-panel hidden">
-          <div class="payload-header">
-            <h3>Payload Viewer</h3>
-            <button id="closePayload">✖</button>
-          </div>
+          <button class="account-card js-profile-card">
+            <h3>Profile</h3>
+            <p>Manage your personal information</p>
+          </button>
 
-          <div class="payload-data" id="payloadData"></div>
+          <button class="account-card js-orders-card">
+            <h3>Orders</h3>
+            <p>View your order history</p>
+          </button>
+
+          <button class="account-card js-addresses-card">
+            <h3>Addresses</h3>
+            <p>Manage shipping addresses</p>
+          </button>
+
+          <button class="account-card js-logout-card">
+            <h3>Logout</h3>
+            <p>Sign out of your account</p>
+          </button>
+
         </div>
 
       </div>
 
     </main>
+
 
     <div class="divider-2"></div>
 
@@ -82,7 +84,7 @@
 
   </div>
 
-  <script type="module" src="../scripts/admin/autoEventsLog.js"></script>
+  <script type="module" src="../scripts/profile/account.js"></script>
 
 </body>
 

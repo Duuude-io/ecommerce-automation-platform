@@ -1,10 +1,21 @@
 import { auth } from "../auth/authStore.js"
 import { clearAuthState } from "../auth/authFlow.js"
+import { authContext } from "../auth/authContext.js";
 
 export function renderAccountHeader() {
 
   const container = document.querySelector('.js-account-section');
   if (!container) return;
+
+  const user = auth.getUser();
+
+  const firstName =
+    user?.name ||
+    user?.first_name ||
+    user?.firstName ||
+    "User";
+
+  console.log(auth.getUser())
 
   /* NOT LOGGED IN */
   if (!auth.isLoggedIn()) {
@@ -20,25 +31,10 @@ export function renderAccountHeader() {
   /* LOGGED IN */
   container.innerHTML = `
     <div class="account-menu">
-      <span>Hello, User</span>
-      <button class="js-signout-btn signout-btn">
-        Sign Out
-      </button>
+      <a href="profile/account.html" class="header-link">
+        <span>Hello, ${firstName}</span>
+        <span class="orders-text">My Account</span>
+      </a>
     </div>
   `;
-
-  container
-    .querySelector('.js-signout-btn')
-    .addEventListener('click', signOut);
-}
-
-/* CENTRALIZED LOGOUT */
-function signOut() {
-
-  auth.logout();        // removes token + userId
-  clearAuthState();     // clears auth flow
-
-  localStorage.removeItem("identifier");
-
-  window.location.replace("login.html");
 }

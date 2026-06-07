@@ -13,7 +13,7 @@ def welcome_user(data):
 
 
 @listen(Events.USER_CREATED)
-def send_welcome_email(data):
+def welcome_email(data):
     print("📧 Welcome, Prepaing....")
 
     time.sleep(5)
@@ -40,12 +40,12 @@ def handle_otp_verified(data):
 
 
 @listen(Events.USER_FULLY_VERIFIED)
-def user_onboarding(data):
+def onboarding(data):
     print("🚀 Starting onboarding workflow")
 
 
 @listen(Events.USER_LOGGED_IN)
-def login_analytics(data):
+def analytics(data):
     print("User logged in:", data["userId"])
 
 
@@ -55,7 +55,7 @@ def order_received(data):
 
 
 @listen(Events.ORDER_CREATED)
-def start_order_workflow(data):
+def order_workflow(data):
 
     order_id = data["orderId"]
 
@@ -107,7 +107,7 @@ def complete_order(data):
 
 
 @listen(Events.ORDER_CANCELLED)
-def cancel_order_workflow(data):
+def cancel_order(data):
 
     update_order_status(data["orderId"], "cancelled")
 
@@ -117,7 +117,7 @@ def cancel_order_workflow(data):
 
 
 @listen(Events.ORDER_CREATED)
-def generate_order_receipt(data):
+def order_receipt(data):
 
     receipts = load_receipts()
 
