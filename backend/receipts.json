@@ -328,5 +328,76 @@
     "shippingCents": 0,
     "taxCents": 270,
     "total": 2968
+  },
+  {
+    "receiptId": "43a5d7b6-ddbd-492c-b747-d2fae2f07a8e",
+    "orderId": "357271b0-3a3b-46c5-952b-9d299749fa3a",
+    "userId": "7a1c7a37-c291-4ca8-8f82-3aa733b73172",
+    "orderNumber": "262-6598359-8408717",
+    "name": "Dude",
+    "email": "",
+    "phone": "",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 2,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      },
+      {
+        "productId": "3ebe75dc-64d2-4137-8860-1f5a963e534b",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      },
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "createdAt": "2026-06-08T04:29:57.766683+00:00",
+    "subTotalCents": 5564,
+    "shippingCents": 499,
+    "taxCents": 606,
+    "total": 6669
+  },
+  {
+    "receiptId": "701f98b6-00ec-4f45-ab3c-68fc5060f84a",
+    "orderId": "1a512ac9-082a-4878-b8ca-a5137d86dd99",
+    "userId": "7a1c7a37-c291-4ca8-8f82-3aa733b73172",
+    "orderNumber": "123-5115321-1770878",
+    "name": "Dude",
+    "email": "",
+    "phone": "",
+    "items": [],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "createdAt": "2026-06-08T04:30:22.339055+00:00",
+    "subTotalCents": 0,
+    "shippingCents": 0,
+    "taxCents": 0,
+    "total": 0
   }
 ]

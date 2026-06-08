@@ -359,5 +359,48 @@
     "id": "6bb9fd14-d477-44b7-b304-292dd3d79b97",
     "orderNumber": "296-9038724-8817823",
     "orderTime": "2026-06-05T20:28:00.387265+00:00"
+  },
+  {
+    "userId": "7a1c7a37-c291-4ca8-8f82-3aa733b73172",
+    "items": [
+      {
+        "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+        "quantity": 2,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      },
+      {
+        "productId": "3ebe75dc-64d2-4137-8860-1f5a963e534b",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      },
+      {
+        "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+        "quantity": 1,
+        "deliveryOptionId": "2",
+        "estimatedDeliveryTime": "Thursday, June 11"
+      }
+    ],
+    "billingDetails": {
+      "firstName": "",
+      "lastName": "",
+      "apartment": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "ME",
+      "zipCode": "",
+      "phone": "",
+      "email": ""
+    },
+    "subTotalCents": 5564,
+    "taxCents": 606,
+    "shippingCents": 499,
+    "totalCostCents": 6669,
+    "paymentMethod": null,
+    "status": "processing",
+    "id": "357271b0-3a3b-46c5-952b-9d299749fa3a",
+    "orderNumber": "262-6598359-8408717",
+    "orderTime": "2026-06-08T04:29:57.766683+00:00"
   }
 ]

@@ -12,7 +12,8 @@ import json
 import uuid
 from pathlib import Path
 from models.order import Order
-from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, IdentifierRequest, SignupRequest
+from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, IdentifierRequest, SignupRequest, ChangePasswordRequest
+
 from auth import verify_password, create_token, hash_password
 from datetime import datetime, UTC
 from auth import get_current_user
@@ -934,5 +935,50 @@ def get_order_receipt(
         )
 
     return receipt
+
+
+@app.post("/change-password")
+def change_password(
+    data: ChangePasswordRequest,
+    current_user=Depends(get_current_user)
+):
+
+    users = load_users()
+
+    user = next((
+        u for u in users
+        if u["id"] == current_user["id"]), None
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    if not verify_password(
+        data.currentPassword,
+        user["password"]
+    ):
+        return {
+            "success": False,
+            "message": "Current password is incorrect"
+        }
+
+    if data.currentPassword == data.newPassword:
+        return {
+            "success": False,
+            "message": "New password must be different"
+        }
+
+    user["password"] = hash_password(data.newPassword)
+
+    save_users(users)
+
+    return {
+        "success": True,
+        "message": "Password updated successfully"
+    }
+
 
 # auth flow >>>>

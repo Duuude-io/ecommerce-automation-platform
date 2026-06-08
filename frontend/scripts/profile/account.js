@@ -5,14 +5,19 @@ import { authContext } from "../auth/authContext.js";
 
 initAuthGuard("account-page");
 
+document.querySelector(".js-profile-card")
+  ?.addEventListener("click", () => {
+    window.location.href = "profile.html";
+  });
+
 document.querySelector(".js-orders-card")
   ?.addEventListener("click", () => {
     window.location.href = "../orders.html";
   });
 
-document.querySelector(".js-addresses-card")
+document.querySelector(".js-security-card")
   ?.addEventListener("click", () => {
-    window.location.href = "addresses.html";
+    window.location.href = "security.html";
   });
 
 const greeting = document.querySelector(".js-account-greeting");

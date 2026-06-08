@@ -30,48 +30,50 @@
     </header>
 
     <main class="auth-container">
-
       <div class="auth-card">
 
-        <h1 class="account-title">Account Center</h1>
+        <h1 class="account-title">
+          Security Settings
+        </h1>
 
-        <p class="account-subtitle js-account-greeting">
-          Welcome back
+        <p class="account-subtitle">
+          Manage your password and account security.
         </p>
 
-        <div class="account-grid">
+        <div class="account-section">
+          <h3>Verified Contact Information</h3>
 
-          <button class="account-card js-profile-card">
-            <h3>Profile</h3>
-            <p>Manage your personal information</p>
-          </button>
+          <p>
+            Email:
+            <span class="js-email">
+              -
+            </span>
+          </p>
 
-          <button class="account-card js-orders-card">
-            <h3>Orders</h3>
-            <p>View your order history</p>
-          </button>
+          <p>
+            Phone:
+            <span class="js-phone">
+              -
+            </span>
+          </p>
+        </div>
 
-          <button class="account-card js-payment-card">
-            <h3>Payment Methods</h3>
-            <p>Manage saved cards</p>
-          </button>
+        <div class="divider"></div>
 
-          <button class="account-card js-security-card">
-            <h3>Security</h3>
-            <p>Manage password and account security</p>
-          </button>
+        <div class="account-section">
+          <h3>Change Password</h3>
 
-          <button class="account-card js-logout-card">
-            <h3>Logout</h3>
-            <p>Sign out of your account</p>
+          <input type="password" class="js-current-password" placeholder="Current Password">
+          <input type="password" class="js-new-password" placeholder="New Password">
+          <input type="password" class="js-confirm-password" placeholder="Confirm New Password">
+
+          <button class="primary-button js-update-password">
+            Update Password
           </button>
 
         </div>
-
       </div>
-
     </main>
-
 
     <div class="divider-2"></div>
 
@@ -89,7 +91,7 @@
 
   </div>
 
-  <script type="module" src="../scripts/profile/account.js"></script>
+  <script type="module" src="../scripts/profile/security.js"></script>
 
 </body>
 

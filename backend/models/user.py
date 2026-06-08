@@ -39,3 +39,8 @@ class SignupRequest(BaseModel):
     identifier: str
     name: str
     password: str
+
+
+class ChangePasswordRequest(BaseModel):
+    currentPassword: str
+    newPassword: str
