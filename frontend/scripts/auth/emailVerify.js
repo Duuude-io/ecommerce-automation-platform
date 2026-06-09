@@ -1,5 +1,5 @@
 import { verifyOtp } from "./otpService.js";
-import { AuthState, getAuthState } from "./authFlow.js";
+import { AuthState, clearAuthState, getAuthState } from "./authFlow.js";
 import { auth } from "./authStore.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
@@ -63,18 +63,23 @@ document.addEventListener("DOMContentLoaded", () => {
       verifying = true;
 
       try {
+
         const session = getAuthState();
-
         console.log("Current Session Object:", session);
-
         const userId = session.userId;
 
         let purpose = "signup";
 
         if (session.step === AuthState.VERIFY_ADD_EMAIL) {
           purpose = "add_email";
-        } else if (session.step === AuthState.VERIFY_ADD_PHONE) {
+        }
+        else if (
+          session.step === AuthState.VERIFY_ADD_PHONE) {
           purpose = "add_phone";
+        }
+        else if (
+          session.step === AuthState.PASSWORD_CHANGE_EMAIL) {
+          purpose = "change_password";
         }
 
         const { data } = await verifyOtp({
@@ -83,13 +88,38 @@ document.addEventListener("DOMContentLoaded", () => {
           purpose
         });
 
-        console.log("VERIFY DATA:", data)
+        console.log("VERIFY DATA:", data);
+        console.log("PURPOSE:", purpose);
+        console.log("VERIFY RESPONSE:", data);
+        console.log("SUCCESS:", data.success);
 
         if (!data.success) {
           alert(data.message || "Invalid OTP");
           return;
         }
 
+        console.log("CURRENT PATH:", window.location.pathname);
+        console.log("SESSION:", getAuthState());
+
+        if (purpose === "change_password") {
+
+          //alert("Password updated successfully");
+
+          console.log("AFTER ALERT");
+          console.log("PATH:", window.location.pathname);
+          console.log("SESSION:", getAuthState());
+
+          sessionStorage.setItem(
+            "successMessage",
+            "Password updated successfully"
+          );
+
+          clearAuthState();
+
+          window.location.href = "/frontend/profile/account.html";
+
+          return;
+        }
         console.log("OTP RESPONSE:", data);
 
         auth.login({

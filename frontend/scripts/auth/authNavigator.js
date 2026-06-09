@@ -54,6 +54,8 @@ export function navigateAuth(source = "unknown") {
   sessionStorage.setItem(LAST_TARGET_KEY, target);
 
   console.log(`[NAVIGATE] ${current} → ${target}`);
+  console.trace("NAVIGATION TARGET:", target);
+  console.trace("navigateAuth called");
 
   window.location.href = target;
 }

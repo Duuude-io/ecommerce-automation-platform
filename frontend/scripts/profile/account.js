@@ -5,6 +5,21 @@ import { authContext } from "../auth/authContext.js";
 
 initAuthGuard("account-page");
 
+document.addEventListener("DOMContentLoaded", () => {
+
+  const successMessage =
+    sessionStorage.getItem("successMessage");
+
+  if (successMessage) {
+    alert(successMessage);
+
+    sessionStorage.removeItem(
+      "successMessage"
+    );
+  }
+
+});
+
 document.querySelector(".js-profile-card")
   ?.addEventListener("click", () => {
     window.location.href = "profile.html";

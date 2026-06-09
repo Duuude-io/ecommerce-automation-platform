@@ -2,7 +2,7 @@ let cooldownActive = false;
 
 import { verifyOtp } from "./otpService.js";
 import { auth } from "./authStore.js";
-import { AuthState, getAuthState } from "./authFlow.js";
+import { AuthState, clearAuthState, getAuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
 import { safeNavigate } from "./safeNavigate.js";
@@ -83,13 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        const targetUserId = session.userId || auth.getUserId();
+        const targetUserId =
+          session.userId || auth.getUserId();
         console.log("Target User ID:", targetUserId);
 
         let purpose = "signup";
 
         if (session.step === AuthState.VERIFY_ADD_PHONE) {
           purpose = "add_phone";
+        }
+        else if (
+          session.step === AuthState.PASSWORD_CHANGE_PHONE) {
+          purpose = "change_password";
         }
         console.log("Purpose decided:", purpose);
 
@@ -100,9 +105,35 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         console.log("VERIFY DATA:", data);
+        console.log("PURPOSE:", purpose);
+        console.log("VERIFY RESPONSE:", data);
+        console.log("SUCCESS:", data.success);
 
         if (!data.success) {
           alert(data.message);
+          return;
+        }
+
+        console.log("CURRENT PATH:", window.location.pathname);
+        console.log("SESSION:", getAuthState());
+
+        if (purpose === "change_password") {
+
+          //alert("Password updated successfully");
+
+          console.log("AFTER ALERT");
+          console.log("PATH:", window.location.pathname);
+          console.log("SESSION:", getAuthState());
+
+          sessionStorage.setItem(
+            "successMessage",
+            "Password updated successfully"
+          );
+
+          clearAuthState();
+
+          window.location.href = "/frontend/profile/account.html";
+
           return;
         }
 

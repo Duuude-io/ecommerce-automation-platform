@@ -44,3 +44,4 @@ class SignupRequest(BaseModel):
 class ChangePasswordRequest(BaseModel):
     currentPassword: str
     newPassword: str
+    otpMethod: str

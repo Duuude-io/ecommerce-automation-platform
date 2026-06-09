@@ -40,8 +40,10 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 signup_sessions = {}
+pending_password_changes = {}
 
 OTP_EXPIRY = 300  # 5 minutes
+PASSWORD_CHANGE_EXPIRY = 600  # 10 minutes
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -101,6 +103,24 @@ def cleanup_expired_sessions():
     for uid in to_delete:
         del signup_sessions[uid]
         print(f"Purged expired session: {uid}")
+
+
+def cleanup_expired_password_changes():
+    now = time.time()
+
+    expired = [
+        user_id
+        for user_id, request in pending_password_changes.items()
+        if now - request["created_at"] > PASSWORD_CHANGE_EXPIRY
+    ]
+
+    for user_id in expired:
+        pending_password_changes.pop(user_id, None)
+
+    if expired:
+        print(
+            f"Cleaned up {len(expired)} expired password change requests"
+        )
 
 
 def generate_and_save_otp(user_id, identifier, purpose):
@@ -381,6 +401,14 @@ async def handle_send_otp(data: OTPRequest):
 
         identifier = user.get("pending_phone")
 
+    elif purpose == "change_password":
+        if not user:
+            return {"success": False, "message": "User not found"}
+
+        identifier = (
+            user.get("email") or user.get("phone")
+        )
+
     else:
         return {"success": False, "message": "Invalid purpose"}
 
@@ -512,11 +540,45 @@ def verify_otp(data: VerifyOTPRequest):
             "next_page": "accverified.html" if fully_verified else "accsuccess.html"
         }
 
-    # ADD EMAIL / PHONE FLOW
+    # ADD EMAIL / PHONE FLOW / PASSWORD CHANGE
     user = next((u for u in users if u["id"] == user_id), None)
 
     if not user:
         return {"success": False, "message": "User not found"}
+
+    if purpose == "change_password":
+
+        cleanup_expired_password_changes()
+
+        pending = pending_password_changes.get(user_id)
+
+        if not pending:
+            return {
+                "success": False,
+                "message": "Password change session expired"
+            }
+
+        if (
+            time.time() - pending["created_at"] > OTP_EXPIRY
+        ):
+            pending_password_changes.pop(user_id, None)
+
+            otps.pop(key, None)
+            save_otps(otps)
+
+            return {
+                "success": False,
+                "message": "Password change request expired"
+            }
+
+        user["password"] = pending["new_password"]
+        save_users(users)
+        pending_password_changes.pop(user_id, None)
+
+        return {
+            "success": True,
+            "message": "Password updated successfully"
+        }
 
     if purpose == "add_email":
         pending_email = user.get("pending_email")
@@ -937,14 +999,13 @@ def get_order_receipt(
     return receipt
 
 
-@app.post("/change-password")
-def change_password(
+@app.post("/request-password-change")
+def request_password_change(
     data: ChangePasswordRequest,
     current_user=Depends(get_current_user)
 ):
 
     users = load_users()
-
     user = next((
         u for u in users
         if u["id"] == current_user["id"]), None
@@ -962,7 +1023,7 @@ def change_password(
     ):
         return {
             "success": False,
-            "message": "Current password is incorrect"
+            "message": "Current password incorrect"
         }
 
     if data.currentPassword == data.newPassword:
@@ -971,14 +1032,33 @@ def change_password(
             "message": "New password must be different"
         }
 
-    user["password"] = hash_password(data.newPassword)
+    cleanup_expired_password_changes()
 
-    save_users(users)
+    pending_password_changes[user["id"]] = {
+        "new_password": hash_password(data.newPassword),
+        "created_at": time.time()
+    }
+
+    if data.otpMethod == "email":
+        identifier = user.get("email")
+    else:
+        identifier = user.get("phone")
+
+    if not identifier:
+        return {
+            "success": False,
+            "message": "No verified identifier found"
+        }
+
+    print("REQUEST PASSWORD CHANGE ENDPOINT")
+
+    generate_and_save_otp(
+        user["id"],
+        identifier,
+        "change_password"
+    )
 
     return {
         "success": True,
-        "message": "Password updated successfully"
+        "message": "OTP sent"
     }
-
-
-# auth flow >>>>

@@ -19,17 +19,20 @@ export function initAuthRouter(pageName) {
     return;
   }
 
-  const expectedRoute =
-    routes[session.step];
-
+  const expectedRoute = routes[session.step];
   if (!expectedRoute) {
     return;
   }
 
-  if (currentFile !== expectedRoute) {
+  console.log("EXPECTED ROUTE:", expectedRoute);
+  console.log("CURRENT FILE:", currentFile);
+  console.log("SESSION:", session);
+
+  const expectedFile = expectedRoute.split("/").pop();
+  if (currentFile !== expectedFile) {
 
     console.log(
-      `Router correcting route: ${currentFile} → ${expectedRoute}`
+      `Router correcting route: ${currentFile} → ${expectedFile}`
     );
 
     navigateAuth("authRouter");

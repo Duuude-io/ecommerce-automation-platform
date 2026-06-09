@@ -1,10 +1,11 @@
+
 export function getAuthRoutes() {
   return {
+
     login: "login.html",
-
     user_exists: "userexistpage.html",
-    new_user_auth: "loginauth.html",
 
+    new_user_auth: "loginauth.html",
     create_account: "createaccount.html",
 
     verify_signup_email: "emailverify.html",
@@ -20,8 +21,10 @@ export function getAuthRoutes() {
     verify_add_phone: "numberverify.html",
 
     otp_login: "otpuserlogin.html",
+    authenticated: "amazon.html",
 
-    authenticated: "amazon.html"
+    password_change_email: "../emailverify.html",
+    password_change_phone: "../numberverify.html"
   };
 }
 
@@ -31,8 +34,8 @@ export const AuthState = {
 
   LOGIN: "login",
   USER_EXISTS: "user_exists",
-  NEW_USER_AUTH: "new_user_auth",
 
+  NEW_USER_AUTH: "new_user_auth",
   CREATE_ACCOUNT: "create_account",
 
   VERIFY_SIGNUP_EMAIL: "verify_signup_email",
@@ -48,8 +51,11 @@ export const AuthState = {
   VERIFY_ADD_PHONE: "verify_add_phone",
 
   OTP_LOGIN: "otp_login",
+  AUTHENTICATED: "authenticated",
 
-  AUTHENTICATED: "authenticated"
+  PASSWORD_CHANGE_EMAIL: "password_change_email",
+  PASSWORD_CHANGE_PHONE: "password_change_phone",
+
 };
 
 const AUTH_SESSION_KEY = "authSession";

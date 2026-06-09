@@ -1,5 +1,8 @@
 import { initAuthGuard } from "../auth/authGuard.js";
 import { auth } from "../auth/authStore.js";
+import { AuthState } from "../auth/authFlow.js";
+import { safeNavigate } from "../auth/safeNavigate.js";
+import { authContext } from "../auth/authContext.js";
 
 initAuthGuard("account-page");
 
@@ -27,6 +30,8 @@ async function handlePasswordChange() {
 
   const confirmPassword = document.querySelector(".js-confirm-password").value.trim();
 
+  const otpMethod = document.querySelector("input[name='otp-method']:checked").value;
+
   if (
     !currentPassword ||
     !newPassword ||
@@ -49,9 +54,10 @@ async function handlePasswordChange() {
   try {
 
     const token = auth.getToken();
+    const user = auth.getUser();
 
     const response = await fetch(
-      "http://127.0.0.1:8000/change-password",
+      "http://127.0.0.1:8000/request-password-change",
       {
         method: "POST",
         headers: {
@@ -60,22 +66,46 @@ async function handlePasswordChange() {
         },
         body: JSON.stringify({
           currentPassword,
-          newPassword
+          newPassword,
+          otpMethod
         })
       }
     );
 
-    const data = await response.json();
+    console.log("STATUS:", response.status);
+
+    const text = await response.text();
+
+    console.log("RAW RESPONSE:", text);
+
+    const data = JSON.parse(text);
     if (!data.success) {
       alert(data.message);
       return;
     }
 
-    alert("Password updated successfully");
-    console.log({ currentPassword, newPassword });
+    if (otpMethod === "email") {
+
+      authContext.setIdentifier(user.email);
+
+      safeNavigate(AuthState.PASSWORD_CHANGE_EMAIL, {
+        userId: auth.getUserId()
+      });
+    } else {
+
+      authContext.setIdentifier(user.phone);
+
+      safeNavigate(AuthState.PASSWORD_CHANGE_PHONE, {
+        userId: auth.getUserId()
+      });
+    }
 
   } catch (error) {
     console.error(error);
     alert("Unable to update password");
   }
 }
+
+window.addEventListener("beforeunload", () => {
+  console.log("LEAVING PAGE");
+});
