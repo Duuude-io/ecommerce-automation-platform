@@ -1,0 +1,26 @@
+{
+  "72d412a4-46b8-4ddf-bdd9-509353400623": [
+    {
+      "id": "9c0c5c4e-226a-45bc-9621-1610dbd4f55b",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781069344.3394608,
+      "last_seen": 1781069344.3394616
+    },
+    {
+      "id": "bfceaa06-e9eb-440e-91c4-c40eadc751a9",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781081725.549065,
+      "last_seen": 1781081725.5490665
+    },
+    {
+      "id": "b53487e2-7365-4975-bd98-95cdd89eb821",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781081802.1722417,
+      "last_seen": 1781081802.1722424
+    }
+  ],
+  "7a1c7a37-c291-4ca8-8f82-3aa733b73172": []
+}

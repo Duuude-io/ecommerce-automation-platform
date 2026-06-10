@@ -12,6 +12,8 @@ ORDERS_FILE = BASE_DIR / "orders.json"
 BASE_DIR = Path(__file__).resolve().parent.parent
 RECEIPTS_FILE = BASE_DIR / "receipts.json"
 
+SESSIONS_FILE = BASE_DIR / "active_sessions.json"
+
 
 def load_users():
     if not USERS_FILE.exists():
@@ -68,3 +70,20 @@ def save_receipts(receipts):
 
     with open(RECEIPTS_FILE, "w") as f:
         json.dump(receipts, f, indent=2)
+
+
+def load_sessions():
+    if not SESSIONS_FILE.exists():
+        return {}
+
+    try:
+        with open(SESSIONS_FILE, "r") as f:
+            return json.load(f)
+
+    except json.JSONDecodeError:
+        return {}
+
+
+def save_sessions(sessions):
+    with open(SESSIONS_FILE, "w") as f:
+        json.dump(sessions, f, indent=2)

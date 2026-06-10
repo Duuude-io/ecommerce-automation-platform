@@ -6,7 +6,7 @@ import random
 from random import randint
 import time
 from auth_states import AuthState
-from utils.storage import load_users, save_users, load_receipts
+from utils.storage import load_users, save_users, load_receipts, load_sessions, save_sessions
 
 import json
 import uuid
@@ -49,6 +49,9 @@ PASSWORD_CHANGE_EXPIRY = 600  # 10 minutes
 BASE_DIR = Path(__file__).resolve().parent
 USERS_FILE = BASE_DIR / "users.json"
 ORDERS_FILE = BASE_DIR / "orders.json"
+OTP_FILE = BASE_DIR / "otp_store.json"
+
+
 
 # Allow frontend access
 app.add_middleware(
@@ -61,8 +64,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-OTP_FILE = BASE_DIR / "otp_store.json"
 
 
 def load_otps():
@@ -192,6 +193,46 @@ def assert_identifier_available(identifier: str, user_id: str | None = None):
     return identifier
 
 
+def create_session(
+    user_id,
+    device="Unknown Device",
+    ip="Unknown IP"
+):
+    sessions = load_sessions()
+
+    session = {
+        "id": str(uuid.uuid4()),
+        "device": device,
+        "ip": ip,
+        "created_at": time.time(),
+        "last_seen": time.time()
+    }
+
+    sessions.setdefault(user_id, []).append(session)
+
+    save_sessions(sessions)
+
+    return session
+
+
+@app.get("/active-sessions")
+def get_active_sessions(
+    current_user=Depends(get_current_user)
+):
+
+    sessions = load_sessions()
+
+    user_sessions = sessions.get(
+        current_user["id"],
+        []
+    )
+
+    return {
+        "success": True,
+        "sessions": user_sessions
+    }
+
+
 @app.post("/signup")
 def signup(data: SignupRequest):
     cleanup_expired_sessions()
@@ -272,7 +313,8 @@ def login(data: LoginRequest):
             "next_page": user["auth_state"]
         }
 
-    token = create_token(user["id"])
+    session = create_session(user["id"])
+    token = create_token(user["id"], session["id"])
 
     dispatch(Events.USER_LOGGED_IN, {
         "userId": user["id"]
@@ -513,7 +555,8 @@ def verify_otp(data: VerifyOTPRequest):
 
         signup_sessions.pop(user_id, None)
 
-        token = create_token(user_id)
+        session = create_session(user_id)
+        token = create_token(user_id, session["id"])
 
         fully_verified = new_user["verified_email"] and new_user["verified_phone"]
 
@@ -678,9 +721,12 @@ def verify_login_otp(data: VerifyOTPRequest):
         "userId": user_id
     })
 
+    session = create_session(user_id)
+    token = create_token(user_id, session["id"])
+
     return {
         "success": True,
-        "token": create_token(user_id),
+        "token": token,
         "userId": user_id,
         "userData": {
             "name": user.get("name"),
