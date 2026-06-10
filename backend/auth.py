@@ -31,6 +31,9 @@ def create_token(user_id, session_id):
         SECRET_KEY,
         algorithm=ALGORITHM
     )
+
+    print("PAYLOAD:", payload)
+
     return token, session_id
 
 
@@ -39,6 +42,8 @@ def get_current_user(authorization: str = Header(None)):
         raise HTTPException(status_code=401, detail="Missing token")
 
     token = authorization.replace("Bearer ", "")
+
+    print("TOKEN RECEIVED:", token)
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -66,7 +71,15 @@ def get_current_user(authorization: str = Header(None)):
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
 
-        return user   # RETURN FULL USER OBJECT
+        return {
+            "user": user,
+            "session_id": session_id
+        }
+    
+    except JWTError as e:
+        print("JWT ERROR:", e)
 
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )

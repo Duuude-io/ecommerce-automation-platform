@@ -20,7 +20,36 @@
       "ip": "Unknown IP",
       "created_at": 1781081802.1722417,
       "last_seen": 1781081802.1722424
+    },
+    {
+      "id": "0bf84ee1-782c-407f-8f41-4194d59e8eb0",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781097511.385536,
+      "last_seen": 1781097511.385537
     }
   ],
-  "7a1c7a37-c291-4ca8-8f82-3aa733b73172": []
+  "7a1c7a37-c291-4ca8-8f82-3aa733b73172": [
+    {
+      "id": "7eebb1f9-699c-4d4d-868d-a921efb26ce4",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781097409.3938358,
+      "last_seen": 1781097409.3938367
+    },
+    {
+      "id": "c3bc03bd-df11-4b4f-8b5a-ecd7799551ae",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781101981.1931763,
+      "last_seen": 1781101981.193179
+    },
+    {
+      "id": "99cd2e37-ba3b-42ef-9c50-ed25e682efb2",
+      "device": "Unknown Device",
+      "ip": "Unknown IP",
+      "created_at": 1781104012.9812105,
+      "last_seen": 1781104012.981213
+    }
+  ]
 }

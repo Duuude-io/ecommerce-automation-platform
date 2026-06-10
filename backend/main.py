@@ -52,7 +52,6 @@ ORDERS_FILE = BASE_DIR / "orders.json"
 OTP_FILE = BASE_DIR / "otp_store.json"
 
 
-
 # Allow frontend access
 app.add_middleware(
     CORSMiddleware,
@@ -220,15 +219,15 @@ def get_active_sessions(
     current_user=Depends(get_current_user)
 ):
 
-    sessions = load_sessions()
+    user = current_user["user"]
+    current_session = current_user["session_id"]
 
-    user_sessions = sessions.get(
-        current_user["id"],
-        []
-    )
+    sessions = load_sessions()
+    user_sessions = sessions.get(user["id"], [])
 
     return {
         "success": True,
+        "current_session": current_session,
         "sessions": user_sessions
     }
 
@@ -314,7 +313,10 @@ def login(data: LoginRequest):
         }
 
     session = create_session(user["id"])
-    token = create_token(user["id"], session["id"])
+    token, session_id = create_token(
+        user["id"],
+        session["id"]
+    )
 
     dispatch(Events.USER_LOGGED_IN, {
         "userId": user["id"]
@@ -556,7 +558,10 @@ def verify_otp(data: VerifyOTPRequest):
         signup_sessions.pop(user_id, None)
 
         session = create_session(user_id)
-        token = create_token(user_id, session["id"])
+        token, session_id = create_token(
+            user_id,
+            session["id"]
+        )
 
         fully_verified = new_user["verified_email"] and new_user["verified_phone"]
 
@@ -672,9 +677,16 @@ def verify_otp(data: VerifyOTPRequest):
             "phone": user.get("phone")
         })
 
+        session = create_session(user_id)
+
+        token, session_id = create_token(
+            user_id,
+            session["id"]
+        )
+
     return {
         "success": True,
-        "token": create_token(user_id),
+        "token": token,
         "userId": user_id,
         "fullyVerified": user["verified_email"] and user["verified_phone"],
         "userData": {
@@ -722,7 +734,10 @@ def verify_login_otp(data: VerifyOTPRequest):
     })
 
     session = create_session(user_id)
-    token = create_token(user_id, session["id"])
+    token, session_id = create_token(
+        user_id,
+        session["id"]
+    )
 
     return {
         "success": True,
@@ -794,9 +809,7 @@ def get_automation_logs():
 @app.get("/auth/session-status")
 def session_status(current_user=Depends(get_current_user)):
 
-    users = load_users()
-
-    user = next((u for u in users if u["id"] == current_user["id"]), None)
+    user = current_user["user"]
 
     if not user:
         return {"next_page": "login.html"}
@@ -809,7 +822,10 @@ def session_status(current_user=Depends(get_current_user)):
             "ADD_EMAIL_OPTIONAL": "addemail.html",
             "ADD_PHONE_OPTIONAL": "addnumber.html",
             "AUTHENTICATED": "accsuccess.html"
-        }.get(user.get("auth_state", "CREATE_ACCOUNT"), "login.html")
+        }.get(
+            user.get("auth_state", "CREATE_ACCOUNT"),
+            "login.html"
+        )
     }
 
 
@@ -818,18 +834,16 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 
     phone = normalize_identifier(data["phone"])
     users = load_users()
+    user = current_user["user"]
 
     # prevent duplicate phone
-
     try:
         phone = assert_identifier_available(
             phone,
-            current_user["id"]
+            user["id"]
         )
     except ValueError as e:
         return {"error": "Phone already used"}
-
-    user = next((u for u in users if u["id"] == current_user["id"]), None)
 
     if not user:
         return {"error": "User not found"}
@@ -840,8 +854,7 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 
     return {
         "success": True,
-        "userId": current_user["id"],
-        "token": create_token(user["id"]),
+        "userId": user["id"],
         "next_step": user["auth_state"],
         "fullyVerified": user["verified_email"] and user["verified_phone"]
     }
@@ -852,17 +865,16 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
 
     email = normalize_identifier(data["email"])
     users = load_users()
+    user = current_user["user"]
 
     # prevent duplicate email
     try:
         email = assert_identifier_available(
-            data["email"],
-            current_user["id"]
+            email,
+            user["id"]
         )
     except ValueError as e:
         return {"error": "Email already used"}
-
-    user = next((u for u in users if u["id"] == current_user["id"]), None)
 
     if not user:
         return {"error": "User not found"}
@@ -875,7 +887,6 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
     return {
         "success": True,
         "userId": user["id"],
-        "token": create_token(user["id"]),
         "next_step": user["auth_state"],
         "fullyVerified": user["verified_email"] and user["verified_phone"]
     }
@@ -893,10 +904,6 @@ with open("products.json") as f:
 @app.get("/products")
 def get_products():
     return PRODUCTS
-
-
-BASE_DIR = Path(__file__).resolve().parent
-ORDERS_FILE = BASE_DIR / "orders.json"
 
 
 def load_orders():
@@ -923,13 +930,15 @@ def generate_order_number():
 @app.post("/orders")
 def create_order(order: Order, background_tasks: BackgroundTasks, current_user=Depends(get_current_user)):
 
-    user_id = current_user["id"]
+    user = current_user["user"]
+
+    user_id = user["id"]
 
     if not user_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
-    verified_email = current_user.get("verified_email", False)
-    verified_phone = current_user.get("verified_phone", False)
+    verified_email = user.get("verified_email", False)
+    verified_phone = user.get("verified_phone", False)
 
     if not verified_email or not verified_phone:
         raise HTTPException(
@@ -964,9 +973,9 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
             "orderId": new_order["id"],
             "userId": user_id,
 
-            "name": current_user.get("name"),
-            "email": current_user.get("email"),
-            "phone": current_user.get("phone"),
+            "name": user.get("name"),
+            "email": user.get("email"),
+            "phone": user.get("phone"),
 
             "orderNumber": new_order["orderNumber"],
             "subTotalCents": new_order["subTotalCents"],
@@ -987,24 +996,27 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
 
 @app.get("/orders")
 def get_orders(current_user=Depends(get_current_user)):
+
     orders = load_orders()
+    user = current_user["user"]
 
     return [
         o for o in orders
-        if o["userId"] == current_user["id"]
+        if o["userId"] == user["id"]
     ]
 
 
 @app.delete("/orders/{order_id}")
 def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
+    user = current_user["user"]
     orders = load_orders()
 
     updated_orders = [
         order for order in orders
         if not (
             order["id"] == order_id
-            and order["userId"] == current_user["id"]
+            and order["userId"] == user["id"]
         )
     ]
 
@@ -1025,14 +1037,14 @@ def get_order_receipt(
     current_user=Depends(get_current_user)
 ):
 
+    user = current_user["user"]
     receipts = load_receipts()
 
-    receipt = next(
-        (
-            r for r in receipts
-            if r["orderId"] == order_id
-            and r["userId"] == current_user["id"]
-        ),
+    receipt = next((
+        r for r in receipts
+        if r["orderId"] == order_id
+        and r["userId"] == user["id"]
+    ),
         None
     )
 
@@ -1050,12 +1062,7 @@ def request_password_change(
     data: ChangePasswordRequest,
     current_user=Depends(get_current_user)
 ):
-
-    users = load_users()
-    user = next((
-        u for u in users
-        if u["id"] == current_user["id"]), None
-    )
+    user = current_user["user"]
 
     if not user:
         raise HTTPException(

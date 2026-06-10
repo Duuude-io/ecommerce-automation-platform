@@ -80,7 +80,22 @@
           <button class="primary-button js-update-password">
             Update Password
           </button>
+        </div>
 
+        <div class="active-sessions-section">
+          <h1>Active Sessions</h1>
+
+          <div class="js-active-sessions">
+            Loading sessions...
+          </div>
+
+          <div class="session-card">
+
+            <button class="js-revoke-session" data-session-id="${session.id}">
+              Sign Out
+            </button>
+
+          </div>
         </div>
       </div>
     </main>

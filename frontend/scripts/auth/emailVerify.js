@@ -121,6 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
         console.log("OTP RESPONSE:", data);
+        console.log("TOKEN TYPE:", typeof data.token);
+        console.log("TOKEN VALUE:", data.token);
 
         auth.login({
           token: data.token,

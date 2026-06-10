@@ -10,6 +10,7 @@ const user = auth.getUser();
 
 document.addEventListener("DOMContentLoaded", () => {
   renderUserInfo();
+  loadActiveSessions();
 
   document.querySelector(".js-update-password")
     ?.addEventListener("click", handlePasswordChange);
@@ -103,6 +104,64 @@ async function handlePasswordChange() {
   } catch (error) {
     console.error(error);
     alert("Unable to update password");
+  }
+}
+
+async function loadActiveSessions() {
+
+  try {
+
+    const token = auth.getToken();
+
+    console.log("TOKEN:", token);
+
+    const res = await fetch(
+      "http://127.0.0.1:8000/active-sessions",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await res.json();
+
+    console.log("SESSIONS:", data);
+
+    const container =
+      document.querySelector(".js-active-sessions");
+
+    if (!data.success) {
+      container.innerHTML = "<p>Unable to load sessions</p>";
+      return;
+    }
+
+    container.innerHTML = data.sessions.map(session => {
+
+      const isCurrent = session.id === data.current_session;
+      return `
+        <div class="session-card">
+
+          <div>
+            <strong>${session.device}</strong>
+            ${isCurrent ? "<span>(Current)</span>" : ""}
+          </div>
+
+          <div>
+            ${session.ip}
+          </div>
+
+          <div>
+            ${new Date(session.created_at * 1000)
+          .toLocaleString()}
+          </div>
+
+        </div>
+      `;
+    }).join("");
+
+  } catch (err) {
+    console.error(err);
   }
 }
 
