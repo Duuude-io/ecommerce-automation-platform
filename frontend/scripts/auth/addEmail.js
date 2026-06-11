@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const otpData = await otpRes.json();
+        console.log("OTP STATUS:", otpRes.status);
+        console.log("OTP DATA:", otpData);
+
         if (!otpData.success) return alert("Failed OTP");
 
         authContext.setIdentifier(email);

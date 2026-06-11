@@ -1,10 +1,13 @@
+console.log("SECURITY PAGE LOADED");
+console.trace("SECURITY PAGE ENTRY");
+
 import { initAuthGuard } from "../auth/authGuard.js";
 import { auth } from "../auth/authStore.js";
 import { AuthState } from "../auth/authFlow.js";
 import { safeNavigate } from "../auth/safeNavigate.js";
 import { authContext } from "../auth/authContext.js";
 
-initAuthGuard("account-page");
+//initAuthGuard("account-page");
 
 const user = auth.getUser();
 
@@ -15,6 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".js-update-password")
     ?.addEventListener("click", handlePasswordChange);
 });
+
+document.querySelector(".js-signout-others")
+  ?.addEventListener(
+    "click",
+    revokeOtherSessions
+  );
 
 function renderUserInfo() {
   document.querySelector(".js-email").textContent =
@@ -74,9 +83,7 @@ async function handlePasswordChange() {
     );
 
     console.log("STATUS:", response.status);
-
     const text = await response.text();
-
     console.log("RAW RESPONSE:", text);
 
     const data = JSON.parse(text);
@@ -86,16 +93,14 @@ async function handlePasswordChange() {
     }
 
     if (otpMethod === "email") {
-
       authContext.setIdentifier(user.email);
-
       safeNavigate(AuthState.PASSWORD_CHANGE_EMAIL, {
         userId: auth.getUserId()
       });
+
     } else {
 
       authContext.setIdentifier(user.phone);
-
       safeNavigate(AuthState.PASSWORD_CHANGE_PHONE, {
         userId: auth.getUserId()
       });
@@ -109,10 +114,11 @@ async function handlePasswordChange() {
 
 async function loadActiveSessions() {
 
+  console.trace("loadActiveSessions called");
+
   try {
 
     const token = auth.getToken();
-
     console.log("TOKEN:", token);
 
     const res = await fetch(
@@ -125,7 +131,6 @@ async function loadActiveSessions() {
     );
 
     const data = await res.json();
-
     console.log("SESSIONS:", data);
 
     const container =
@@ -137,34 +142,110 @@ async function loadActiveSessions() {
     }
 
     container.innerHTML = data.sessions.map(session => {
-
       const isCurrent = session.id === data.current_session;
+
       return `
         <div class="session-card">
-
           <div>
-            <strong>${session.device}</strong>
-            ${isCurrent ? "<span>(Current)</span>" : ""}
+            <strong>
+              ${session.device}
+              ${session.id ===
+          data.current_session ? "(Current)" : ""}
+            </strong>
           </div>
 
           <div>
             ${session.ip}
           </div>
-
           <div>
             ${new Date(session.created_at * 1000)
           .toLocaleString()}
           </div>
 
+          ${session.id !== data.current_session
+          ? `
+            <button
+              class="js-revoke-session"
+              data-session-id="${session.id}">
+              Sign Out
+            </button>
+            `
+          : ""
+        }
+
         </div>
       `;
     }).join("");
+
+    document.querySelectorAll(".js-revoke-session").forEach(button => {
+      button.addEventListener("click", async () => {
+        const sessionId = button.dataset.sessionId;
+        await revokeSession(sessionId);
+      });
+    });
+
+    console.log("loadActiveSessions finished");
 
   } catch (err) {
     console.error(err);
   }
 }
 
+async function revokeSession(sessionId) {
+  const token = auth.getToken();
+  const res = await fetch(
+    `http://127.0.0.1:8000/active-sessions/${sessionId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+
+  const data = await res.json();
+  if (!data.success) {
+    alert(data.message);
+    return;
+  }
+
+  loadActiveSessions();
+}
+
+async function revokeOtherSessions() {
+  const confirmed = confirm("Sign out all other devices?");
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    const token = auth.getToken();
+    const res = await fetch(
+      "http://127.0.0.1:8000/active-sessions",
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await res.json();
+    if (!data.success) {
+      alert(data.message);
+      return;
+    }
+
+    alert("Other devices signed out");
+    loadActiveSessions();
+
+  } catch (err) {
+    console.error(err);
+    alert("Unable to revoke sessions");
+  }
+}
+
 window.addEventListener("beforeunload", () => {
-  console.log("LEAVING PAGE");
+  console.trace("LEAVING PAGE");
 });

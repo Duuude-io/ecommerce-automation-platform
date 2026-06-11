@@ -89,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const otpData = await otpRes.json();
 
+        console.log("OTP STATUS:", otpRes.status);
+        console.log("OTP DATA:", otpData);
+
         if (!otpRes.ok || !otpData.success) {
           alert("Failed to send OTP");
           return;

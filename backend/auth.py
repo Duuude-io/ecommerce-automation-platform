@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime
 from fastapi import Header, HTTPException
-from utils.storage import load_users, load_sessions
+from utils.storage import load_users, load_sessions, update_session_activity
 from uuid import uuid4
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -47,7 +47,7 @@ def get_current_user(authorization: str = Header(None)):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        
+
         user_id = payload["user_id"]
         session_id = payload["session_id"]
 
@@ -65,6 +65,11 @@ def get_current_user(authorization: str = Header(None)):
                 detail="Session revoked"
             )
 
+        update_session_activity(
+            user_id,
+            session_id
+        )
+
         users = load_users()
         user = next((u for u in users if u["id"] == user_id), None)
 
@@ -75,7 +80,7 @@ def get_current_user(authorization: str = Header(None)):
             "user": user,
             "session_id": session_id
         }
-    
+
     except JWTError as e:
         print("JWT ERROR:", e)
 

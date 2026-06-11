@@ -1,18 +1,15 @@
 import json
 from pathlib import Path
+import time
+import uuid
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-USERS_FILE = BASE_DIR / "users.json"
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "data"
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-ORDERS_FILE = BASE_DIR / "orders.json"
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-RECEIPTS_FILE = BASE_DIR / "receipts.json"
-
-SESSIONS_FILE = BASE_DIR / "active_sessions.json"
+USERS_FILE = DATA_DIR / "users.json"
+ORDERS_FILE = DATA_DIR / "orders.json"
+RECEIPTS_FILE = DATA_DIR / "receipts.json"
+SESSIONS_FILE = DATA_DIR / "active_sessions.json"
 
 
 def load_users():
@@ -87,3 +84,48 @@ def load_sessions():
 def save_sessions(sessions):
     with open(SESSIONS_FILE, "w") as f:
         json.dump(sessions, f, indent=2)
+
+
+def create_session(
+    user_id,
+    device="Unknown Device",
+    ip="Unknown IP"
+):
+    sessions = load_sessions()
+
+    session = {
+        "id": str(uuid.uuid4()),
+        "device": device,
+        "ip": ip,
+        "created_at": time.time(),
+        "last_seen": time.time()
+    }
+
+    sessions.setdefault(user_id, []).append(session)
+
+    save_sessions(sessions)
+
+    return session
+
+
+def update_session_activity(
+    user_id,
+    session_id
+):
+    sessions = load_sessions()
+
+    user_sessions = sessions.get(
+        user_id,
+        []
+    )
+
+    for session in user_sessions:
+
+        if session["id"] == session_id:
+
+            session["last_seen"] = time.time()
+
+            print("UPDATE SESSION:", user_id, session_id)
+            break
+
+    save_sessions(sessions)

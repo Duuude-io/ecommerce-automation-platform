@@ -9,6 +9,8 @@ let navigating = false;
 
 export function navigateAuth(source = "unknown") {
 
+  console.trace("navigateAuth fired");
+
   console.trace(`navigateAuth called from: ${source}`);
 
   const session = getAuthState();
@@ -42,6 +44,8 @@ export function navigateAuth(source = "unknown") {
   navDebug("STEP", session.step);
   navDebug("TARGET", target);
   navDebug("CURRENT", current);
+
+  console.log("REDIRECTING:", current, "->", target);
 
   const lastTarget = sessionStorage.getItem(LAST_TARGET_KEY);
 

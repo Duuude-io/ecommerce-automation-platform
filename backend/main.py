@@ -1,12 +1,13 @@
 
-from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks, Request
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import random
 from random import randint
 import time
 from auth_states import AuthState
-from utils.storage import load_users, save_users, load_receipts, load_sessions, save_sessions
+from utils.storage import load_users, save_users, load_receipts, load_sessions, save_sessions, create_session
 
 import json
 import uuid
@@ -46,10 +47,13 @@ OTP_EXPIRY = 300  # 5 minutes
 PASSWORD_CHANGE_EXPIRY = 600  # 10 minutes
 
 
-BASE_DIR = Path(__file__).resolve().parent
-USERS_FILE = BASE_DIR / "users.json"
-ORDERS_FILE = BASE_DIR / "orders.json"
-OTP_FILE = BASE_DIR / "otp_store.json"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+
+USERS_FILE = DATA_DIR / "users.json"
+ORDERS_FILE = DATA_DIR / "orders.json"
+OTP_FILE = DATA_DIR / "otp_store.json"
+PRODUCTS_FILE = DATA_DIR / "products.json"
 
 
 # Allow frontend access
@@ -63,6 +67,29 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def parse_device(user_agent):
+    ua = user_agent.lower()
+    if "android" in ua:
+        platform = "Android"
+    elif "iphone" in ua:
+        platform = "iPhone"
+    elif "windows" in ua:
+        platform = "Windows"
+    elif "mac" in ua:
+        platform = "Mac"
+    else:
+        platform = "Unknown"
+    if "chrome" in ua:
+        browser = "Chrome"
+    elif "firefox" in ua:
+        browser = "Firefox"
+    elif "safari" in ua:
+        browser = "Safari"
+    else:
+        browser = "Browser"
+    return f"{browser} on {platform}"
 
 
 def load_otps():
@@ -192,28 +219,6 @@ def assert_identifier_available(identifier: str, user_id: str | None = None):
     return identifier
 
 
-def create_session(
-    user_id,
-    device="Unknown Device",
-    ip="Unknown IP"
-):
-    sessions = load_sessions()
-
-    session = {
-        "id": str(uuid.uuid4()),
-        "device": device,
-        "ip": ip,
-        "created_at": time.time(),
-        "last_seen": time.time()
-    }
-
-    sessions.setdefault(user_id, []).append(session)
-
-    save_sessions(sessions)
-
-    return session
-
-
 @app.get("/active-sessions")
 def get_active_sessions(
     current_user=Depends(get_current_user)
@@ -229,6 +234,67 @@ def get_active_sessions(
         "success": True,
         "current_session": current_session,
         "sessions": user_sessions
+    }
+
+
+@app.delete("/active-sessions/{session_id}")
+def revoke_session(
+    session_id: str,
+    current_user=Depends(get_current_user)
+):
+    user = current_user["user"]
+    current_session = current_user["session_id"]
+
+    if session_id == current_session:
+        return {
+            "success": False,
+            "message": "Cannot revoke current session"
+        }
+
+    sessions = load_sessions()
+
+    user_sessions = sessions.get(
+        user["id"],
+        []
+    )
+
+    sessions[user["id"]] = [
+        s for s in user_sessions
+        if s["id"] != session_id
+    ]
+
+    save_sessions(sessions)
+
+    return {
+        "success": True,
+        "message": "Session revoked"
+    }
+
+
+@app.delete("/active-sessions")
+def revoke_other_sessions(
+    current_user=Depends(get_current_user)
+):
+    user = current_user["user"]
+    current_session = current_user["session_id"]
+
+    sessions = load_sessions()
+
+    user_sessions = sessions.get(
+        user["id"],
+        []
+    )
+
+    sessions[user["id"]] = [
+        s for s in user_sessions
+        if s["id"] == current_session
+    ]
+
+    save_sessions(sessions)
+
+    return {
+        "success": True,
+        "message": "Other sessions revoked"
     }
 
 
@@ -283,7 +349,7 @@ def signup(data: SignupRequest):
 
 
 @app.post("/login")
-def login(data: LoginRequest):
+def login(data: LoginRequest, request: Request):
 
     identifier = normalize_identifier(data.identifier)
     users = load_users()
@@ -312,7 +378,19 @@ def login(data: LoginRequest):
             "next_page": user["auth_state"]
         }
 
-    session = create_session(user["id"])
+    user_agent = request.headers.get(
+        "user-agent",
+        "Unknown Device"
+    )
+
+    ip = request.client.host
+
+    session = create_session(
+        user["id"],
+        device=parse_device(user_agent),
+        ip=ip
+    )
+
     token, session_id = create_token(
         user["id"],
         session["id"]
@@ -433,6 +511,9 @@ async def handle_send_otp(data: OTPRequest):
         if user.get("verified_email"):
             return {"success": False, "message": "Email already verified"}
 
+        print("USER IN SEND OTP:", user)
+        print("PENDING EMAIL:", user.get("pending_email"))
+
         identifier = user.get("pending_email")
 
     # ADD PHONE FLOW
@@ -476,7 +557,7 @@ async def handle_send_otp(data: OTPRequest):
 
 
 @app.post("/verify-otp")
-def verify_otp(data: VerifyOTPRequest):
+def verify_otp(data: VerifyOTPRequest, request: Request):
 
     otps = load_otps()
 
@@ -557,7 +638,19 @@ def verify_otp(data: VerifyOTPRequest):
 
         signup_sessions.pop(user_id, None)
 
-        session = create_session(user_id)
+        user_agent = request.headers.get(
+            "user-agent",
+            "Unknown Device"
+        )
+
+        ip = request.client.host
+
+        session = create_session(
+            user_id,
+            device=parse_device(user_agent),
+            ip=ip
+        )
+
         token, session_id = create_token(
             user_id,
             session["id"]
@@ -677,7 +770,18 @@ def verify_otp(data: VerifyOTPRequest):
             "phone": user.get("phone")
         })
 
-        session = create_session(user_id)
+        user_agent = request.headers.get(
+            "user-agent",
+            "Unknown Device"
+        )
+
+        ip = request.client.host
+
+        session = create_session(
+            user_id,
+            device=parse_device(user_agent),
+            ip=ip
+        )
 
         token, session_id = create_token(
             user_id,
@@ -701,7 +805,10 @@ def verify_otp(data: VerifyOTPRequest):
 
 
 @app.post("/verify-login-otp")
-def verify_login_otp(data: VerifyOTPRequest):
+def verify_login_otp(
+    data: VerifyOTPRequest,
+    request: Request
+):
 
     user_id = data.userId
     otp = data.otp.strip()
@@ -733,7 +840,19 @@ def verify_login_otp(data: VerifyOTPRequest):
         "userId": user_id
     })
 
-    session = create_session(user_id)
+    user_agent = request.headers.get(
+        "user-agent",
+        "Unknown Device"
+    )
+
+    ip = request.client.host
+
+    session = create_session(
+        user_id,
+        device=parse_device(user_agent),
+        ip=ip
+    )
+
     token, session_id = create_token(
         user_id,
         session["id"]
@@ -834,7 +953,13 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 
     phone = normalize_identifier(data["phone"])
     users = load_users()
-    user = current_user["user"]
+    user = next((
+        u for u in users
+        if u["id"] == current_user["user"]["id"]), None
+    )
+
+    if not user:
+        return {"error": "User not found"}
 
     # prevent duplicate phone
     try:
@@ -845,10 +970,10 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
     except ValueError as e:
         return {"error": "Phone already used"}
 
-    if not user:
-        return {"error": "User not found"}
     user["pending_phone"] = phone
     user["auth_state"] = AuthState.VERIFY_PHONE.value
+
+    print("SAVING PENDING PHONE:", user.get("pending_phone"))
 
     save_users(users)
 
@@ -865,7 +990,14 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
 
     email = normalize_identifier(data["email"])
     users = load_users()
-    user = current_user["user"]
+
+    user = next((
+        u for u in users
+        if u["id"] == current_user["user"]["id"]), None
+    )
+
+    if not user:
+        return {"error": "User not found"}
 
     # prevent duplicate email
     try:
@@ -876,11 +1008,10 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
     except ValueError as e:
         return {"error": "Email already used"}
 
-    if not user:
-        return {"error": "User not found"}
-
     user["pending_email"] = email
     user["auth_state"] = AuthState.VERIFY_EMAIL.value
+
+    print("SAVING PENDING EMAIL:", user.get("pending_email"))
 
     save_users(users)
 
@@ -897,7 +1028,7 @@ def root():
     return {"message": "Amazon Backend API is running"}
 
 
-with open("products.json") as f:
+with open(PRODUCTS_FILE, "r") as f:
     PRODUCTS = json.load(f)
 
 
@@ -1115,3 +1246,13 @@ def request_password_change(
         "success": True,
         "message": "OTP sent"
     }
+
+
+app.mount(
+    "/",
+    StaticFiles(
+        directory="../frontend",
+        html=True
+    ),
+    name="frontend"
+)
