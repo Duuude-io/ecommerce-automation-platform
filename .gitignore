@@ -15,6 +15,10 @@ Thumbs.db
 # VS Code
 .vscode/
 
-# Data files (optional)
+# Runtime / generated data
+backend/automation.db
 otp_store.json
 users.json
+data/orders.json
+data/receipts.json
+data/active_sessions.json
