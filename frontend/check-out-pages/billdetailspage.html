@@ -34,16 +34,19 @@
 
     <div class="auth-card">
 
-      <h2>Billing Details</h2>
+      <h3>Saved Addresses</h3>
+      <div class="js-saved-addresses"></div>
+
+      <p></p>
+
+      <h1>Or enter a new address below</h1>
 
       <form class="create-form js-billdetails-form">
 
         <div class="input-group">
           <div class="create-input-wrapper">
 
-            <input type="text" class="js-first-name" placeholder="First Name">
-
-            <input type="text" class="js-last-name" placeholder="Last Name">
+            <input type="text" class="js-full-name" placeholder="Full Name">
 
             <input type="text" class="js-apartment" placeholder="Apartment, suite, unit, etc">
 
@@ -51,11 +54,17 @@
 
             <input type="text" class="js-city" placeholder="Town/City">
 
-
             <select class="state-select js-state" id="state" required>
-              <option value="" selected hidden>State Select</option>
+              <option value="" selected hidden>
+                Select State
+              </option>
             </select>
 
+            <select class="country-select js-country" id="country" required>
+              <option value="" selected hidden>
+                Select Country
+              </option>
+            </select>
 
             <input type="text" class="js-zip" placeholder="Zip">
 

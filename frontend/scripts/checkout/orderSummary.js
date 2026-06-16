@@ -148,17 +148,15 @@ export function renderOrderSummary() {
 
     let html = '';
 
-    const firstOptionId =
-      cart.cartItems[0]?.deliveryOptionId;
+    const firstOptionId = cart.cartItems[0]?.deliveryOptionId;
 
-    const allSame =
-      cart.cartItems.every(
-        item =>
-          item.deliveryOptionId === firstOptionId
-      );
+    const allSame = cart.cartItems.every(
+      item => item.deliveryOptionId === firstOptionId
+    );
 
-    const selectedDeliveryOptionId =
-      allSame ? firstOptionId : null;
+    const selectedDeliveryOptionId = allSame
+      ? firstOptionId
+      : null;
 
     deliveryOptions.forEach((deliveryOption) => {
       const today = dayjs();
@@ -175,8 +173,7 @@ export function renderOrderSummary() {
           ? 'FREE'
           : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
-      const isChecked =
-        deliveryOption.id === selectedDeliveryOptionId;
+      const isChecked = deliveryOption.id === selectedDeliveryOptionId;
 
       html += `
         <div class="global-delivery-option

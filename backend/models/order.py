@@ -11,12 +11,12 @@ class OrderItem(BaseModel):
 
 
 class BillingDetails(BaseModel):
-    firstName: str
-    lastName: str
+    fullName: str
     apartment: Optional[str] = None
     streetAddress: str
     city: str
     state: str
+    country: str
     zipCode: str
     phone: str | None = None
     email: str

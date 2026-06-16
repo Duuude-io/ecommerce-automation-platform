@@ -1,44 +1,44 @@
 import { checkoutSession } from './checkoutSession.js';
 
 console.log('Checkout Success Page Loaded');
-
 document.addEventListener('DOMContentLoaded', initPage);
 
 function initPage() {
-
   const page = document.querySelector('.checkout-success-page');
-
   if (!page) return;
 
-  displayOrderId(page);
+  const session = checkoutSession.get();
 
+  // 1. Grab ID immediately from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  let orderId = urlParams.get('orderId');
+
+  // 2. Fallback to storage if URL is empty
+  if (!orderId) {
+    orderId = session.lastOrderId || 'Unavailable';
+  }
+
+  console.log("SUCCESS SESSION:", session);
+  console.log(window.location.href);
+
+  displayOrderId(page, orderId);
   setupContinueButton(page);
-
-  clearCheckoutFlow();
+  clearCheckoutFlow(orderId);
 }
 
-function displayOrderId(page) {
-
+function displayOrderId(page, orderId) {
   const orderIdElement = page.querySelector('.js-order-id');
-
   const receiptLink = page.querySelector('.js-receipt-link');
 
   if (!orderIdElement) return;
 
-  const session = checkoutSession.get();
-
-  const orderId =
-    session.lastOrderId || 'Unavailable';
-
   orderIdElement.textContent = orderId;
 
-  if (receiptLink) {
+  console.log(orderIdElement);
 
+  if (receiptLink) {
     receiptLink.innerHTML = `
-      <a
-        href="../receipts.html?orderId=${orderId}"
-        class="view-receipt-btn"
-      >
+      <a href="../receipts.html?orderId=${orderId}" class="view-receipt-btn">
         View Receipt
       </a>
     `;
@@ -46,30 +46,21 @@ function displayOrderId(page) {
 }
 
 function setupContinueButton(page) {
-
-  const button =
-    page.querySelector('.primary-button');
-
+  const button = page.querySelector('.primary-button');
   if (!button) return;
 
   button.addEventListener('click', () => {
-
     window.location.href = '../amazon.html';
   });
 }
 
-function clearCheckoutFlow() {
-
-  const session = checkoutSession.get();
-
+// ✅ Accept the active orderId as an argument so we don't save stale states
+function clearCheckoutFlow(activeOrderId) {
   checkoutSession.save({
-
-    lastOrderId: session.lastOrderId,
-
+    lastOrderId: activeOrderId,
     billingDetails: null,
-
     paymentMethod: null,
-
-    cardDetails: null
+    cardDetails: null,
+    selectedPaymentId: null
   });
 }

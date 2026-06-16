@@ -9,6 +9,8 @@ const params = new URLSearchParams(window.location.search);
 
 const orderId = params.get("orderId");
 
+console.log(orderId);
+
 loadReceipt();
 
 async function loadReceipt() {
@@ -107,8 +109,7 @@ function renderReceipt(receipt) {
         <strong>Shipping Address:</strong>
 
         <div>
-          ${receipt.billingDetails.firstName}
-          ${receipt.billingDetails.lastName}
+          ${receipt.billingDetails.fullName}
         </div>
         <div>
           ${receipt.billingDetails.apartment}

@@ -1,10 +1,10 @@
 import { auth } from "../auth/authStore.js";
 import { initAuthGuard } from "../auth/authGuard.js";
 import { states, countries } from "../../data/state.js";
+import { getAddresses, saveAddresses } from "../paymentStore.js";
 
 initAuthGuard("profile-page");
 
-const ADDRESS_KEY = "savedAddresses";
 const user = auth.getUser();
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,18 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".js-save-address")
     ?.addEventListener("click", saveAddress);
 
-  document.addEventListener("click", handleDeleteAddress);
+  document.addEventListener("click", handleAddressActions);
 });
+
+function toggleAddressForm() {
+  const form = document.querySelector(".js-address-form");
+
+  if (!form) {
+    console.error("Address form not found");
+    return;
+  }
+  form.classList.toggle("hidden");
+}
 
 document.querySelector(".js-profile-name").textContent =
   user?.name || "Not provided";
-
 document.querySelector(".js-profile-email").textContent =
   user?.email || "Not provided";
 
 document.querySelector(".js-profile-phone").textContent =
   user?.phone || "Not provided";
-
 document.querySelector(".js-profile-status").textContent =
   user?.fullyVerified
     ? "Fully Verified"
@@ -40,26 +48,11 @@ document.querySelector(".js-back-btn")
     window.location.href = "account.html";
   });
 
-
-// Addresses container
-
-function getAddresses() {
-  return JSON.parse(
-    localStorage.getItem(ADDRESS_KEY)
-  ) || [];
-}
-
-function saveAddresses(addresses) {
-  localStorage.setItem(
-    ADDRESS_KEY,
-    JSON.stringify(addresses)
-  );
-}
-
 function saveAddress() {
+  const addresses = getAddresses();
   const address = {
-    id: crypto.randomUUID(),
 
+    id: crypto.randomUUID(),
     fullName:
       document.querySelector(".js-full-name").value.trim(),
     phone:
@@ -69,7 +62,9 @@ function saveAddress() {
 
     city: document.querySelector(".js-city").value.trim(),
     state: document.querySelector(".js-state").value,
-    country: document.querySelector(".js-country").value
+    country: document.querySelector(".js-country").value,
+
+    isDefault: addresses.length === 0
   };
 
   if (
@@ -83,8 +78,6 @@ function saveAddress() {
     alert("Please fill all fields");
     return;
   }
-
-  const addresses = getAddresses();
 
   addresses.push(address);
   saveAddresses(addresses);
@@ -109,7 +102,14 @@ function renderAddresses() {
   }
 
   container.innerHTML = addresses.map(address => `
-    <div class="saved-address">
+    <div class="saved-address" data-id="${address.id}">
+
+      ${address.isDefault ? `
+        <p class="default-badge">
+          Default Address
+        </p>
+      ` : ""}
+
       <h3>${address.fullName}</h3>
       <p>${address.phone}</p>
       <p>${address.streetAddress}</p>
@@ -119,13 +119,18 @@ function renderAddresses() {
         ${address.country}
       </p>
 
+      ${!address.isDefault ? `
+        <button class="js-set-default">
+          Set as Default
+        </button>
+      ` : ""}
+
       <button
-        class="js-delete-address"
-        data-id="${address.id}">
+        class="js-delete-address">
         Delete
       </button>
-
     </div>
+
   `).join("");
 }
 
@@ -178,20 +183,45 @@ function resetAddressForm() {
   document.querySelector(".js-country").selectedIndex = 0;
 }
 
-function toggleAddressForm() {
-  document.querySelector(".js-address-form")
-    ?.classList.toggle("hidden");
-}
+function handleAddressActions(event) {
+  const card = event.target.closest(".saved-address");
+  if (!card) return;
 
-function handleDeleteAddress(event) {
-  if (!event.target.classList.contains("js-delete-address")) {
+  const addressId = card.dataset.id;
+  if (!addressId) {
+    console.error("No address ID found");
     return;
   }
 
-  const addressId = event.target.dataset.id;
-  const addresses = getAddresses().filter(
-    address => address.id !== addressId);
+  let addresses = getAddresses();
 
-  saveAddresses(addresses);
-  renderAddresses();
+  // DELETE
+  if (event.target.classList.contains("js-delete-address")) {
+    addresses = addresses.filter(
+      address => address.id !== addressId
+    );
+
+    // If deleted default address
+    if (
+      addresses.length > 0 &&
+      !addresses.some(address => address.isDefault)
+    ) {
+      addresses[0].isDefault = true;
+    }
+
+    saveAddresses(addresses);
+    renderAddresses();
+    return;
+  }
+
+  // SET DEFAULT
+  if (event.target.classList.contains("js-set-default")) {
+    addresses = addresses.map(address => ({
+      ...address,
+      isDefault: address.id === addressId
+    }));
+
+    saveAddresses(addresses);
+    renderAddresses();
+  }
 }

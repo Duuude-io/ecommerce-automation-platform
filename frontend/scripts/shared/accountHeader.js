@@ -30,11 +30,11 @@ export function renderAccountHeader() {
 
   /* LOGGED IN */
   container.innerHTML = `
-    <div class="account-menu">
-      <a href="profile/account.html" class="header-link">
-        <span>Hello, ${firstName}</span>
-        <span class="orders-text">My Account</span>
-      </a>
-    </div>
-  `;
+  <div class="account-menu">
+    <a href="profile/account.html" class="header-link">
+      <span>Hello, ${firstName}</span>
+      <span class="orders-text">My Account</span>
+    </a>
+  </div>
+`;
 }

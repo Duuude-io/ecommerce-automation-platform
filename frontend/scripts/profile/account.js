@@ -30,6 +30,11 @@ document.querySelector(".js-orders-card")
     window.location.href = "../orders.html";
   });
 
+document.querySelector(".js-payment-card")
+  ?.addEventListener("click", () => {
+    window.location.href = "payment-methods.html";
+  });
+
 document.querySelector(".js-security-card")
   ?.addEventListener("click", () => {
     window.location.href = "security.html";

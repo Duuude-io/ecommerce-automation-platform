@@ -1104,9 +1104,9 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
             "orderId": new_order["id"],
             "userId": user_id,
 
-            "name": user.get("name"),
-            "email": user.get("email"),
-            "phone": user.get("phone"),
+            "name": new_order["billingDetails"].get("fullName"),
+            "email": new_order["billingDetails"].get("email"),
+            "phone": new_order["billingDetails"].get("phone"),
 
             "orderNumber": new_order["orderNumber"],
             "subTotalCents": new_order["subTotalCents"],
@@ -1117,7 +1117,10 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
             "items": new_order["items"],
             "billingDetails": new_order["billingDetails"],
             "orderTime": new_order["orderTime"]
+
         })
+
+    print("ORDER BILLING:", order.billingDetails)
 
     return {
         "message": "Order created successfully!",
@@ -1178,6 +1181,8 @@ def get_order_receipt(
     ),
         None
     )
+
+    print(receipt)
 
     if not receipt:
         raise HTTPException(

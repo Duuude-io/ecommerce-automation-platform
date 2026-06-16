@@ -46,6 +46,32 @@
   border: 2px solid #ffd814;
 }
 
-.hidden {
-  display: none;
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-form input {
+  padding: 10px;
+}
+
+.payment-form button {
+  align-self: flex-start;
+}
+
+.payment-form {
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-form.hidden {
+  display: none !important;
+}
+
+.address-form.hidden {
+  display: none !important;
 }

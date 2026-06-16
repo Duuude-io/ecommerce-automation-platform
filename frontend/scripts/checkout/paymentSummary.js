@@ -1,6 +1,7 @@
 import { cart } from '../../data/cart-class.js';
 import { getProduct, products } from '../../data/products.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
+import { getDefaultPayment } from "../paymentStore.js";
 import { formatCurrency } from '../utils/money.js';
 import { createOrder } from '../../data/ordersApi.js';
 
@@ -15,7 +16,7 @@ export function renderPaymentSummary() {
 
     const product = getProduct(cartItem.productId);
 
-    if (!products) {
+    if (!product) {
       console.warn('product missing:', cartItem.productId);
       return '';
     }
@@ -36,6 +37,24 @@ export function renderPaymentSummary() {
   const totalBeforeTaxCents = productPriceCents + shippingPriceCents;
   const taxCents = totalBeforeTaxCents * 0.1;
   const totalCents = totalBeforeTaxCents + taxCents;
+
+  const payment = getDefaultPayment();
+  const maskedCardNumber = (payment?.last16 || "0000").slice(-4);
+
+  const paymentHTML = payment ? `
+    <div class="payment-method-preview">
+      <h3>Payment Method</h3>
+      <p>${payment.cardType}</p>
+      <p>**** **** **** ${maskedCardNumber}</p>
+    </div>
+    
+  `
+    : `
+    <div class="payment-method-preview">
+      <h3>Payment Method</h3>
+      <p>No payment method selected</p>
+    </div>
+  `;
 
   const paymentSummaryHTML = `
     <div class="payment-summary-title">
@@ -77,6 +96,8 @@ export function renderPaymentSummary() {
       </div>
     </div>
 
+    ${paymentHTML}
+
     <button class="place-order-button button-primary
       js-place-order">
       Make Payments
@@ -94,28 +115,56 @@ export function renderPaymentSummary() {
         return;
       }
 
-      /*
-      try {
-        const response = await fetch('https://supersimplebackend.dev/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            cart: cart.cartItems
-          })
-        });
-
-        const order = await response.json();
-        addOrder(order);
-
-        cart.resetCart();
-
-      } catch (error) {
-        console.log('Unexpected error. Try again later.');
-      }
-      */
-
       window.location.href = 'check-out-pages/billdetailspage.html';
     });
+}
+
+export function getCartTotals() {
+  let productPriceCents = 0;
+  let cartQuantity = 0;
+
+  cart.cartItems.forEach(cartItem => {
+    console.log("cartItem:", cartItem);
+
+    const product = getProduct(cartItem.productId);
+    console.log("product:", product);
+    if (!product) return;
+
+    cartQuantity += cartItem.quantity;
+    productPriceCents +=
+      product.priceCents * cartItem.quantity;
+  });
+
+  console.log("cart:", cart.cartItems);
+
+  const selectedDeliveryOption =
+    getDeliveryOption(
+      cart.cartItems[0]?.deliveryOptionId || "1"
+    );
+
+  const shippingPriceCents =
+    selectedDeliveryOption.priceCents;
+
+  const totalBeforeTaxCents =
+    productPriceCents + shippingPriceCents;
+
+  const taxCents =
+    totalBeforeTaxCents * 0.1;
+
+  const totalCents =
+    totalBeforeTaxCents + taxCents;
+
+  console.log({
+    productPriceCents,
+    shippingPriceCents,
+    totalCents
+  });
+
+  return {
+    cartQuantity,
+    productPriceCents,
+    shippingPriceCents,
+    taxCents,
+    totalCents
+  };
 }

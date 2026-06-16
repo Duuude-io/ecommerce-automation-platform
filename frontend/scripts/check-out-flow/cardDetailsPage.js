@@ -3,6 +3,7 @@ import { createOrder, buildOrderData } from '../../data/ordersApi.js';
 import { cart } from '../../data/cart-class.js';
 import { loadProductsFetch } from '../../data/products.js';
 import { calculateCartTotal } from '../checkout/paymentEvents.js';
+import { getAddresses } from "../paymentStore.js";
 
 console.log("Card Details Page Loaded")
 
@@ -26,7 +27,6 @@ async function initPage() {
 }
 
 async function handleSubmit(event, page) {
-
   event.preventDefault();
 
   const cardDetails = {
@@ -43,9 +43,12 @@ async function handleSubmit(event, page) {
 
   try {
 
+    const billingAddress = session.billingDetails ||
+      getAddresses().find(address => address.isDefault);
+
     const orderData = buildOrderData(
       cart.cartItems,
-      session.billingDetails,
+      billingAddress
     );
 
     const result = await createOrder(orderData);
@@ -58,7 +61,8 @@ async function handleSubmit(event, page) {
 
     cart.resetCart();
 
-    window.location.href = 'checkoutSuccess.html';
+    window.location.href =
+      `checkoutSuccess.html?orderId=${result.orderId}`;
 
   } catch (error) {
 
