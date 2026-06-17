@@ -3,6 +3,7 @@ import { AuthState, getAuthState } from "./authFlow.js";
 import { initAuthRouter } from "./authRouter.js";
 import { auth } from "./authStore.js";
 import { safeNavigate } from "./safeNavigate.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("Create Account loaded");
 
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const authType = authContext.getAuthType();
 
-        const signupResponse = await fetch("http://127.0.0.1:8000/signup", {
+        const signupResponse = await fetch(`${API_BASE_URL}/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

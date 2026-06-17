@@ -7,6 +7,7 @@ import { auth } from "./authStore.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
 import { navigateAuth } from "./authNavigator.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("User Exist Page loaded");
 
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
 
         const res = await fetch(
-          "http://127.0.0.1:8000/login",
+          `${API_BASE_URL}/login`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      await fetch("http://127.0.0.1:8000/send-otp", {
+      await fetch(`${API_BASE_URL}/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

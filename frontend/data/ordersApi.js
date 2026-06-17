@@ -1,13 +1,14 @@
 import { cart } from './cart-class.js'
 import { getDeliveryOption, calculateDeliveryDate } from './deliveryOptions.js';
 import { getProduct } from './products.js';
+import { API_BASE_URL } from '../scripts/config.js';
 
 export async function createOrder(orderData) {
 
   const token = localStorage.getItem('token');
   console.log("TOKEN SENT:", token);
 
-  const response = await fetch('http://127.0.0.1:8000/orders', {
+  const response = await fetch(`${API_BASE_URL}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ export async function createOrder(orderData) {
 export async function fetchOrders() {
   const token = localStorage.getItem('token'); // Get the token
 
-  const response = await fetch('http://127.0.0.1:8000/orders', {
+  const response = await fetch(`${API_BASE_URL}/orders`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -99,7 +100,7 @@ export function buildOrderData(cartItems, billingDetails) {
 export async function cancelOrder(orderId) {
   const token = localStorage.getItem('token');
 
-  const response = await fetch(`http://127.0.0.1:8000/orders/${orderId}`, {
+  const response = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`

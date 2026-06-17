@@ -3,6 +3,7 @@ import { authContext } from "./authContext.js";
 import { setAuthState, AuthState, getAuthState } from "./authFlow.js";
 import { initAuthRouter } from "./authRouter.js";
 import { navigateAuth } from "./authNavigator.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("User Login Loaded");
 
@@ -58,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const session = getAuthState();
 
-        const res = await fetch("http://127.0.0.1:8000/verify-login-otp", {
+        const res = await fetch(`${API_BASE_URL}/verify-login-otp`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -123,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
           resendBtn.style.opacity = "0.5";
           resendBtn.style.pointerEvents = "none";
 
-          const res = await fetch("http://127.0.0.1:8000/send-otp", {
+          const res = await fetch(`${API_BASE_URL}/send-otp`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

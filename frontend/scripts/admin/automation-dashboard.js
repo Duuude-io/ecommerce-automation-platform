@@ -1,5 +1,6 @@
+import { API_BASE_URL } from "../config.js";
+
 console.log("Admin Dashboard Loaded")
-const API_BASE_URL = "https://ecommerce-automation-platform-2.onrender.com";
 
 const tableBody = document.getElementById("logsTable");
 

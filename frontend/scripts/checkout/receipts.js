@@ -1,6 +1,5 @@
 import { getProduct, loadProductsFetch } from "../../data/products.js";
-
-const API_BASE_URL = "https://ecommerce-automation-platform-2.onrender.com";
+import { API_BASE_URL } from "../config.js";
 
 const receiptContent =
   document.getElementById("receiptContent");

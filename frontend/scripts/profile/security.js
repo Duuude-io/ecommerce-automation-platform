@@ -6,6 +6,7 @@ import { auth } from "../auth/authStore.js";
 import { AuthState } from "../auth/authFlow.js";
 import { safeNavigate } from "../auth/safeNavigate.js";
 import { authContext } from "../auth/authContext.js";
+import { API_BASE_URL } from "../config.js";
 
 //initAuthGuard("account-page");
 
@@ -67,7 +68,7 @@ async function handlePasswordChange() {
     const user = auth.getUser();
 
     const response = await fetch(
-      "http://127.0.0.1:8000/request-password-change",
+      `${API_BASE_URL}/request-password-change`,
       {
         method: "POST",
         headers: {
@@ -122,7 +123,7 @@ async function loadActiveSessions() {
     console.log("TOKEN:", token);
 
     const res = await fetch(
-      "http://127.0.0.1:8000/active-sessions",
+      `${API_BASE_URL}/active-sessions`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -194,7 +195,7 @@ async function loadActiveSessions() {
 async function revokeSession(sessionId) {
   const token = auth.getToken();
   const res = await fetch(
-    `http://127.0.0.1:8000/active-sessions/${sessionId}`,
+    `${API_BASE_URL}/active-sessions/${sessionId}`,
     {
       method: "DELETE",
       headers: {
@@ -222,7 +223,7 @@ async function revokeOtherSessions() {
 
     const token = auth.getToken();
     const res = await fetch(
-      "http://127.0.0.1:8000/active-sessions",
+      `${API_BASE_URL}/active-sessions`,
       {
         method: "DELETE",
         headers: {

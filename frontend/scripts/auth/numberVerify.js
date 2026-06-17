@@ -6,6 +6,7 @@ import { AuthState, clearAuthState, getAuthState } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
 import { safeNavigate } from "./safeNavigate.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("Number verify loaded");
 
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           // 2. Call Backend
-          const res = await fetch("http://127.0.0.1:8000/send-otp", {
+          const res = await fetch(`${API_BASE_URL}/send-otp`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

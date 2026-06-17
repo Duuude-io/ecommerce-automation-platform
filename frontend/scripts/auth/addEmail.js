@@ -3,6 +3,7 @@ import { authContext } from "./authContext.js";
 import { auth } from "./authStore.js";
 import { initAuthRouter } from "./authRouter.js";
 import { safeNavigate } from "./safeNavigate.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("Add Email loaded");
 
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
 
         // 1. CHECK IF PHONE ALREADY EXISTS
-        const checkRes = await fetch("http://127.0.0.1:8000/check-user", {
+        const checkRes = await fetch(`${API_BASE_URL}/check-user`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ identifier: email })
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const token = auth.getToken();
 
-        const addRes = await fetch("http://127.0.0.1:8000/add-email", {
+        const addRes = await fetch(`${API_BASE_URL}/add-email`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const addData = await addRes.json();
         if (!addRes.ok || addData.error) return alert(addData.error);
 
-        const otpRes = await fetch("http://127.0.0.1:8000/send-otp", {
+        const otpRes = await fetch(`${API_BASE_URL}/send-otp`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

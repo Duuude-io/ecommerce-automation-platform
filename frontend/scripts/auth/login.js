@@ -2,6 +2,7 @@ import { AuthState, getAuthRoutes } from "./authFlow.js";
 import { authContext } from "./authContext.js";
 import { initAuthRouter } from "./authRouter.js";
 import { safeNavigate } from "./safeNavigate.js";
+import { API_BASE_URL } from "../config.js";
 
 console.log("Login Page loaded");
 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
 
         const response = await fetch(
-          "http://127.0.0.1:8000/check-user",
+          `${API_BASE_URL}/check-user`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

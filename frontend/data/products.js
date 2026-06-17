@@ -1,4 +1,5 @@
 import { formatCurrency } from '../scripts/utils/money.js';
+import { API_BASE_URL } from '../scripts/config.js';
 
 export function getProduct(productId) {
   let matchingProduct;
@@ -117,7 +118,7 @@ export let products = [];
 
 export function loadProductsFetch() {
   const promise = fetch(
-    'http://127.0.0.1:8000/products'
+    `${API_BASE_URL}/products`
   ).then((response) => {
     return response.json();
   }).then((productsData) => {
@@ -167,6 +168,6 @@ export function loadProducts(fun) {
     console.log('Unexpected error. Please try again later.');
   });
 
-  xhr.open('GET', 'http://127.0.0.1:8000/products');
+  xhr.open('GET', `${API_BASE_URL}/products`);
   xhr.send();
 }
