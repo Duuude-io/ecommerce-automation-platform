@@ -21,7 +21,7 @@ export function getAuthRoutes() {
     verify_add_phone: "numberverify.html",
 
     otp_login: "otpuserlogin.html",
-    authenticated: "amazon.html",
+    authenticated: "index.html",
 
     password_change_email: "../emailverify.html",
     password_change_phone: "../numberverify.html"

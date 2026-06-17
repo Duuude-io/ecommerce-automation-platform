@@ -39,7 +39,7 @@ async function loadPage() {
         <div class="empty-orders-message">
           You haven't placed any orders yet.
         </div>
-        <a class="button-primary view-products-link" href="amazon.html">
+        <a class="button-primary view-products-link" href="index.html">
           Start Shopping
         </a>
       </div>

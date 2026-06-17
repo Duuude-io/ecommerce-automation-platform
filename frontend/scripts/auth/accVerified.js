@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (startBtn) {
       startBtn.addEventListener("click", () => {
         clearAuthState();
-        window.location.href = "amazon.html";
+        window.location.href = "index.html";
       });
     }
   }

@@ -137,7 +137,7 @@ const performSearch = () => {
   const searchBar = document.querySelector('.js-search-bar');
   if (searchBar) {
     const search = searchBar.value;
-    window.location.href = `amazon.html?search=${search}`;
+    window.location.href = `index.html?search=${search}`;
   }
 };
 

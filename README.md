@@ -65,7 +65,7 @@ http://127.0.0.1:8000
 
 Frontend
 Open:
-amazon.html
+index.html
 or use VS Code Live Server
 
 ## Project Status

@@ -15,7 +15,7 @@ export function renderOrderSummary() {
       <div class="empty-cart-container">
         <img class="empty-cart-animation" src="images/empty-cart.gif" alt="Empty Cart Animation">
       <div>Duude.. Your cart is empty.</div>
-      <a class="button-primary view-products-link" href="amazon.html" data-testid="view-products-link">
+      <a class="button-primary view-products-link" href="index.html" data-testid="view-products-link">
         View products
       </a>
     `;
