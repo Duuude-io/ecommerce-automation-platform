@@ -1,6 +1,6 @@
 import { getProduct, loadProductsFetch } from "../../data/products.js";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://ecommerce-automation-platform-2.onrender.com";
 
 const receiptContent =
   document.getElementById("receiptContent");
@@ -29,7 +29,7 @@ async function loadReceipt() {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `${API_URL}/orders/${orderId}/receipt`,
+      `${API_BASE_URL}/orders/${orderId}/receipt`,
       {
         headers: {
           Authorization: `Bearer ${token}`

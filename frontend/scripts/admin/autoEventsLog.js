@@ -1,5 +1,5 @@
 console.log("Events Log Loaded")
-const API_URL = "http://127.0.0.1:8000/automation/logs";
+const API_BASE_URL = "https://ecommerce-automation-platform-2.onrender.com";
 
 const tableBody = document.getElementById("logsTable");
 const payloadPanel = document.getElementById("payloadPanel");
@@ -25,7 +25,7 @@ async function fetchLogs() {
 
   try {
 
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_BASE_URL}/automation/logs`);
     const logs = await response.json();
 
     console.log("ALL LOGS:", logs);
