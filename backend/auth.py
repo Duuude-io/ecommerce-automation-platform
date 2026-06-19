@@ -2,9 +2,8 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime
 from fastapi import Header, HTTPException
-from utils.storage import load_users, load_sessions, update_session_activity
-from uuid import uuid4
-
+from utils.storage import get_user_sessions, update_session_activity
+from repository.user_repository import get_user_by_id
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = "secret123"
@@ -51,8 +50,10 @@ def get_current_user(authorization: str = Header(None)):
         user_id = payload["user_id"]
         session_id = payload["session_id"]
 
-        sessions = load_sessions()
-        user_sessions = sessions.get(user_id, [])
+        user_sessions = get_user_sessions(user_id)
+
+        print("USER SESSIONS:", user_sessions)
+        print("SESSION TYPE:", type(user_sessions))
 
         session_exists = any(
             s["id"] == session_id
@@ -70,8 +71,7 @@ def get_current_user(authorization: str = Header(None)):
             session_id
         )
 
-        users = load_users()
-        user = next((u for u in users if u["id"] == user_id), None)
+        user = get_user_by_id(user_id)
 
         if not user:
             raise HTTPException(status_code=401, detail="User not found")

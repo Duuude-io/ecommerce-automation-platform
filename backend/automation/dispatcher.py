@@ -1,6 +1,6 @@
 from threading import Thread
 from automation.logs.sqlite_logs import log_event
-from utils.storage import load_users
+from repository.user_repository import get_user_by_id
 
 handlers = {}
 
@@ -25,16 +25,9 @@ def run_handler(handler, payload, event_name):
 
     payload = dict(payload or {})
 
-    # normalize userId
-
     user_id = payload.get("userId") or payload.get("user_id")
 
-    users = load_users()
-
-    user = next(
-        (u for u in users if u["id"] == user_id),
-        None
-    )
+    user = get_user_by_id(user_id) if user_id else None
 
     print("FOUND USER:", user)
 

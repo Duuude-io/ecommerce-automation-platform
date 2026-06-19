@@ -2,32 +2,22 @@ import json
 from pathlib import Path
 import time
 import uuid
+from automation_db import get_conn
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = BASE_DIR / "data"
 
-USERS_FILE = DATA_DIR / "users.json"
 ORDERS_FILE = DATA_DIR / "orders.json"
 RECEIPTS_FILE = DATA_DIR / "receipts.json"
-SESSIONS_FILE = DATA_DIR / "active_sessions.json"
 
 
 def load_users():
-    if not USERS_FILE.exists():
-        return []
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users")
+        rows = cur.fetchall()
 
-    with open(USERS_FILE, "r") as f:
-        users = json.load(f)
-
-    for user in users:
-        user.setdefault("auth_state", "CREATE_ACCOUNT")
-
-    return users
-
-
-def save_users(users):
-    with open(USERS_FILE, "w") as f:
-        json.dump(users, f, indent=2)
+        return [dict(row) for row in rows]
 
 
 def load_orders():
@@ -70,20 +60,30 @@ def save_receipts(receipts):
 
 
 def load_sessions():
-    if not SESSIONS_FILE.exists():
-        return {}
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM sessions")
+        rows = cur.fetchall()
 
-    try:
-        with open(SESSIONS_FILE, "r") as f:
-            return json.load(f)
+        sessions = {}
 
-    except json.JSONDecodeError:
-        return {}
+        for row in rows:
+            session = dict(row)
+            user_id = session["user_id"]
+
+            sessions.setdefault(user_id, []).append(session)
+
+        return sessions
 
 
-def save_sessions(sessions):
-    with open(SESSIONS_FILE, "w") as f:
-        json.dump(sessions, f, indent=2)
+def get_user_sessions(user_id: str):
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT * FROM sessions
+            WHERE user_id = ?
+        """, (user_id,))
+        return [dict(row) for row in cur.fetchall()]
 
 
 def create_session(
@@ -91,7 +91,6 @@ def create_session(
     device="Unknown Device",
     ip="Unknown IP"
 ):
-    sessions = load_sessions()
 
     session = {
         "id": str(uuid.uuid4()),
@@ -101,31 +100,41 @@ def create_session(
         "last_seen": time.time()
     }
 
-    sessions.setdefault(user_id, []).append(session)
-
-    save_sessions(sessions)
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO sessions (
+                id,
+                user_id,
+                device,
+                ip,
+                created_at,
+                last_seen
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            session["id"],
+            user_id,
+            session["device"],
+            session["ip"],
+            session["created_at"],
+            session["last_seen"]
+        ))
 
     return session
 
 
-def update_session_activity(
-    user_id,
-    session_id
-):
-    sessions = load_sessions()
+def update_session_activity(user_id, session_id):
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE sessions
+            SET last_seen = ?
+            WHERE user_id = ? AND id = ?
+        """, (
+            time.time(),
+            user_id,
+            session_id
+        ))
 
-    user_sessions = sessions.get(
-        user_id,
-        []
-    )
-
-    for session in user_sessions:
-
-        if session["id"] == session_id:
-
-            session["last_seen"] = time.time()
-
-            print("UPDATE SESSION:", user_id, session_id)
-            break
-
-    save_sessions(sessions)
+    print("UPDATE SESSION:", user_id, session_id)

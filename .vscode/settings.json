@@ -1,4 +1,18 @@
 {
   "files.enableTrash": true,
-  "python-envs.defaultEnvManager": "ms-python.python:system"
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "liveServer.settings.ignoreFiles": [
+    "**/database/**",
+    "**/otp_store.json",
+    "**/data/**",
+    "**/.vscode/**",
+    "**/*.db",
+    "**/*.db-wal",
+    "**/*.db-shm",
+    "**/*.json",
+    "**/database/**",
+    "**/data/**",
+    "**/.git/**",
+    "**/.vscode/**"
+  ]
 }

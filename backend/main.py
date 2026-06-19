@@ -7,7 +7,9 @@ import random
 from random import randint
 import time
 from auth_states import AuthState
-from utils.storage import load_users, save_users, load_receipts, load_sessions, save_sessions, create_session
+from utils.storage import load_receipts, create_session
+
+from repository.user_repository import create_user, update_user, get_user_by_id, get_all_users, get_user_by_email, get_user_by_phone
 
 import json
 import uuid
@@ -203,29 +205,44 @@ def assert_identifier_available(identifier: str, user_id: str | None = None):
 
     identifier = normalize_identifier(identifier)
 
-    users = load_users()
+    user = (
+        get_user_by_email(identifier)
+        or get_user_by_phone(identifier)
+    )
 
-    if is_identifier_taken(
-        identifier,
-        users,
-        signup_sessions,
-        exclude_user_id=user_id
-    ):
+    if user and user["id"] != user_id:
         raise ValueError("Identifier already in use")
 
     return identifier
+
+
+@app.get("/debug/users")
+def debug_users():
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT id, email, phone FROM users")
+    rows = cur.fetchall()
+    return [dict(r) for r in rows]
 
 
 @app.get("/active-sessions")
 def get_active_sessions(
     current_user=Depends(get_current_user)
 ):
-
     user = current_user["user"]
     current_session = current_user["session_id"]
 
-    sessions = load_sessions()
-    user_sessions = sessions.get(user["id"], [])
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT *
+            FROM sessions
+            WHERE user_id = ?
+            ORDER BY last_seen DESC
+        """, (user["id"],))
+
+        rows = cur.fetchall()
+        user_sessions = [dict(row) for row in rows]
 
     return {
         "success": True,
@@ -248,19 +265,15 @@ def revoke_session(
             "message": "Cannot revoke current session"
         }
 
-    sessions = load_sessions()
-
-    user_sessions = sessions.get(
-        user["id"],
-        []
-    )
-
-    sessions[user["id"]] = [
-        s for s in user_sessions
-        if s["id"] != session_id
-    ]
-
-    save_sessions(sessions)
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            DELETE FROM sessions
+            WHERE user_id = ? AND id = ?
+        """, (
+            user["id"],
+            session_id
+        ))
 
     return {
         "success": True,
@@ -275,19 +288,16 @@ def revoke_other_sessions(
     user = current_user["user"]
     current_session = current_user["session_id"]
 
-    sessions = load_sessions()
-
-    user_sessions = sessions.get(
-        user["id"],
-        []
-    )
-
-    sessions[user["id"]] = [
-        s for s in user_sessions
-        if s["id"] == current_session
-    ]
-
-    save_sessions(sessions)
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            DELETE FROM sessions
+            WHERE user_id = ?
+            AND id != ?
+        """, (
+            user["id"],
+            current_session
+        ))
 
     return {
         "success": True,
@@ -300,8 +310,6 @@ def signup(data: SignupRequest):
     cleanup_expired_sessions()
 
     identifier = normalize_identifier(data.identifier)
-
-    users = load_users()
 
     for sid, s in signup_sessions.items():
         if s.get("email") == identifier or s.get("phone") == identifier:
@@ -321,6 +329,7 @@ def signup(data: SignupRequest):
     user_id = str(uuid4())
 
     purpose = "signup"
+
     auth_state = (
         "verify_signup_email"
         if "@" in identifier
@@ -349,15 +358,10 @@ def signup(data: SignupRequest):
 def login(data: LoginRequest, request: Request):
 
     identifier = normalize_identifier(data.identifier)
-    users = load_users()
-
-    user = next(
-        (
-            u for u in users
-            if u["email"] == identifier
-            or u["phone"] == identifier
-        ),
-        None
+    user = (
+        get_user_by_email(identifier)
+        if "@" in identifier
+        else get_user_by_phone(identifier)
     )
 
     if not user:
@@ -429,16 +433,10 @@ def normalize_identifier(identifier: str):
 def check_user(data: IdentifierRequest):
 
     identifier = normalize_identifier(data.identifier)
-    users = load_users()
 
-    user = next(
-        (
-            u for u in users
-            if u.get("email") == identifier
-            or u.get("phone") == identifier
-        ),
-        None
-    )
+    user = get_user_by_email(identifier)
+    if not user:
+        user = get_user_by_phone(identifier)
 
     if user:
         return {
@@ -457,9 +455,8 @@ async def handle_send_otp(data: OTPRequest):
     user_id = data.userId
     purpose = data.purpose
 
-    users = load_users()
+    user = get_user_by_id(user_id)
 
-    user = next((u for u in users if u["id"] == user_id), None)
     signup = signup_sessions.get(user_id)
 
     # SESSION VALIDATION
@@ -590,7 +587,7 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
     save_otps(otps)
     target = stored.get("target")
 
-    users = load_users()
+    user = get_user_by_id(user_id)
 
     # SIGNUP FLOW
     if purpose == "signup":
@@ -617,21 +614,19 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
             "auth_state": signup["auth_state"]
         }
 
-        if any(u["id"] == user_id for u in users):
+        existing_user = get_user_by_id(user_id)
+
+        if existing_user:
             return {"success": False, "message": "Duplicate user id"}
 
-        existing_user = next((u for u in users if u["id"] == user_id), None)
+        create_user(new_user)
 
-        if not existing_user:
-            users.append(new_user)
-            save_users(users)
-
-            dispatch(Events.USER_CREATED, {
-                "userId": user_id,
-                "email": signup.get("email"),
-                "phone": signup.get("phone"),
-                "name": signup.get("name")
-            })
+        dispatch(Events.USER_CREATED, {
+            "userId": user_id,
+            "email": signup.get("email"),
+            "phone": signup.get("phone"),
+            "name": signup.get("name")
+        })
 
         signup_sessions.pop(user_id, None)
 
@@ -679,7 +674,6 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         }
 
     # ADD EMAIL / PHONE FLOW / PASSWORD CHANGE
-    user = next((u for u in users if u["id"] == user_id), None)
 
     if not user:
         return {"success": False, "message": "User not found"}
@@ -709,9 +703,12 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
                 "message": "Password change request expired"
             }
 
-        user["password"] = pending["new_password"]
-        save_users(users)
+        update_user(user_id, {
+            "password": pending["new_password"]
+        })
         pending_password_changes.pop(user_id, None)
+
+        user = get_user_by_id(user_id)
 
         return {
             "success": True,
@@ -729,9 +726,13 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         except ValueError:
             return {"success": False, "message": "Email already used"}
 
-        user["email"] = pending_email
-        user["verified_email"] = True
-        user.pop("pending_email", None)
+        update_user(user_id, {
+            "email": pending_email,
+            "verified_email": True,
+            "pending_email": None
+        })
+
+        user = get_user_by_id(user_id)
 
     if purpose == "add_phone":
         pending_phone = user.get("pending_phone")
@@ -744,18 +745,29 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         except ValueError:
             return {"success": False, "message": "Phone already used"}
 
-        user["phone"] = pending_phone
-        user["verified_phone"] = True
-        user.pop("pending_phone", None)
+        update_user(user_id, {
+            "phone": pending_phone,
+            "verified_phone": True,
+            "pending_phone": None
+        })
+
+        user = get_user_by_id(user_id)
 
     if user["verified_email"] and user["verified_phone"]:
-        user["auth_state"] = AuthState.AUTHENTICATED.value
+        new_state = AuthState.AUTHENTICATED.value
     elif user["verified_email"]:
-        user["auth_state"] = AuthState.ADD_PHONE_OPTIONAL.value
+        new_state = AuthState.ADD_PHONE_OPTIONAL.value
     elif user["verified_phone"]:
-        user["auth_state"] = AuthState.ADD_EMAIL_OPTIONAL.value
+        new_state = AuthState.ADD_EMAIL_OPTIONAL.value
+    else:
+        new_state = user["auth_state"]
 
-    save_users(users)
+    update_user(user_id, {
+        "auth_state": new_state
+    })
+
+    user = get_user_by_id(user_id)
+
     otps.pop(key, None)
     save_otps(otps)
 
@@ -823,9 +835,7 @@ def verify_login_otp(
         save_otps(otps)
         return {"success": False, "message": "OTP expired"}
 
-    users = load_users()
-
-    user = next((u for u in users if u["id"] == user_id), None)
+    user = get_user_by_id(user_id)
 
     if not user:
         return {"success": False, "message": "User not found"}
@@ -949,11 +959,8 @@ def session_status(current_user=Depends(get_current_user)):
 def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 
     phone = normalize_identifier(data["phone"])
-    users = load_users()
-    user = next((
-        u for u in users
-        if u["id"] == current_user["user"]["id"]), None
-    )
+
+    user = get_user_by_id(current_user["user"]["id"])
 
     if not user:
         return {"error": "User not found"}
@@ -967,12 +974,11 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
     except ValueError as e:
         return {"error": "Phone already used"}
 
-    user["pending_phone"] = phone
-    user["auth_state"] = AuthState.VERIFY_PHONE.value
-
+    update_user(user["id"], {
+        "pending_phone": phone,
+        "auth_state": AuthState.VERIFY_PHONE.value
+    })
     print("SAVING PENDING PHONE:", user.get("pending_phone"))
-
-    save_users(users)
 
     return {
         "success": True,
@@ -986,12 +992,8 @@ def add_phone(data: dict, current_user: dict = Depends(get_current_user)):
 def add_email(data: dict, current_user: dict = Depends(get_current_user)):
 
     email = normalize_identifier(data["email"])
-    users = load_users()
 
-    user = next((
-        u for u in users
-        if u["id"] == current_user["user"]["id"]), None
-    )
+    user = get_user_by_id(current_user["user"]["id"])
 
     if not user:
         return {"error": "User not found"}
@@ -1005,12 +1007,11 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
     except ValueError as e:
         return {"error": "Email already used"}
 
-    user["pending_email"] = email
-    user["auth_state"] = AuthState.VERIFY_EMAIL.value
-
+    update_user(user["id"], {
+        "pending_email": email,
+        "auth_state": AuthState.VERIFY_EMAIL.value
+    })
     print("SAVING PENDING EMAIL:", user.get("pending_email"))
-
-    save_users(users)
 
     return {
         "success": True,

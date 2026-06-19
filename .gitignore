@@ -16,9 +16,9 @@ Thumbs.db
 .vscode/
 
 # Runtime / generated data
-backend/automation.db
+database/automation.db
+database/automation.db-shm
+database/automation.db-wal
 otp_store.json
-users.json
 data/orders.json
 data/receipts.json
-data/active_sessions.json
