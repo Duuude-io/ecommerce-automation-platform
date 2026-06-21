@@ -8,13 +8,11 @@ import uuid
 
 @listen(Events.USER_CREATED)
 def welcome_user(data):
-    print("🔥 AUTOMATION TRIGGERED")
     print("User created:", data)
 
 
 @listen(Events.USER_CREATED)
 def welcome_email(data):
-    print("📧 Welcome, Prepaing....")
 
     time.sleep(5)
 
@@ -30,7 +28,6 @@ def welcome_email(data):
 
 @listen(Events.OTP_VERIFIED)
 def handle_otp_verified(data):
-    print("🔥 OTP VERIFIED AUTOMATION")
 
     if data.get("email"):
         print("Send verified email confirmation")

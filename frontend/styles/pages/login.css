@@ -14,22 +14,25 @@
   justify-content: center;
   background: white;
   display: flex;
+  padding-top: 12px;
+  padding-bottom: 5px;
 }
 
 .amazon-logo-dark {
   height: 80px;
-  padding-bottom: 0px;
-
+  box-shadow: 0 4px 12px rgb(53, 52, 61);
+  border-radius: 60px;
 }
 
 .signin-card {
-  width: 400px;
-  border-radius: 10px;
+  width: 380px;
   padding-left: 35px;
   padding-right: 35px;
   background: white;
   padding-bottom: 5px;
-  border: 1px solid rgb(185, 177, 178);
+  border: 1px solid rgb(255, 255, 255);
+  background: rgb(216, 217, 218);
+  box-shadow: -7px 15px 30px rgb(5, 3, 0);
 }
 
 .signin-card h1 {
@@ -237,12 +240,14 @@
 }
 
 .auth-card {
-  width: 400px;
+  width: 380px;
   border: 1px solid rgb(185, 177, 179);
   border-radius: 8px;
   margin: 5px 5px;
   padding: 20px 40px 20px 40px;
   background: white;
+  background: rgb(216, 217, 218);
+  box-shadow: -7px 15px 30px rgb(5, 3, 0);
 }
 
 .auth-card h1 {

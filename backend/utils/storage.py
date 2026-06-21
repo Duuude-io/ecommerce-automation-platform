@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import time
 import uuid
-from automation_db import get_conn
+from automation_db import get_conn, release_conn, RealDictCursor
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -12,12 +12,16 @@ RECEIPTS_FILE = DATA_DIR / "receipts.json"
 
 
 def load_users():
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM users")
         rows = cur.fetchall()
 
         return [dict(row) for row in rows]
+
+    finally:
+        release_conn(conn)
 
 
 def load_orders():
@@ -60,8 +64,9 @@ def save_receipts(receipts):
 
 
 def load_sessions():
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM sessions")
         rows = cur.fetchall()
 
@@ -75,15 +80,26 @@ def load_sessions():
 
         return sessions
 
+    finally:
+        release_conn(conn)
+
 
 def get_user_sessions(user_id: str):
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("""
             SELECT * FROM sessions
-            WHERE user_id = ?
+            WHERE user_id = %s
         """, (user_id,))
-        return [dict(row) for row in cur.fetchall()]
+
+        rows = cur.fetchall()
+        print("SESSION ROWS:", rows)
+
+        return [dict(row) for row in rows]
+
+    finally:
+        release_conn(conn)
 
 
 def create_session(
@@ -100,9 +116,10 @@ def create_session(
         "last_seen": time.time()
     }
 
-    with get_conn() as conn:
-        cur = conn.cursor()
-        cur.execute("""
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
             INSERT INTO sessions (
                 id,
                 user_id,
@@ -111,30 +128,39 @@ def create_session(
                 created_at,
                 last_seen
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """, (
-            session["id"],
-            user_id,
-            session["device"],
-            session["ip"],
-            session["created_at"],
-            session["last_seen"]
-        ))
+                session["id"],
+                user_id,
+                session["device"],
+                session["ip"],
+                session["created_at"],
+                session["last_seen"]
+            ))
+
+        print("CREATING SESSION:", session["id"], user_id)
+
+    finally:
+        release_conn(conn)
 
     return session
 
 
 def update_session_activity(user_id, session_id):
-    with get_conn() as conn:
-        cur = conn.cursor()
-        cur.execute("""
-            UPDATE sessions
-            SET last_seen = ?
-            WHERE user_id = ? AND id = ?
-        """, (
-            time.time(),
-            user_id,
-            session_id
-        ))
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                UPDATE sessions
+                SET last_seen = %s
+                WHERE user_id = %s AND id = %s
+            """, (
+                time.time(),
+                user_id,
+                session_id
+            ))
 
-    print("UPDATE SESSION:", user_id, session_id)
+        print("UPDATE SESSION:", user_id, session_id)
+
+    finally:
+        release_conn(conn)

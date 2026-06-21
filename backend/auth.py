@@ -31,8 +31,6 @@ def create_token(user_id, session_id):
         algorithm=ALGORITHM
     )
 
-    print("PAYLOAD:", payload)
-
     return token, session_id
 
 
@@ -53,7 +51,6 @@ def get_current_user(authorization: str = Header(None)):
         user_sessions = get_user_sessions(user_id)
 
         print("USER SESSIONS:", user_sessions)
-        print("SESSION TYPE:", type(user_sessions))
 
         session_exists = any(
             s["id"] == session_id

@@ -1,4 +1,4 @@
-from automation_db import get_conn
+from automation_db import get_conn, release_conn, RealDictCursor
 import datetime
 
 
@@ -21,57 +21,73 @@ def row_to_user(row):
 
 
 def get_all_users():
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM users")
         rows = cur.fetchall()
         return [row_to_user(row) for row in rows]
 
+    finally:
+        release_conn(conn)
+
 
 def get_user_by_id(user_id):
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute(
-            "SELECT * FROM users WHERE id = ?",
+            "SELECT * FROM users WHERE id = %s",
             (user_id,)
         )
 
-        print("LOOKUP USER_ID:", user_id)
-        print("ALL USER IDS:", [u["id"] for u in get_all_users()])
+       # print("LOOKUP USER_ID:", user_id)
+       # print("ALL USER IDS:", [u["id"] for u in get_all_users()])
 
         row = cur.fetchone()
         return row_to_user(row)
 
+    finally:
+        release_conn(conn)
+
 
 def get_user_by_email(email):
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute(
-            "SELECT * FROM users WHERE email = ?",
+            "SELECT * FROM users WHERE email = %s",
             (email,)
         )
         row = cur.fetchone()
         return row_to_user(row)
 
+    finally:
+        release_conn(conn)
+
 
 def get_user_by_phone(phone):
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute(
-            "SELECT * FROM users WHERE phone = ?",
+            "SELECT * FROM users WHERE phone = %s",
             (phone,)
         )
         row = cur.fetchone()
         return row_to_user(row)
 
+    finally:
+        release_conn(conn)
+
 
 def create_user(user):
     now = datetime.datetime.utcnow().isoformat()
 
-    with get_conn() as conn:
-        cur = conn.cursor()
-
-        cur.execute("""
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
             INSERT INTO users (
                 id,
                 name,
@@ -85,20 +101,23 @@ def create_user(user):
                 verified_phone,
                 created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
-            user["id"],
-            user.get("name"),
-            user.get("email"),
-            user.get("phone"),
-            user["password"],
-            user.get("pending_email"),
-            user.get("pending_phone"),
-            user.get("auth_state", "CREATE_ACCOUNT"),
-            int(user.get("verified_email", False)),
-            int(user.get("verified_phone", False)),
-            now
-        ))
+                user["id"],
+                user.get("name"),
+                user.get("email"),
+                user.get("phone"),
+                user["password"],
+                user.get("pending_email"),
+                user.get("pending_phone"),
+                user.get("auth_state", "CREATE_ACCOUNT"),
+                int(user.get("verified_email", False)),
+                int(user.get("verified_phone", False)),
+                now
+            ))
+
+    finally:
+        release_conn(conn)
 
 
 def update_user(user_id, updates: dict):
@@ -127,17 +146,24 @@ def update_user(user_id, updates: dict):
             if key in ["verified_email", "verified_phone"]:
                 value = int(bool(value))
 
-            fields.append(f"{db_column} = ?")
+            fields.append(f"{db_column} = %s")
             values.append(value)
 
-    values.append(user_id)
+    if not fields:
+        return
 
+    values.append(user_id)
     query = f"""
         UPDATE users
         SET {", ".join(fields)}
-        WHERE id = ?
+        WHERE id = %s
     """
 
-    with get_conn() as conn:
-        cur = conn.cursor()
-        cur.execute(query, tuple(values))
+    conn = get_conn()
+    try:
+
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, tuple(values))
+
+    finally:
+        release_conn(conn)

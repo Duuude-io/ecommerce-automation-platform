@@ -29,8 +29,6 @@ def run_handler(handler, payload, event_name):
 
     user = get_user_by_id(user_id) if user_id else None
 
-    print("FOUND USER:", user)
-
     payload["userId"] = user_id
 
     if user:

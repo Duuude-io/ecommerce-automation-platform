@@ -25,7 +25,7 @@ from automation import handlers
 from automation.events import Events
 from contextlib import asynccontextmanager
 from automation_db import init_db
-from automation_db import get_conn
+from automation_db import get_conn, release_conn, RealDictCursor
 
 
 @asynccontextmanager
@@ -216,15 +216,6 @@ def assert_identifier_available(identifier: str, user_id: str | None = None):
     return identifier
 
 
-@app.get("/debug/users")
-def debug_users():
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT id, email, phone FROM users")
-    rows = cur.fetchall()
-    return [dict(r) for r in rows]
-
-
 @app.get("/active-sessions")
 def get_active_sessions(
     current_user=Depends(get_current_user)
@@ -232,17 +223,21 @@ def get_active_sessions(
     user = current_user["user"]
     current_session = current_user["session_id"]
 
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("""
             SELECT *
             FROM sessions
-            WHERE user_id = ?
+            WHERE user_id = %s
             ORDER BY last_seen DESC
         """, (user["id"],))
 
         rows = cur.fetchall()
         user_sessions = [dict(row) for row in rows]
+
+    finally:
+        release_conn(conn)
 
     return {
         "success": True,
@@ -265,15 +260,19 @@ def revoke_session(
             "message": "Cannot revoke current session"
         }
 
-    with get_conn() as conn:
-        cur = conn.cursor()
-        cur.execute("""
-            DELETE FROM sessions
-            WHERE user_id = ? AND id = ?
-        """, (
-            user["id"],
-            session_id
-        ))
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                DELETE FROM sessions
+                WHERE user_id = %s AND id = %s
+            """, (
+                user["id"],
+                session_id
+            ))
+
+    finally:
+        release_conn(conn)
 
     return {
         "success": True,
@@ -288,16 +287,20 @@ def revoke_other_sessions(
     user = current_user["user"]
     current_session = current_user["session_id"]
 
-    with get_conn() as conn:
-        cur = conn.cursor()
-        cur.execute("""
-            DELETE FROM sessions
-            WHERE user_id = ?
-            AND id != ?
-        """, (
-            user["id"],
-            current_session
-        ))
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                DELETE FROM sessions
+                WHERE user_id = %s
+                AND id != %s
+            """, (
+                user["id"],
+                current_session
+            ))
+
+    finally:
+        release_conn(conn)
 
     return {
         "success": True,
@@ -506,7 +509,6 @@ async def handle_send_otp(data: OTPRequest):
             return {"success": False, "message": "Email already verified"}
 
         print("USER IN SEND OTP:", user)
-        print("PENDING EMAIL:", user.get("pending_email"))
 
         identifier = user.get("pending_email")
 
@@ -559,9 +561,6 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
     otp = data.otp.strip()
 
     key = f"{user_id}_{data.purpose}"
-
-    print("KEY EXPECTED:", key)
-    print("OTP STORE KEYS:", otps.keys())
 
     stored = otps.get(key)
 
@@ -779,24 +778,6 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
             "phone": user.get("phone")
         })
 
-        user_agent = request.headers.get(
-            "user-agent",
-            "Unknown Device"
-        )
-
-        ip = request.client.host
-
-        session = create_session(
-            user_id,
-            device=parse_device(user_agent),
-            ip=ip
-        )
-
-        token, session_id = create_token(
-            user_id,
-            session["id"]
-        )
-
     return {
         "success": True,
         "token": token,
@@ -894,40 +875,40 @@ def safe_json_load(value):
 @app.get("/automation/logs")
 def get_automation_logs():
     conn = get_conn()
-    cur = conn.cursor()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("""
-        SELECT
-            event,
-            handler,
-            user_id,
-            payload,
-            status,
-            timestamp,
-            user_name,
-            email,
-            phone
-        FROM automation_logs
-        ORDER BY timestamp DESC
-    """)
+        cur.execute("""
+            SELECT
+                event,
+                handler,
+                user_id,
+                payload,
+                status,
+                timestamp,
+                user_name,
+                email,
+                phone
+            FROM automation_logs
+            ORDER BY timestamp DESC
+        """)
+        rows = cur.fetchall()
 
-    rows = cur.fetchall()
-    conn.close()
+    finally:
+        release_conn(conn)
 
     return [
-        (
-            lambda payload: {
-                "event": r[0],
-                "handler": r[1],
-                "user_id": r[2],
-                "payload": payload,
-                "status": r[4],
-                "timestamp": r[5],
-                "name": r[6],
-                "email": r[7],
-                "phone": r[8]
-            }
-        )(safe_json_load(r[3]))
+        {
+            "event": r["event"],
+            "handler": r["handler"],
+            "user_id": r["user_id"],
+            "payload": safe_json_load(r["payload"]),
+            "status": r["status"],
+            "timestamp": r["timestamp"],
+            "name": r["user_name"],
+            "email": r["email"],
+            "phone": r["phone"]
+        }
         for r in rows
     ]
 
@@ -1236,8 +1217,6 @@ def request_password_change(
             "success": False,
             "message": "No verified identifier found"
         }
-
-    print("REQUEST PASSWORD CHANGE ENDPOINT")
 
     generate_and_save_otp(
         user["id"],

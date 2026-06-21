@@ -1,87 +1,104 @@
-import sqlite3
-from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "database"
-DATA_DIR.mkdir(exist_ok=True)
+import os
+from dotenv import load_dotenv
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from psycopg2.pool import SimpleConnectionPool
 
-DB_PATH = DATA_DIR / "automation.db"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+db_pool = SimpleConnectionPool(
+    1,   # min connections
+    10,  # max connections
+    DATABASE_URL
+)
 
 
 def get_conn():
-    conn = sqlite3.connect(
-        DB_PATH,
-        timeout=30,
-        check_same_thread=False
-    )
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
+    conn = db_pool.getconn()
+    conn.autocommit = True
     return conn
 
 
+def release_conn(conn):
+    db_pool.putconn(conn)
+
+
 def init_logs_table():
-    with get_conn() as conn:
-        cur = conn.cursor()
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS automation_logs (
+                    id SERIAL PRIMARY KEY,
+                    event TEXT,
+                    handler TEXT,
+                    user_id TEXT,
+                    payload TEXT,
+                    status TEXT,
+                    timestamp REAL,
+                    user_name TEXT,
+                    email TEXT,
+                    phone TEXT
+                )
+                """)
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS automation_logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            event TEXT,
-            handler TEXT,
-            user_id TEXT,
-            payload TEXT,
-            status TEXT,
-            timestamp REAL,
-            user_name TEXT,
-            email TEXT,
-            phone TEXT
-        )
-        """)
+        print(" ⚙️      automation_logs table ready   🛠️")
 
-    print(" ⚙️      automation_logs table ready   🛠️")
+    finally:
+        release_conn(conn)
 
 
 def init_users_table():
-    with get_conn() as conn:
-        cursor = conn.cursor()
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    email TEXT UNIQUE,
+                    phone TEXT UNIQUE,
+                    password_hash TEXT NOT NULL,
 
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE,
-            phone TEXT UNIQUE,
-            password_hash TEXT NOT NULL,
+                    verified_email INTEGER DEFAULT 0,
+                    verified_phone INTEGER DEFAULT 0,
 
-            verified_email INTEGER DEFAULT 0,
-            verified_phone INTEGER DEFAULT 0,
+                    auth_state TEXT DEFAULT 'CREATE_ACCOUNT',
 
-            auth_state TEXT DEFAULT 'CREATE_ACCOUNT',
+                    pending_email TEXT,
+                    pending_phone TEXT,
 
-            pending_email TEXT,
-            pending_phone TEXT,
+                    created_at TEXT NOT NULL
+                )
+                """)
 
-            created_at TEXT NOT NULL
-        )
-        """)
+            print(" 🛠️      users table ready")
 
-    print("🛠️ users table ready")
+    finally:
+        release_conn(conn)
 
 
 def init_sessions_table():
-    with get_conn() as conn:
-        conn.execute("""
-        CREATE TABLE IF NOT EXISTS sessions (
-            id TEXT PRIMARY KEY,
-            user_id TEXT,
-            device TEXT,
-            ip TEXT,
-            created_at REAL,
-            last_seen REAL
-        )
-        """)
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS sessions (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT,
+                    device TEXT,
+                    ip TEXT,
+                    created_at REAL,
+                    last_seen REAL
+                )
+                """)
 
-    print("🛠️ sessions table ready")
+            print(" 🛠️      sessions table ready")
+
+    finally:
+        release_conn(conn)
 
 
 def init_db():
