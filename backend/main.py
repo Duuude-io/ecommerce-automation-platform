@@ -780,7 +780,6 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
 
     return {
         "success": True,
-        "token": token,
         "userId": user_id,
         "fullyVerified": user["verified_email"] and user["verified_phone"],
         "userData": {

@@ -14,14 +14,14 @@
   justify-content: center;
   background: white;
   display: flex;
-  padding-top: 12px;
-  padding-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 2px;
 }
 
 .amazon-logo-dark {
   height: 80px;
-  box-shadow: 0 4px 12px rgb(53, 52, 61);
-  border-radius: 60px;
+  box-shadow: 0 4px 12px rgb(84, 18, 9);
+  border-radius: 2px;
 }
 
 .signin-card {
