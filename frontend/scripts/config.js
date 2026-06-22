@@ -4,4 +4,4 @@ const isLocal =
 
 export const API_BASE_URL = isLocal
   ? "http://127.0.0.1:8000"
-  : "https://ecommerce-automation-platform-2.onrender.com";
+  : "https://ecommerce-automation-platform.onrender.com";
