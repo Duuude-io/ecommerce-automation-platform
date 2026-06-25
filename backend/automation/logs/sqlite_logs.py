@@ -22,6 +22,7 @@ def already_logged(event, payload, handler_name):
         ))
 
         result = cur.fetchone()
+
     finally:
         release_conn(conn)
 

@@ -1,11 +1,12 @@
-import { getPayments, savePayments } from "../paymentStore.js"
+import { API_BASE_URL } from "../config.js";
+import { auth } from "../auth/authStore.js";
 
 console.log("Payment Method Loaded")
 
 let editingPaymentId = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadPayments();
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadPayments();
 
   document.querySelector(".js-save-payment")
     ?.addEventListener("click", savePaymentMethod);
@@ -19,16 +20,24 @@ document.querySelector(".js-add-payment")
     console.log("button clicked");
 
     const form = document.querySelector(".js-payment-form");
-
     if (!form) {
       console.error("Payment form not found");
       return;
     }
 
+    editingPaymentId = null;
+
+    document.querySelector(".js-card-type").value = "";
+    document.querySelector(".js-card-name").value = "";
+    document.querySelector(".js-last16").value = "";
+    document.querySelector(".js-expiry").value = "";
+    document.querySelector(".js-cvv").value = "";
+    document.querySelector(".js-billing-zip").value = "";
+
     form.classList.toggle("hidden");
   });
 
-function savePaymentMethod() {
+async function savePaymentMethod() {
   const cardType = document.querySelector(".js-card-type")
     .value.trim();
 
@@ -65,47 +74,58 @@ function savePaymentMethod() {
     return;
   }
 
-  const payments = JSON.parse(
-    localStorage.getItem("payments")
-  ) || [];
-
   if (editingPaymentId) {
-    const index = payments.findIndex(
-      payment => payment.id === editingPaymentId
+    const res = await fetch(
+      `${API_BASE_URL}/profile/payments/${editingPaymentId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${auth.getToken()}`
+        },
+        body: JSON.stringify({
+          cardType,
+          cardName,
+          last16,
+          expiry,
+          cvv,
+          billingZip
+        })
+      }
     );
 
-    if (index !== -1) {
-      payments[index] = {
-        ...payments[index],
-        cardType,
-        cardName,
-        last16,
-        expiry,
-        cvv,
-        billingZip
-      };
+    if (!res.ok) {
+      alert("Failed to update payment");
+      return;
     }
+
     editingPaymentId = null;
 
   } else {
-    const payment = {
-      id: crypto.randomUUID(),
-      cardType,
-      cardName,
-      last16,
-      expiry,
-      cvv,
-      billingZip,
-      isDefault: payments.length === 0
-    };
+    const res = await fetch(
+      `${API_BASE_URL}/profile/payments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${auth.getToken()}`
+        },
+        body: JSON.stringify({
+          cardType,
+          cardName,
+          last16,
+          expiry,
+          cvv,
+          billingZip
+        })
+      }
+    );
 
-    payments.push(payment);
+    if (!res.ok) {
+      alert("Failed to save payment");
+      return;
+    }
   }
-
-  localStorage.setItem(
-    "payments",
-    JSON.stringify(payments)
-  );
 
   document.querySelector(".empty-state")?.remove();
 
@@ -117,7 +137,7 @@ function savePaymentMethod() {
   document.querySelector(".js-billing-zip").value = "";
 
 
-  refreshPayments();
+  await refreshPayments();
 }
 
 function renderPaymentCard(payment) {
@@ -160,31 +180,50 @@ function renderPaymentCard(payment) {
   );
 }
 
-function loadPayments() {
-  let payments = getPayments();
+async function loadPayments() {
+  try {
 
-  if (payments.length === 0) {
-    return;
+    const res = await fetch(
+      `${API_BASE_URL}/profile/payments`,
+      {
+        headers: {
+          "Authorization": `Bearer ${auth.getToken()}`
+        }
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to load payments");
+    }
+
+    const payments = await res.json();
+    console.log(payments)
+
+    const container = document.querySelector(".js-payment-list");
+
+    container.querySelectorAll(".payment-card")
+      .forEach(card => card.remove());
+
+    document.querySelector(".empty-state")?.remove();
+
+    if (payments.length === 0) {
+      container.insertAdjacentHTML(
+        "beforeend",
+        `<p class="empty-state">No payment methods added yet.</p>`
+      );
+      return;
+    }
+
+    payments.forEach(payment => {
+      renderPaymentCard(payment);
+    });
+
+  } catch (error) {
+    console.error("Load payments failed:", error);
   }
-
-  payments = payments.map((payment, index) => ({
-    ...payment,
-    isDefault:
-      payment.isDefault !== undefined
-        ? payment.isDefault
-        : index === 0
-  }));
-
-  savePayments(payments);
-
-  document.querySelector(".empty-state")?.remove();
-
-  payments.forEach(payment => {
-    renderPaymentCard(payment);
-  });
 }
 
-function handlePaymentActions(event) {
+async function handlePaymentActions(event) {
   const card = event.target.closest(".payment-card");
   if (!card) return;
 
@@ -194,78 +233,110 @@ function handlePaymentActions(event) {
     return;
   }
 
-  let payments = getPayments();
-
   // DELETE 
   if (event.target.classList.contains("js-delete-payment")) {
-    payments = payments.filter(
-      payment => payment.id !== paymentId
-    );
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/payments/${paymentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    // if deleted default card
-    if (
-      payments.length > 0 &&
-      !payments.some(payment => payment.isDefault)
-    ) {
-      payments[0].isDefault = true;
+      if (!res.ok) {
+        throw new Error("Delete failed");
+      }
+
+      await refreshPayments();
+
+    } catch (error) {
+      console.error(error);
     }
-
-    savePayments(payments);
-
-    console.log("DELETE ID:", paymentId);
-
-    refreshPayments();
     return;
   }
 
+  // EDIT
   if (event.target.classList.contains("js-edit-payment")) {
-    const payments = getPayments();
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/payments`,
+        {
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    const payment = payments.find(
-      payment => payment.id === paymentId
-    );
+      if (!res.ok) {
+        throw new Error("Failed to fetch payments");
+      }
 
-    if (!payment) return;
+      const payments = await res.json();
 
-    document.querySelector(".js-card-type").value =
-      payment.cardType;
+      const payment = payments.find(
+        payment => payment.id === paymentId
+      );
 
-    document.querySelector(".js-card-name").value =
-      payment.cardName;
+      if (!payment) return;
 
-    document.querySelector(".js-last16").value =
-      payment.last16;
+      document.querySelector(".js-card-type").value =
+        payment.cardType;
 
-    document.querySelector(".js-expiry").value =
-      payment.expiry;
+      document.querySelector(".js-card-name").value =
+        payment.cardName;
 
-    document.querySelector(".js-cvv").value =
-      payment.cvv;
+      document.querySelector(".js-last16").value =
+        payment.last16;
 
-    document.querySelector(".js-billing-zip").value =
-      payment.billingZip;
+      document.querySelector(".js-expiry").value =
+        payment.expiry;
 
-    editingPaymentId = payment.id;
+      document.querySelector(".js-cvv").value =
+        payment.cvv;
 
-    document.querySelector(".js-payment-form")
-      ?.classList.remove("hidden");
+      document.querySelector(".js-billing-zip").value =
+        payment.billingZip;
 
+      editingPaymentId = payment.id;
+
+      document.querySelector(".js-payment-form")
+        ?.classList.remove("hidden");
+
+    } catch (error) {
+      console.error(error);
+    }
     return;
   }
 
   // SET DEFAULT
   if (event.target.classList.contains("js-set-default")) {
-    payments = payments.map(payment => ({
-      ...payment,
-      isDefault: payment.id === paymentId
-    }));
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/payments/${paymentId}/default`,
+        {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    savePayments(payments);
-    refreshPayments();
+      if (!res.ok) {
+        throw new Error("Set default failed");
+      }
+
+      await refreshPayments();
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
-function refreshPayments() {
+async function refreshPayments() {
   const container = document.querySelector(".js-payment-list");
 
   container.innerHTML = `
@@ -298,17 +369,5 @@ function refreshPayments() {
   document.querySelector(".js-save-payment")
     ?.addEventListener("click", savePaymentMethod);
 
-  const payments = getPayments();
-
-  if (payments.length === 0) {
-    container.insertAdjacentHTML(
-      "beforeend",
-      `<p class="empty-state">No payment methods added yet.</p>`
-    );
-    return;
-  }
-
-  payments.forEach(payment => {
-    renderPaymentCard(payment);
-  });
+  await loadPayments();
 }

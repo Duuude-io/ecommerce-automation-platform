@@ -1,7 +1,11 @@
 import { auth } from "../auth/authStore.js";
 import { initAuthGuard } from "../auth/authGuard.js";
 import { states, countries } from "../../data/state.js";
-import { getAddresses, saveAddresses } from "../paymentStore.js";
+import { API_BASE_URL } from "../config.js";
+
+console.log("profile page loaded");
+
+let editingAddressId = null;
 
 initAuthGuard("profile-page");
 
@@ -28,6 +32,11 @@ function toggleAddressForm() {
     console.error("Address form not found");
     return;
   }
+
+  editingAddressId = null;
+
+  resetAddressForm();
+
   form.classList.toggle("hidden");
 }
 
@@ -48,90 +57,147 @@ document.querySelector(".js-back-btn")
     window.location.href = "account.html";
   });
 
-function saveAddress() {
-  const addresses = getAddresses();
-  const address = {
+async function saveAddress() {
+  try {
+    const address = {
+      fullName:
+        document.querySelector(".js-full-name").value.trim(),
+      phone:
+        document.querySelector(".js-phone").value.trim(),
+      streetAddress:
+        document.querySelector(".js-address").value.trim(),
 
-    id: crypto.randomUUID(),
-    fullName:
-      document.querySelector(".js-full-name").value.trim(),
-    phone:
-      document.querySelector(".js-phone").value.trim(),
-    streetAddress:
-      document.querySelector(".js-address").value.trim(),
+      city: document.querySelector(".js-city").value.trim(),
+      state: document.querySelector(".js-state").value,
+      country: document.querySelector(".js-country").value,
+    };
 
-    city: document.querySelector(".js-city").value.trim(),
-    state: document.querySelector(".js-state").value,
-    country: document.querySelector(".js-country").value,
+    if (
+      !address.fullName ||
+      !address.phone ||
+      !address.streetAddress ||
+      !address.city ||
+      !address.state ||
+      !address.country
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
 
-    isDefault: addresses.length === 0
-  };
+    if (editingAddressId) {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/addresses/${editingAddressId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${auth.getToken()}`
+          },
+          body: JSON.stringify(address)
+        }
+      );
 
-  if (
-    !address.fullName ||
-    !address.phone ||
-    !address.streetAddress ||
-    !address.city ||
-    !address.state ||
-    !address.country
-  ) {
-    alert("Please fill all fields");
-    return;
+      if (!res.ok) {
+        throw new Error("Failed to update address");
+      }
+
+      editingAddressId = null;
+
+    } else {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/addresses`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${auth.getToken()}`
+          },
+          body: JSON.stringify(address)
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to save address");
+      }
+    }
+
+    resetAddressForm();
+    await renderAddresses();
+
+    document.querySelector(".js-address-form")
+      ?.classList.add("hidden");
+
+  } catch {
+    console.error(error);
+    alert("Address save failed")
   }
-
-  addresses.push(address);
-  saveAddresses(addresses);
-
-  resetAddressForm();
-  renderAddresses();
-
-  document.querySelector(".js-address-form")
-    ?.classList.add("hidden");
 }
 
-function renderAddresses() {
-  const container = document.querySelector(".js-address-list");
+async function renderAddresses() {
+  const container = document.querySelector(
+    ".js-address-list");
   if (!container) return;
 
-  const addresses = getAddresses();
-  if (!addresses.length) {
-    container.innerHTML = `
-      <p>No saved addresses yet.</p>
-    `;
-    return;
-  }
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/profile/addresses`,
+      {
+        headers: {
+          "Authorization": `Bearer ${auth.getToken()}`
+        }
+      }
+    );
 
-  container.innerHTML = addresses.map(address => `
-    <div class="saved-address" data-id="${address.id}">
+    if (!res.ok) {
+      throw new Error("Failed to load addresses");
+    }
 
-      ${address.isDefault ? `
-        <p class="default-badge">
-          Default Address
+    const addresses = await res.json();
+    console.log(addresses);
+
+    if (!addresses.length) {
+      container.innerHTML = `
+        <p>No saved addresses yet.</p>
+      `;
+      return;
+    }
+
+    container.innerHTML = addresses.map(address => `
+      <div class="saved-address" data-id="${address.id}">
+        ${address.isDefault ? `
+          <p class="default-badge">
+            Default Address
+          </p>
+        ` : ""}
+
+        <h3>${address.fullName}</h3>
+        <p>${address.phone}</p>
+        <p>${address.streetAddress}</p>
+        <p>
+          ${address.city},
+          ${address.state},
+          ${address.country}
         </p>
-      ` : ""}
 
-      <h3>${address.fullName}</h3>
-      <p>${address.phone}</p>
-      <p>${address.streetAddress}</p>
-      <p>
-        ${address.city},
-        ${address.state},
-        ${address.country}
-      </p>
+        <button class="js-edit-address">Edit</button>
 
-      ${!address.isDefault ? `
-        <button class="js-set-default">
-          Set as Default
+        ${!address.isDefault ? `
+          <button class="js-set-default">
+            Set as Default
+          </button>
+        ` : ""}
+
+        <button
+          class="js-delete-address">
+          Delete
         </button>
-      ` : ""}
+      </div>
 
-      <button
-        class="js-delete-address">
-        Delete
-      </button>
-    </div>
+    `).join("");
 
-  `).join("");
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function renderStateList() {
@@ -183,7 +249,7 @@ function resetAddressForm() {
   document.querySelector(".js-country").selectedIndex = 0;
 }
 
-function handleAddressActions(event) {
+async function handleAddressActions(event) {
   const card = event.target.closest(".saved-address");
   if (!card) return;
 
@@ -193,35 +259,105 @@ function handleAddressActions(event) {
     return;
   }
 
-  let addresses = getAddresses();
-
   // DELETE
   if (event.target.classList.contains("js-delete-address")) {
-    addresses = addresses.filter(
-      address => address.id !== addressId
-    );
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/addresses/${addressId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    // If deleted default address
-    if (
-      addresses.length > 0 &&
-      !addresses.some(address => address.isDefault)
-    ) {
-      addresses[0].isDefault = true;
+      if (!res.ok) {
+        throw new Error("Delete failed");
+      }
+
+      await renderAddresses();
+
+    } catch (error) {
+      console.error(error);
     }
+    return;
+  }
 
-    saveAddresses(addresses);
-    renderAddresses();
+  // EDIT
+  if (event.target.classList.contains("js-edit-address")) {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/addresses`,
+        {
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch pays");
+      }
+
+      const addresses = await res.json();
+
+      const address = addresses.find(
+        address => address.id === addressId
+      );
+
+      if (!address) return;
+
+      document.querySelector(".js-full-name").value =
+        address.fullName;
+
+      document.querySelector(".js-phone").value =
+        address.phone;
+
+      document.querySelector(".js-address").value =
+        address.streetAddress;
+
+      document.querySelector(".js-city").value =
+        address.city;
+
+      document.querySelector(".js-state").value =
+        address.state;
+
+      document.querySelector(".js-country").value =
+        address.country;
+
+      editingAddressId = address.id;
+
+      document.querySelector(".js-address-form")
+        ?.classList.remove("hidden");
+
+    } catch (error) {
+      console.error(error);
+    }
     return;
   }
 
   // SET DEFAULT
   if (event.target.classList.contains("js-set-default")) {
-    addresses = addresses.map(address => ({
-      ...address,
-      isDefault: address.id === addressId
-    }));
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/profile/addresses/${addressId}/default`,
+        {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    saveAddresses(addresses);
-    renderAddresses();
+      if (!res.ok) {
+        throw new Error("Set default failed");
+      }
+
+      await renderAddresses();
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

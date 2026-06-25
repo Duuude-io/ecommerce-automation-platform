@@ -94,7 +94,6 @@ def get_user_sessions(user_id: str):
         """, (user_id,))
 
         rows = cur.fetchall()
-        print("SESSION ROWS:", rows)
 
         return [dict(row) for row in rows]
 

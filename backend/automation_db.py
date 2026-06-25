@@ -74,7 +74,7 @@ def init_users_table():
                 )
                 """)
 
-            print(" 🛠️      users table ready")
+            print(" 🛠️      users table ready  ")
 
     finally:
         release_conn(conn)
@@ -95,13 +95,139 @@ def init_sessions_table():
                 )
                 """)
 
-            print(" 🛠️      sessions table ready")
+            print(" 🛠️      sessions table ready   ")
 
     finally:
         release_conn(conn)
 
 
+def init_orders_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS orders (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT,
+                    order_number TEXT,
+                    status TEXT,
+                    created_at TEXT,
+
+                    sub_total_cents INTEGER,
+                    tax_cents INTEGER,
+                    shipping_cents INTEGER,
+                    total_cents INTEGER,
+
+                    billing_json TEXT
+                )
+                """)
+
+        print(" 🛠️      orders table ready ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_order_items_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS order_items (
+                    id SERIAL PRIMARY KEY,
+                    order_id TEXT,
+                    product_id TEXT,
+                    quantity INTEGER,
+                    delivery_option_id TEXT,
+                    estimated_delivery TEXT
+                )
+                """)
+
+        print(" 🛠️      ordered_Items table ready   ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_receipts_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS order_items (
+                    id SERIAL PRIMARY KEY,
+                    order_id TEXT,
+                    product_id TEXT,
+                    quantity INTEGER,
+                    delivery_option_id TEXT,
+                    estimated_delivery TEXT
+                )
+                """)
+
+        print(" 🛠️      receipts table ready   ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_addresses_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS addresses (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+
+                    full_name TEXT NOT NULL,
+                    phone TEXT NOT NULL,
+                    street_address TEXT NOT NULL,
+                    city TEXT NOT NULL,
+                    state TEXT NOT NULL,
+                    country TEXT NOT NULL,
+
+                    is_default INTEGER DEFAULT 0
+                )
+            """)
+
+        print(" 🛠️      addresses table ready   ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_payment_methods_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS payment_methods (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+
+                    card_type TEXT,
+                    card_name TEXT,
+                    last16 TEXT,
+                    expiry TEXT,
+                    cvv TEXT,
+                    billing_zip TEXT,
+
+                    is_default BOOLEAN DEFAULT FALSE
+                )
+            """)
+        print(" 🛠️      payment_methods table ready ")
+    finally:
+        release_conn(conn)
+
+
 def init_db():
+
     init_logs_table()
     init_users_table()
     init_sessions_table()
+    init_orders_table()
+
+    init_order_items_table()
+    init_receipts_table()
+    init_addresses_table()
+    init_payment_methods_table()

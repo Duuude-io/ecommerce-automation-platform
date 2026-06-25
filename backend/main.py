@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks, Request
+from fastapi import FastAPI, Header, Depends, HTTPException, BackgroundTasks, Request, APIRouter
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -26,6 +26,9 @@ from automation.events import Events
 from contextlib import asynccontextmanager
 from automation_db import init_db
 from automation_db import get_conn, release_conn, RealDictCursor
+from repository.order_repository import create_order, add_order_items, get_user_orders, create_order_in_db, cancel_order_in_db
+
+from routes.profile_routes import router as profile_router
 
 
 @asynccontextmanager
@@ -41,6 +44,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+router = APIRouter()
+app.include_router(profile_router)
 
 signup_sessions = {}
 pending_password_changes = {}
@@ -1015,19 +1021,6 @@ def get_products():
     return PRODUCTS
 
 
-def load_orders():
-    if not ORDERS_FILE.exists():
-        return []
-
-    with ORDERS_FILE.open("r") as file:
-        return json.load(file)
-
-
-def save_orders(orders):
-    with ORDERS_FILE.open("w") as file:
-        json.dump(orders, file, indent=2)
-
-
 def generate_order_number():
     return (
         f"{randint(100, 999)}-"
@@ -1055,9 +1048,8 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
             detail="User must verify phone and email before ordering"
         )
 
-    orders = load_orders()
-
     new_order = order.model_dump()
+
     new_order["id"] = str(uuid.uuid4())
     new_order["userId"] = user_id
 
@@ -1069,11 +1061,10 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
     new_order["shippingCents"] = order.shippingCents
     new_order["totalCostCents"] = order.totalCostCents
 
-    orders.append(new_order)
+    order_id = create_order_in_db(new_order)
+    add_order_items(order_id, new_order["items"])
 
     print("NEW ORDER:", new_order)
-
-    save_orders(orders)
 
     background_tasks.add_task(
         dispatch,
@@ -1108,31 +1099,16 @@ def create_order(order: Order, background_tasks: BackgroundTasks, current_user=D
 
 @app.get("/orders")
 def get_orders(current_user=Depends(get_current_user)):
-
-    orders = load_orders()
     user = current_user["user"]
-
-    return [
-        o for o in orders
-        if o["userId"] == user["id"]
-    ]
+    return get_user_orders(user["id"])
 
 
 @app.delete("/orders/{order_id}")
 def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
     user = current_user["user"]
-    orders = load_orders()
 
-    updated_orders = [
-        order for order in orders
-        if not (
-            order["id"] == order_id
-            and order["userId"] == user["id"]
-        )
-    ]
-
-    save_orders(updated_orders)
+    cancel_order_in_db(order_id, user["id"])
 
     dispatch(Events.ORDER_CANCELLED, {
         "orderId": order_id,
