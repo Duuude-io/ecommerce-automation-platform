@@ -1,11 +1,8 @@
 import { checkoutSession } from "./checkoutSession.js";
-import { getPayments, getDefaultPayment } from "../paymentStore.js";
 import { cart } from "../../data/cart-class.js";
-import { products } from "../../data/products.js";
-import { loadProductsFetch } from "../../data/products.js";
+import { products, loadProductsFetch } from "../../data/products.js";
 import { getCartTotals } from "../checkout/paymentSummary.js";
 import { formatCurrency } from "../utils/money.js";
-import { getAddresses } from "../paymentStore.js";
 import { createOrder, buildOrderData } from "../../data/ordersApi.js";
 
 console.log("Card Review Page Loaded");
@@ -30,10 +27,7 @@ function renderSelectedCard() {
 
   const session = checkoutSession.get();
   const paymentId = session.selectedPaymentId;
-  const payments = getPayments();
-  const payment = payments.find(
-    payment => payment.id === paymentId
-  );
+  const payment = checkoutSession.get().selectedPayment;
 
   console.log(payment, paymentId)
 
@@ -88,21 +82,7 @@ function renderBillingAddress() {
 
   console.log("checkoutSession:", checkoutSession.get());
 
-  let billingAddress;
-
-  // NEW CARD FLOW → use checkout form details
-  if (session.billingDetails) {
-    billingAddress = session.billingDetails;
-  } else {
-    // SAVED CARD FLOW → use default saved address
-    const addresses = getAddresses();
-
-    console.log("addresses:", getAddresses());
-
-    billingAddress = addresses.find(
-      address => address.isDefault
-    );
-  }
+  const billingAddress = session.billingDetails;
 
   if (!billingAddress) {
     container.innerHTML = `
@@ -142,12 +122,8 @@ async function handlePayNow(event) {
 
   const session = checkoutSession.get();
 
-  console.log("checkoutSession:", checkoutSession.get());
-  const payments = getPayments();
-
-  const payment = payments.find(
-    payment => payment.id === session.selectedPaymentId
-  );
+  console.log("checkoutSession:", session);
+  const payment = session.selectedPayment;
 
   if (!payment) {
     alert("Payment method not found");
@@ -166,17 +142,9 @@ async function processOrder() {
   try {
     const session = checkoutSession.get();
 
-    let billingDetails = session.billingDetails;
+    const billingDetails = session.billingDetails;
 
     console.log("SESSION:", checkoutSession.get());
-
-    // fallback to default saved address
-    if (!billingDetails) {
-      const addresses = getAddresses();
-      billingDetails = addresses.find(
-        address => address.isDefault
-      );
-    }
 
     if (!billingDetails) {
       alert("Billing address missing");

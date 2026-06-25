@@ -1,11 +1,12 @@
 import { cart } from '../../data/cart-class.js';
 import { getProduct, products } from '../../data/products.js';
 import { getDeliveryOption } from '../../data/deliveryOptions.js';
-import { getDefaultPayment } from "../paymentStore.js";
 import { formatCurrency } from '../utils/money.js';
 import { createOrder } from '../../data/ordersApi.js';
+import { auth } from '../auth/authStore.js';
+import { API_BASE_URL } from '../config.js';
 
-export function renderPaymentSummary() {
+export async function renderPaymentSummary() {
 
   let productPriceCents = 0;
   let cartQuantity = 0;
@@ -38,7 +39,7 @@ export function renderPaymentSummary() {
   const taxCents = totalBeforeTaxCents * 0.1;
   const totalCents = totalBeforeTaxCents + taxCents;
 
-  const payment = getDefaultPayment();
+  const payment = await getDefaultPayment();
   const maskedCardNumber = (payment?.last16 || "0000").slice(-4);
 
   const paymentHTML = payment ? `
@@ -167,4 +168,23 @@ export function getCartTotals() {
     taxCents,
     totalCents
   };
+}
+
+async function getDefaultPayment() {
+  const res = await fetch(
+    `${API_BASE_URL}/profile/payments`,
+    {
+      headers: {
+        "Authorization": `Bearer ${auth.getToken()}`
+      }
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch payments");
+  }
+
+  const payments = await res.json();
+
+  return payments.find(payment => payment.isDefault);
 }

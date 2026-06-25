@@ -58,12 +58,8 @@
   transition: all 0.2s ease;
 }
 
-.order-id {
-  font-weight: 500;
-}
-
 .js-order-id {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
   color: #9a0909;
 }

@@ -1,9 +1,12 @@
 import { checkoutSession } from './checkoutSession.js';
-import { getPayments } from "../paymentStore.js";
+import { API_BASE_URL } from "../config.js";
+import { auth } from "../auth/authStore.js";
+
 
 console.log("Payment Method Page Loaded")
-
 console.log(import.meta.url);
+
+let savedPayments = [];
 
 document.addEventListener('DOMContentLoaded', initPage);
 
@@ -37,10 +40,20 @@ function handleContinue() {
   console.log("paymentMethod")
 
   if (paymentMethod.startsWith("saved-card-")) {
+
+    const paymentId =
+      paymentMethod.replace("saved-card-", "");
+
+    const payment = savedPayments.find(
+      payment => payment.id === paymentId
+    );
+
+    console.log(savedPayments)
+
     checkoutSession.save({
       paymentMethod,
-      selectedPaymentId:
-        paymentMethod.replace("saved-card-", "")
+      selectedPayment: payment,
+      selectedPaymentId: paymentId
     });
 
     window.location.href = "cardreview.html";
@@ -67,25 +80,46 @@ function handleContinue() {
   }
 }
 
-function renderSavedCards() {
+async function renderSavedCards() {
   const container = document.querySelector(".js-saved-cards");
   if (!container) return;
 
-  const payments = getPayments();
+  const token = auth.getToken();
 
-  if (payments.length === 0) {
-    container.innerHTML = `
-      <p>No saved cards</p>
-    `;
+  if (!token) {
+    console.error("Missing auth token");
     return;
   }
 
-  container.innerHTML = payments.map(payment => {
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/profile/payments`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
 
-    const maskedCardNumber = (
-      payment?.last16 || "0000").slice(-4);
+    if (!res.ok) {
+      throw new Error("Failed to load payments");
+    }
 
-    return `
+    savedPayments = await res.json();
+
+    if (!savedPayments.length) {
+      container.innerHTML = `
+      <p>No saved cards</p>
+    `;
+      return;
+    }
+
+    container.innerHTML = savedPayments.map(payment => {
+
+      const maskedCardNumber = (
+        payment?.last16 || "0000").slice(-4);
+
+      return `
       <label>
         <input
           type="radio"
@@ -97,5 +131,9 @@ function renderSavedCards() {
         ${payment.cardType} ****${maskedCardNumber}
       </label>
     `
-  }).join("");
+    }).join("");
+
+  } catch (error) {
+    console.error(error);
+  }
 }

@@ -35,6 +35,14 @@ async function handleSubmit(event, page) {
     cvv: page.querySelector('.js-cvv-number').value
   };
 
+  if (
+    !cardDetails.cardNumber ||
+    !cardDetails.expiry ||
+    !cardDetails.cvv) {
+    alert("Please fill all required fields");
+    return;
+  }
+
   checkoutSession.save({
     cardDetails
   });

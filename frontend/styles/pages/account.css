@@ -1,11 +1,13 @@
 .account-title {
   font-size: 32px;
   margin-bottom: 8px;
+  background: rgb(216, 217, 218);
 }
 
 .account-subtitle {
   color: rgb(86, 89, 89);
   margin-bottom: 32px;
+  font-size: 20px;
 }
 
 .account-grid {

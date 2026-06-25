@@ -1,8 +1,11 @@
 import { checkoutSession } from './checkoutSession.js';
 import { countries, states } from '../../data/state.js';
-import { getAddresses } from "../paymentStore.js"
+import { API_BASE_URL } from "../config.js";
+import { auth } from "../auth/authStore.js";
 
 console.log("Billing Details Page Loaded")
+
+let savedAddresses = [];
 
 document.addEventListener('DOMContentLoaded', initPage);
 
@@ -61,44 +64,60 @@ function handleSubmit(event) {
   window.location.href = 'paymethodpage.html';
 }
 
-function renderSavedAddresses() {
+async function renderSavedAddresses() {
   const container =
     document.querySelector(".js-saved-addresses");
   if (!container) return;
 
-  const addresses = getAddresses();
-  if (addresses.length === 0) {
-    container.innerHTML = `
-      <p>No saved addresses</p>
-    `;
-    return;
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/profile/addresses`,
+      {
+        headers: {
+          "Authorization": `Bearer ${auth.getToken()}`
+        }
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to load addresses");
+    }
+
+    savedAddresses = await res.json();
+
+    if (!savedAddresses.length) {
+      container.innerHTML = `<p>No saved addresses</p>`;
+      return;
+    }
+
+    container.innerHTML = savedAddresses.map(address => `
+      <label class="saved-address-option">
+        <input
+          type="radio"
+          name="saved-address"
+          value="${address.id}"
+        >
+
+        ${address.isDefault ? "(Default)" : ""}
+        <strong>${address.fullName}</strong><br>
+        ${address.streetAddress}<br>
+        ${address.city}, ${address.state}
+      </label>
+    `).join("");
+
+  } catch (error) {
+    console.error(error);
   }
-
-  container.innerHTML = addresses.map(address => `
-    <label class="saved-address-option">
-      <input
-        type="radio"
-        name="saved-address"
-        value="${address.id}"
-      >
-
-      ${address.isDefault ? "(Default)" : ""}
-      <strong>${address.fullName}</strong><br>
-      ${address.streetAddress}<br>
-      ${address.city}, ${address.state}
-    </label>
-  `).join("");
 }
 
-function handleSavedAddressSelect(event) {
+async function handleSavedAddressSelect(event) {
   if (event.target.name !== "saved-address") {
     return;
   }
 
   const addressId = event.target.value;
-  const addresses = getAddresses();
 
-  const selectedAddress = addresses.find(
+  const selectedAddress = savedAddresses.find(
     address => address.id === addressId
   );
 

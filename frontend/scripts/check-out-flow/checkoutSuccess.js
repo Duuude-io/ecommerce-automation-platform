@@ -9,11 +9,9 @@ function initPage() {
 
   const session = checkoutSession.get();
 
-  // 1. Grab ID immediately from URL
   const urlParams = new URLSearchParams(window.location.search);
   let orderId = urlParams.get('orderId');
 
-  // 2. Fallback to storage if URL is empty
   if (!orderId) {
     orderId = session.lastOrderId || 'Unavailable';
   }
@@ -54,7 +52,6 @@ function setupContinueButton(page) {
   });
 }
 
-// ✅ Accept the active orderId as an argument so we don't save stale states
 function clearCheckoutFlow(activeOrderId) {
   checkoutSession.save({
     lastOrderId: activeOrderId,
