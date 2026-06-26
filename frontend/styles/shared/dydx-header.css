@@ -1,4 +1,4 @@
-.amazon-header {
+.dydx-header {
   background-color: rgb(19, 25, 33);
   color: white;
   padding-left: 15px;
@@ -15,13 +15,13 @@
   height: 60px;
 }
 
-.amazon-header-left-section {
+.dydx-header-left-section {
   width: 180px;
   flex-shrink: 0;
 }
 
 @media (max-width: 800px) {
-  .amazon-header-left-section {
+  .dydx-header-left-section {
     width: unset;
   }
 }
@@ -39,28 +39,28 @@
   border: 1px solid white;
 }
 
-.amazon-logo {
+.dydx-logo {
   width: 100px;
   margin-top: 5px;
 }
 
-.amazon-mobile-logo {
+.dydx-mobile-logo {
   display: none;
 }
 
 @media (max-width: 575px) {
-  .amazon-logo {
+  .dydx-logo {
     display: none;
   }
 
-  .amazon-mobile-logo {
+  .dydx-mobile-logo {
     display: block;
     height: 35px;
     margin-top: 5px;
   }
 }
 
-.amazon-header-middle-section {
+.dydx-header-middle-section {
   flex: 1;
 
   margin-left: 10px;
@@ -99,7 +99,7 @@
   margin-top: 3px;
 }
 
-.amazon-header-right-section {
+.dydx-header-right-section {
 
   flex-shrink: 0;
   display: flex;

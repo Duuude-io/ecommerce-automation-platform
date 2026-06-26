@@ -1009,7 +1009,7 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
 
 @app.get("/")
 def root():
-    return {"message": "Amazon Backend API is running"}
+    return {"message": " Backend API is running"}
 
 
 with open(PRODUCTS_FILE, "r") as f:
@@ -1112,7 +1112,7 @@ def cancel_order(order_id: str, current_user=Depends(get_current_user)):
 
     dispatch(Events.ORDER_CANCELLED, {
         "orderId": order_id,
-        "userId": current_user["id"],
+        "userId": user["id"],
         "cancelledAt": datetime.now(UTC).isoformat()
     })
 

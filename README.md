@@ -1,4 +1,4 @@
-## E-Commerce Automation Platform (Amazon Clone)
+## E-Commerce Automation Platform
 
 A full-stack e-commerce system that simulates real-world shopping flows including authentication, OTP verification, cart management, and order processing.
 
