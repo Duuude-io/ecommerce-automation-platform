@@ -1,101 +1,180 @@
-## E-Commerce Automation Platform
+# DyDx Store — E-Commerce Automation Platform
 
-A full-stack e-commerce system that simulates real-world shopping flows including authentication, OTP verification, cart management, and order processing.
+DyDx Store is a full-stack e-commerce platform built to simulate real-world shopping workflows including secure authentication, OTP verification, cart persistence, checkout, payment flow simulation, and order processing.
 
-This project was built to practice backend architecture, authentication flows, and frontend-backend integration using FastAPI and JavaScript.
+This project was built to practice production-level backend architecture, authentication workflows, automation design, and frontend-backend integration using JavaScript and FastAPI.
 
-🚀 Features
+## Live Demo
 
-## Authentication System
-Multi-step signup flow
-OTP verification (email + phone simulation)
-Session-based authentication handling
-Resume signup support
+* Frontend: https://dydxstorefront.netlify.app
+* Repository: https://github.com/Duuude-io/ecommerce-automation-platform
 
-## E-Commerce System
-Product listing system
-Add to cart / remove items
-Cart persistence logic
-Checkout flow simulation
+---
 
-## Order System
-Order creation endpoint
-Order history tracking
-Order summary rendering
+## Features
 
-## Backend Architecture
--FastAPI REST API
--Event-driven structure (internal automation system)
--JSON-based temporary storage (dev phase)
+### Authentication System
 
-## Architecture Overview
+* Multi-step signup flow
+* Email & phone OTP verification
+* JWT-based authentication
+* Session persistence and recovery
+* Resume signup support
+* Password reset / account recovery
+
+### E-Commerce System
+
+* Product listing
+* Add to cart / remove from cart
+* Cart persistence across sessions
+* Shipping & billing workflow
+* Checkout flow simulation
+
+### Payment System
+
+* Multiple payment method simulation
+* Saved payment methods
+* Billing address management
+* CVV verification for saved cards
+
+### Order System
+
+* Order creation endpoint
+* Order history tracking
+* Order summary rendering
+* Order cancellation
+* Delivery tracking preparation
+
+### Automation System
+
+Event-driven automation layer for backend workflows:
+
+* User onboarding automation
+* OTP dispatch events
+* Order created events
+* Order cancelled events
+* Notification triggers
+
+---
+
+## System Architecture
+
 Frontend (JavaScript UI)
-        ↓
+↓
 FastAPI Backend
-        ↓
-Auth System → Cart System → Order System
-        ↓
+↓
+Authentication → Cart → Payment → Order
+↓
 Event Dispatcher (Automation Layer)
 
-```markdown
-## 🧠 System Architecture
+### Architecture Diagram
 
 <img src="https://github.com/Duuude-io/ecommerce-automation-platform/blob/main/docs/architecture.png?raw=true" width="900"/>
 
-This system follows a modular backend architecture with an event-driven automation layer that simulates real-world e-commerce workflows including authentication, cart management, and order processing.
+This project follows a modular backend architecture using:
 
-```
+* Route Layer
+* Repository Layer
+* Authentication Layer
+* Event Automation Layer
+
+This structure improves maintainability and scalability as the system grows.
+
+---
 
 ## Tech Stack
--FastAPI (Python)
--JavaScript (Frontend logic)
--HTML / CSS
--SON (temporary storage)
--Event-driven backend design
 
-## How to Run
-Backend:
+### Frontend
 
+* JavaScript (ES6+)
+* HTML5
+* CSS3
+* DOM Manipulation
+
+### Backend
+
+* Python
+* FastAPI
+* REST API Architecture
+* Repository Pattern
+* Event-Driven Automation
+
+### Database
+
+* PostgreSQL
+
+### Deployment
+
+* Netlify (Frontend)
+* Render (Backend)
+
+---
+
+## How to Run Locally
+
+### Backend
+
+```bash
 cd backend
 venv\Scripts\activate
 uvicorn main:app --reload
+```
 
 Server runs at:
-http://127.0.0.1:8000
 
-Frontend
+```bash
+http://127.0.0.1:8000
+```
+
+### Frontend
+
 Open:
+
+```bash
 index.html
-or use VS Code Live Server
+```
+
+Or use VS Code Live Server.
+
+---
 
 ## Project Status
 
-* In active development
+Currently in active development.
 
-Core systems implemented:
-Authentication flow
-Cart system
-Order processing
+### Completed Core Systems
 
-## Future improvements:
+* Authentication flow
+* Cart system
+* Checkout workflow
+* Payment flow simulation
+* Order processing
+* Automation event system
 
--Real database integration
--Payment gateway
--Email/SMS services (production)
+### Upcoming Improvements
 
+* Real payment gateway integration
+* Email/SMS production services
+* Admin dashboard
+* Analytics & reporting
+* Product recommendation engine
+
+---
 
 ## Purpose of This Project
 
 This project demonstrates:
 
---full-stack system design thinking
---backend architecture structuring
---frontend-backend communication
---event-driven system design concepts
+* Full-stack application architecture
+* Backend system design
+* Scalable API structuring
+* Frontend-backend communication
+* Authentication workflow design
+* Event-driven system architecture
 
+---
 
 ## Author
 
-Built by a developer focused on building production-level backend systems and scalable e-commerce architecture.
-
-## Duude_io.
+Built by **Oladokun Adeyemi**
+Developer focused on building scalable backend systems, automation pipelines, and production-grade web applications.

@@ -11,8 +11,8 @@ export function renderCheckoutHeader() {
     <div class="header-content">
       <div class="checkout-header-left-section">
         <a href="index.html">
-          <img class="dydx-logo" src="images/dydx-logo.png">
-          <img class="dydx-mobile-logo" src="images/dydx-mobile-logo.png">
+          <img class="dydx-logo" src="images/DyDx_Logo_(2).gif">
+          <img class="dydx-mobile-logo" src="images/DyDx_Logo_(2).gif">
         </a>
       </div>
       <div class="checkout-header-middle-section">

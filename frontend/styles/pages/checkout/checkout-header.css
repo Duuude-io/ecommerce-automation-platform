@@ -20,6 +20,11 @@
 
   display: flex;
   align-items: center;
+  background-image: url(../../../images/DyDx_Logo_\(2\).gif);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
 }
 
 .checkout-header-left-section {
@@ -28,11 +33,13 @@
 
 .dydx-logo {
   width: 100px;
-  margin-top: 12px;
+  margin-top: 8px;
+  border-radius: 50px;
 }
 
 .dydx-mobile-logo {
   display: none;
+  border-radius: 50px;
 }
 
 /* @media is used to create responsive design (making the
@@ -52,6 +59,7 @@
     display: inline-block;
     height: 35px;
     margin-top: 5px;
+    border-radius: 50px;
   }
 }
 
@@ -60,16 +68,17 @@
   flex-shrink: 0;
   text-align: center;
 
-  font-size: 25px;
-  font-weight: 500;
+  font-size: 26px;
+  font-weight: bolder;
+  color: rgb(172, 207, 16);
 
   display: flex;
   justify-content: center;
 }
 
 .return-to-home-link {
-  color: rgb(0, 113, 133);
-  font-size: 23px;
+  color: rgb(8, 255, 111);
+  font-size: 26px;
   text-decoration: none;
   cursor: pointer;
 }

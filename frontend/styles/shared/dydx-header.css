@@ -1,5 +1,9 @@
 .dydx-header {
-  background-color: rgb(19, 25, 33);
+  background-image: url('../../images/DyDx_Logo_\(2\).gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   color: white;
   padding-left: 15px;
   padding-right: 15px;
@@ -13,6 +17,7 @@
   left: 0;
   right: 0;
   height: 60px;
+
 }
 
 .dydx-header-left-section {
@@ -42,10 +47,12 @@
 .dydx-logo {
   width: 100px;
   margin-top: 5px;
+  border-radius: 20px;
 }
 
 .dydx-mobile-logo {
   display: none;
+  border-radius: 50px;
 }
 
 @media (max-width: 575px) {
@@ -57,6 +64,7 @@
     display: block;
     height: 35px;
     margin-top: 5px;
+    border-radius: 50px;
   }
 }
 
@@ -73,14 +81,17 @@
   flex: 1;
   width: 100%;
   max-width: 1400px;
-  font-size: 16px;
-  height: 38px;
+  font-size: 20px;
+  font-weight: bolder;
+  height: 35px;
   padding-left: 15px;
   border: none;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  background-color: transparent;
+  border: 2px solid red;
 }
 
 .search-button {

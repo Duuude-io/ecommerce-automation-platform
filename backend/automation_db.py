@@ -44,7 +44,7 @@ def init_logs_table():
                 )
                 """)
 
-        print(" ⚙️      automation_logs table ready   🛠️")
+        print(" ⚙️      logs table ready   🛠️")
 
     finally:
         release_conn(conn)
@@ -74,7 +74,7 @@ def init_users_table():
                 )
                 """)
 
-            print(" 🛠️      users table ready  ")
+            print(" 🛠️      users table ready..  ")
 
     finally:
         release_conn(conn)
@@ -95,7 +95,7 @@ def init_sessions_table():
                 )
                 """)
 
-            print(" 🛠️      sessions table ready   ")
+            print(" 🛠️      sessions table ready..   ")
 
     finally:
         release_conn(conn)
@@ -122,7 +122,7 @@ def init_orders_table():
                 )
                 """)
 
-        print(" 🛠️      orders table ready ")
+        print(" 🛠️      orders table ready.. ")
 
     finally:
         release_conn(conn)
@@ -143,8 +143,6 @@ def init_order_items_table():
                 )
                 """)
 
-        print(" 🛠️      ordered_Items table ready   ")
-
     finally:
         release_conn(conn)
 
@@ -154,7 +152,7 @@ def init_receipts_table():
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("""
-                CREATE TABLE IF NOT EXISTS order_items (
+                CREATE TABLE IF NOT EXISTS receipts (
                     id SERIAL PRIMARY KEY,
                     order_id TEXT,
                     product_id TEXT,
@@ -190,7 +188,7 @@ def init_addresses_table():
                 )
             """)
 
-        print(" 🛠️      addresses table ready   ")
+        print(" 🛠️      addresses table ready..   ")
 
     finally:
         release_conn(conn)
@@ -215,7 +213,65 @@ def init_payment_methods_table():
                     is_default BOOLEAN DEFAULT FALSE
                 )
             """)
-        print(" 🛠️      payment_methods table ready ")
+        print(" 🛠️      payments table ready.. ")
+    finally:
+        release_conn(conn)
+
+
+def init_otp_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS otp_codes (
+                    id SERIAL PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+                    purpose TEXT NOT NULL,
+                    otp TEXT NOT NULL,
+                    target TEXT,
+                    created_at REAL NOT NULL
+                )
+            """)
+
+        print(" 🛠️      OTP table ready ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_carts_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS carts (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT UNIQUE NOT NULL,
+                    created_at REAL,
+                    updated_at REAL
+                )
+            """)
+
+        print(" 🛠️      carts table ready ")
+
+    finally:
+        release_conn(conn)
+
+
+def init_cart_items_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS cart_items (
+                    id SERIAL PRIMARY KEY,
+                    cart_id TEXT NOT NULL,
+                    product_id TEXT NOT NULL,
+                    quantity INTEGER NOT NULL DEFAULT 1,
+                    delivery_option_id TEXT DEFAULT '1'
+                )
+            """)
+
     finally:
         release_conn(conn)
 
@@ -231,3 +287,6 @@ def init_db():
     init_receipts_table()
     init_addresses_table()
     init_payment_methods_table()
+    init_otp_table()
+    init_carts_table()
+    init_cart_items_table()

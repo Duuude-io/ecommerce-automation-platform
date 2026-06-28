@@ -27,6 +27,8 @@ from contextlib import asynccontextmanager
 from automation_db import init_db
 from automation_db import get_conn, release_conn, RealDictCursor
 from repository.order_repository import create_order, add_order_items, get_user_orders, create_order_in_db, cancel_order_in_db
+from repository.otp_repository import create_otp, get_otp, delete_otp, cleanup_expired_otps
+from repository.cart_repository import get_or_create_cart, get_cart_items
 
 from routes.profile_routes import router as profile_router
 
@@ -58,9 +60,6 @@ PASSWORD_CHANGE_EXPIRY = 600  # 10 minutes
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
-USERS_FILE = DATA_DIR / "users.json"
-ORDERS_FILE = DATA_DIR / "orders.json"
-OTP_FILE = DATA_DIR / "otp_store.json"
 PRODUCTS_FILE = DATA_DIR / "products.json"
 
 
@@ -95,30 +94,6 @@ def parse_device(user_agent):
     else:
         browser = "Browser"
     return f"{browser} on {platform}"
-
-
-def load_otps():
-    if not OTP_FILE.exists():
-        return {}
-    with OTP_FILE.open("r") as f:
-        return json.load(f)
-
-
-def save_otps(data):
-    with OTP_FILE.open("w") as f:
-        json.dump(data, f, indent=2)
-
-
-def cleanup_expired_otps(otps):
-    now = time.time()
-
-    expired_keys = [
-        key for key, value in otps.items()
-        if now - value["created_at"] > OTP_EXPIRY
-    ]
-
-    for key in expired_keys:
-        otps.pop(key, None)
 
 
 def cleanup_expired_sessions():
@@ -156,23 +131,27 @@ def cleanup_expired_password_changes():
 
 
 def generate_and_save_otp(user_id, identifier, purpose):
-    otps = load_otps()
-    cleanup_expired_otps(otps)
+    cleanup_expired_otps(OTP_EXPIRY)
 
-    key = f"{user_id}_{purpose}"
     otp = str(random.randint(100000, 999999))
+    created_at = time.time()
 
-    otps[key] = {
-        "otp": otp,
-        "purpose": purpose,
-        "target": identifier,
-        "created_at": time.time()
-    }
+    # Remove previous OTP for same user + purpose
+    delete_otp(user_id, purpose)
 
-    save_otps(otps)
+    create_otp(
+        user_id=user_id,
+        purpose=purpose,
+        otp=otp,
+        target=identifier,
+        created_at=created_at
+    )
 
     print(
-        f"OTP DEBUG | user_id={user_id} | target={identifier} |purpose = {purpose} | otp={otp}")
+        f"OTP DEBUG | user_id={user_id} | target={identifier} "
+        f"| purpose={purpose} | otp={otp}"
+    )
+
     return otp
 
 
@@ -220,6 +199,21 @@ def assert_identifier_available(identifier: str, user_id: str | None = None):
         raise ValueError("Identifier already in use")
 
     return identifier
+
+
+@app.get("/cart")
+def get_cart(current_user=Depends(get_current_user)):
+    user = current_user["user"]
+    user_id = user["id"]
+
+    cart = get_or_create_cart(user_id)
+    items = get_cart_items(cart["id"])
+
+    return {
+        "success": True,
+        "cartId": cart["id"],
+        "items": items
+    }
 
 
 @app.get("/active-sessions")
@@ -560,15 +554,11 @@ async def handle_send_otp(data: OTPRequest):
 
 @app.post("/verify-otp")
 def verify_otp(data: VerifyOTPRequest, request: Request):
-
-    otps = load_otps()
-
     user_id = data.userId
     otp = data.otp.strip()
+    purpose = data.purpose
 
-    key = f"{user_id}_{data.purpose}"
-
-    stored = otps.get(key)
+    stored = get_otp(user_id, purpose)
 
     if not stored:
         return {"success": False, "message": "OTP not found"}
@@ -577,9 +567,7 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         return {"success": False, "message": "Invalid OTP"}
 
     if time.time() - stored["created_at"] > OTP_EXPIRY:
-        otps.pop(key, None)
-        save_otps(otps)
-
+        delete_otp(user_id, purpose)
         return {"success": False, "message": "OTP expired"}
 
     purpose = stored.get("purpose")
@@ -588,8 +576,8 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         return {"success": False, "message": "OTP purpose mismatch"}
 
     # consume OTP once verified
-    otps.pop(key, None)
-    save_otps(otps)
+    delete_otp(user_id, purpose)
+
     target = stored.get("target")
 
     user = get_user_by_id(user_id)
@@ -700,8 +688,7 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
         ):
             pending_password_changes.pop(user_id, None)
 
-            otps.pop(key, None)
-            save_otps(otps)
+            delete_otp(user_id, purpose)
 
             return {
                 "success": False,
@@ -773,8 +760,7 @@ def verify_otp(data: VerifyOTPRequest, request: Request):
 
     user = get_user_by_id(user_id)
 
-    otps.pop(key, None)
-    save_otps(otps)
+    delete_otp(user_id, purpose)
 
     if user["verified_email"] and user["verified_phone"]:
         dispatch(Events.USER_FULLY_VERIFIED, {
@@ -807,18 +793,18 @@ def verify_login_otp(
 
     user_id = data.userId
     otp = data.otp.strip()
+    purpose = data.purpose
 
-    key = f"{user_id}_{data.purpose}"
+    stored = get_otp(user_id, purpose)
 
-    otps = load_otps()
-    stored = otps.get(key)
+    if not stored:
+        return {"success": False, "message": "OTP not found"}
 
-    if not stored or stored["otp"] != otp:
+    if stored["otp"] != otp:
         return {"success": False, "message": "Invalid OTP"}
 
     if time.time() - stored["created_at"] > OTP_EXPIRY:
-        otps.pop(key, None)
-        save_otps(otps)
+        delete_otp(user_id, purpose)
         return {"success": False, "message": "OTP expired"}
 
     user = get_user_by_id(user_id)
@@ -826,8 +812,7 @@ def verify_login_otp(
     if not user:
         return {"success": False, "message": "User not found"}
 
-    otps.pop(key, None)
-    save_otps(otps)
+    delete_otp(user_id, purpose)
 
     dispatch(Events.USER_LOGGED_IN, {
         "userId": user_id
