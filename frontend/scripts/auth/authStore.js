@@ -2,6 +2,19 @@ const TOKEN_KEY = "token";
 const USER_KEY = "userId";
 const USER_DATA_KEY = "userData";
 
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1])
+    );
+    return Date.now() >= payload.exp * 1000;
+
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return true;
+  }
+}
+
 export const auth = {
 
   getToken() {
@@ -18,9 +31,18 @@ export const auth = {
   },
 
   isLoggedIn() {
-
     const token = this.getToken();
-    return !!token && token !== "null";
+
+    if (!token || token === "null") {
+      return false;
+    }
+
+    if (isTokenExpired(token)) {
+      this.logout();
+      return false;
+    }
+
+    return true;
   },
 
   login({ token, userId, userData }) {

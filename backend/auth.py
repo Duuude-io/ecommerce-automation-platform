@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime
 from fastapi import Header, HTTPException
-from utils.storage import get_user_sessions, update_session_activity
+from repository.session_repository import get_user_sessions, update_session_activity
 from repository.user_repository import get_user_by_id
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -49,8 +49,6 @@ def get_current_user(authorization: str = Header(None)):
         session_id = payload["session_id"]
 
         user_sessions = get_user_sessions(user_id)
-
-        print("USER SESSIONS:", user_sessions)
 
         session_exists = any(
             s["id"] == session_id

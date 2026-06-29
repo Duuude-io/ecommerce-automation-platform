@@ -3,16 +3,19 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from psycopg2.pool import SimpleConnectionPool
+from psycopg2.pool import ThreadedConnectionPool
 
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-db_pool = SimpleConnectionPool(
+db_pool = ThreadedConnectionPool(
     1,   # min connections
     10,  # max connections
     DATABASE_URL
 )
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL missing")
 
 
 def get_conn():
@@ -153,12 +156,11 @@ def init_receipts_table():
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS receipts (
-                    id SERIAL PRIMARY KEY,
-                    order_id TEXT,
-                    product_id TEXT,
-                    quantity INTEGER,
-                    delivery_option_id TEXT,
-                    estimated_delivery TEXT
+                    id TEXT PRIMARY KEY,
+                    order_id TEXT NOT NULL,
+                    user_id TEXT NOT NULL,
+                    created_at TEXT,
+                    data TEXT NOT NULL
                 )
                 """)
 

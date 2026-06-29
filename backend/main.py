@@ -7,9 +7,9 @@ import random
 from random import randint
 import time
 from auth_states import AuthState
-from utils.storage import load_receipts, create_session
+from repository.session_repository import create_session
 
-from repository.user_repository import create_user, update_user, get_user_by_id, get_all_users, get_user_by_email, get_user_by_phone
+from repository.user_repository import create_user, update_user, get_user_by_id, get_user_by_email, get_user_by_phone
 
 import json
 import uuid
@@ -29,6 +29,7 @@ from automation_db import get_conn, release_conn, RealDictCursor
 from repository.order_repository import create_order, add_order_items, get_user_orders, create_order_in_db, cancel_order_in_db
 from repository.otp_repository import create_otp, get_otp, delete_otp, cleanup_expired_otps
 from repository.cart_repository import get_or_create_cart, get_cart_items
+from repository.receipt_repository import get_receipt
 
 from routes.profile_routes import router as profile_router
 
@@ -1111,15 +1112,8 @@ def get_order_receipt(
 ):
 
     user = current_user["user"]
-    receipts = load_receipts()
 
-    receipt = next((
-        r for r in receipts
-        if r["orderId"] == order_id
-        and r["userId"] == user["id"]
-    ),
-        None
-    )
+    receipt = get_receipt(order_id, user["id"])
 
     print(receipt)
 

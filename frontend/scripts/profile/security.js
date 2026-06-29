@@ -7,6 +7,7 @@ import { AuthState } from "../auth/authFlow.js";
 import { safeNavigate } from "../auth/safeNavigate.js";
 import { authContext } from "../auth/authContext.js";
 import { API_BASE_URL } from "../config.js";
+import { apiFetch } from "../apiClient.js";
 
 //initAuthGuard("account-page");
 
@@ -122,7 +123,7 @@ async function loadActiveSessions() {
     const token = auth.getToken();
     console.log("TOKEN:", token);
 
-    const res = await fetch(
+    const res = await apiFetch(
       `${API_BASE_URL}/active-sessions`,
       {
         headers: {
@@ -131,16 +132,22 @@ async function loadActiveSessions() {
       }
     );
 
+    if (res.status === 401) {
+      auth.logout();
+      window.location.href = "login.html";
+      return;
+    }
+
     const data = await res.json();
     console.log("SESSIONS:", data);
-
-    const container =
-      document.querySelector(".js-active-sessions");
 
     if (!data.success) {
       container.innerHTML = "<p>Unable to load sessions</p>";
       return;
     }
+
+    const container =
+      document.querySelector(".js-active-sessions");
 
     container.innerHTML = data.sessions.map(session => {
       const isCurrent = session.id === data.current_session;

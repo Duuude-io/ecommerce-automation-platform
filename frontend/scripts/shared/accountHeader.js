@@ -1,6 +1,4 @@
 import { auth } from "../auth/authStore.js"
-import { clearAuthState } from "../auth/authFlow.js"
-import { authContext } from "../auth/authContext.js";
 
 export function renderAccountHeader() {
 

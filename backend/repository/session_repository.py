@@ -1,14 +1,6 @@
-import json
-from pathlib import Path
 import time
 import uuid
 from automation_db import get_conn, release_conn, RealDictCursor
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "data"
-
-ORDERS_FILE = DATA_DIR / "orders.json"
-RECEIPTS_FILE = DATA_DIR / "receipts.json"
 
 
 def load_users():
@@ -22,45 +14,6 @@ def load_users():
 
     finally:
         release_conn(conn)
-
-
-def load_orders():
-    if not ORDERS_FILE.exists():
-        return []
-
-    with open(ORDERS_FILE, "r") as f:
-        return json.load(f)
-
-
-def save_orders(orders):
-    with open(ORDERS_FILE, "w") as f:
-        json.dump(orders, f, indent=2)
-
-
-def update_order_status(order_id, status):
-
-    orders = load_orders()
-
-    for order in orders:
-        if order["id"] == order_id:
-            order["status"] = status
-
-    save_orders(orders)
-
-
-def load_receipts():
-
-    if not RECEIPTS_FILE.exists():
-        return []
-
-    with open(RECEIPTS_FILE, "r") as f:
-        return json.load(f)
-
-
-def save_receipts(receipts):
-
-    with open(RECEIPTS_FILE, "w") as f:
-        json.dump(receipts, f, indent=2)
 
 
 def load_sessions():
@@ -102,11 +55,8 @@ def get_user_sessions(user_id: str):
 
 
 def create_session(
-    user_id,
-    device="Unknown Device",
-    ip="Unknown IP"
+    user_id, device="Unknown Device", ip="Unknown IP"
 ):
-
     session = {
         "id": str(uuid.uuid4()),
         "device": device,
@@ -118,6 +68,54 @@ def create_session(
     conn = get_conn()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
+
+            # Check for existing session for re-use
+            cur.execute("""
+                SELECT *
+                FROM sessions
+                WHERE user_id = %s
+                AND device = %s
+                AND ip = %s
+                LIMIT 1
+            """, (user_id, device, ip))
+
+            existing_session = cur.fetchone()
+
+            if existing_session:
+                cur.execute("""
+                    UPDATE sessions
+                    SET last_seen = %s
+                    WHERE id = %s
+                """, (
+                    time.time(),
+                    existing_session["id"]
+                ))
+
+                print("REUSING EXISTING SESSION:", existing_session["id"])
+
+                return dict(existing_session)
+
+            # Get all user sessions to Keep max 5 sessions
+            cur.execute("""
+                SELECT id
+                FROM sessions
+                WHERE user_id = %s
+                ORDER BY created_at ASC
+            """, (user_id,))
+
+            sessions = cur.fetchall()
+
+            if len(sessions) >= 5:
+                oldest_session_id = sessions[0]["id"]
+
+                cur.execute("""
+                    DELETE FROM sessions
+                    WHERE id = %s
+                """, (oldest_session_id,))
+
+                print("REMOVED OLDEST SESSION:", oldest_session_id)
+
+            # Insert new session
             cur.execute("""
             INSERT INTO sessions (
                 id,

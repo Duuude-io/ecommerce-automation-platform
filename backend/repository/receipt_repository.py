@@ -25,3 +25,26 @@ def create_receipt(receipt):
 
     finally:
         release_conn(conn)
+
+
+def get_receipt(order_id, user_id):
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                SELECT data
+                FROM receipts
+                WHERE order_id = %s
+                AND user_id = %s
+                LIMIT 1
+            """, (order_id, user_id))
+
+            row = cur.fetchone()
+
+            if not row:
+                return None
+
+            return json.loads(row["data"])
+
+    finally:
+        release_conn(conn)

@@ -1,9 +1,9 @@
-from automation.dispatcher import register, listen, dispatch
+from automation.dispatcher import listen, dispatch
 from automation.events import Events
 import time
-from utils.storage import update_order_status, load_receipts, save_receipts
-
 import uuid
+from repository.receipt_repository import create_receipt
+from repository.order_repository import update_order_status
 
 
 @listen(Events.USER_CREATED)
@@ -116,8 +116,6 @@ def cancel_order(data):
 @listen(Events.ORDER_CREATED)
 def order_receipt(data):
 
-    receipts = load_receipts()
-
     receipt = {
         "receiptId": str(uuid.uuid4()),
         "orderId": data["orderId"],
@@ -138,9 +136,7 @@ def order_receipt(data):
         "total": data.get("totalCostCents")
     }
 
-    receipts.append(receipt)
-
-    save_receipts(receipts)
+    create_receipt(receipt)
 
     print(f"🧾 Receipt generated: {receipt['receiptId']}")
 

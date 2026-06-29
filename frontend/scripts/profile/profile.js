@@ -2,6 +2,7 @@ import { auth } from "../auth/authStore.js";
 import { initAuthGuard } from "../auth/authGuard.js";
 import { states, countries } from "../../data/state.js";
 import { API_BASE_URL } from "../config.js";
+import { apiFetch } from "../apiClient.js";
 
 console.log("profile page loaded");
 
@@ -139,7 +140,7 @@ async function renderAddresses() {
   if (!container) return;
 
   try {
-    const res = await fetch(
+    const res = await apiFetch(
       `${API_BASE_URL}/profile/addresses`,
       {
         headers: {
@@ -147,6 +148,12 @@ async function renderAddresses() {
         }
       }
     );
+
+    if (res.status === 401) {
+      auth.logout();
+      window.location.href = "login.html";
+      return;
+    }
 
     if (!res.ok) {
       throw new Error("Failed to load addresses");

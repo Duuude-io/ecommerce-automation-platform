@@ -168,3 +168,16 @@ def cancel_order_in_db(order_id: str, user_id: str):
 
     finally:
         release_conn(conn)
+
+
+def update_order_status(order_id: str, status: str):
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                UPDATE orders
+                SET status = %s
+                WHERE id = %s
+            """, (status, order_id))
+    finally:
+        release_conn(conn)
