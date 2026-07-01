@@ -8,14 +8,15 @@ import '../data/car.js';
 
 async function loadPage() {
   try {
-    // throw 'error1';
 
     await Promise.all([
       loadProductsFetch(),
+      cart.loadFromBackend()
     ]);
 
   } catch (error) {
     console.log('Unexpected error. Please try again later.');
+    console.log(error);
   }
 
   renderCheckoutHeader();

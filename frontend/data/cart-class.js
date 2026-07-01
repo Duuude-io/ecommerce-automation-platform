@@ -1,16 +1,44 @@
+import { auth } from "../scripts/auth/authStore.js";
+import { API_BASE_URL } from "../scripts/config.js";
+
 class Cart {
   cartItems;
   #localStorageKey;
 
   constructor(localStorageKey) {
     this.#localStorageKey = localStorageKey;
-    this.loadFromStorage();
+    this.cartItems = [];
   }
 
-  loadFromStorage() {
-    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
+  async loadFromBackend() {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.getToken()}`
+          }
+        }
+      );
 
-    if (!this.cartItems) {
+      if (!response.ok) {
+        throw new Error("Failed to load cart");
+      }
+
+      const data = await response.json();
+
+      console.log("BACKEND CART RESPONSE:", data);
+
+      this.cartItems = data.items.map(item => ({
+        productId: item.product_id,
+        quantity: item.quantity,
+        deliveryOptionId: item.delivery_option_id
+      }));
+
+      console.log("cart loaded:", this.cartItems);
+
+    } catch (error) {
+      console.log("Failed to load cart:", error);
       this.cartItems = [];
     }
   }

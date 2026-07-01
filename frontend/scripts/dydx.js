@@ -1,4 +1,5 @@
 import { cart } from '../data/cart-class.js';
+import { addCartItem } from '../data/cartApi.js';
 import { products, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import { renderAccountHeader } from './shared/accountHeader.js';
@@ -8,7 +9,12 @@ initAuthGuard("app-page");
 
 renderAccountHeader();
 
-loadProducts(renderProductsGrid);
+async function initPage() {
+  await cart.loadFromBackend();
+  loadProducts(renderProductsGrid);
+}
+
+initPage();
 
 function renderProductsGrid() {
   let productsHTML = '';
@@ -98,14 +104,21 @@ function renderProductsGrid() {
   const addedMessageTimeouts = {};
 
   document.querySelectorAll('.js-add-to-cart').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const productId = button.dataset.productId;
 
-      // ✅ Now we get the quantity properly inside the click event
+      // Now we get the quantity properly inside the click event
       const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
       const quantity = Number(quantitySelector.value);
 
-      cart.addToCart(productId, quantity); // Pass the quantity if your function supports it
+      const response = await addCartItem(productId, quantity);
+      console.log("cart updated:", response);
+
+      cart.cartItems = response.items.map(item => ({
+        productId: item.product_id,
+        quantity: item.quantity,
+        deliveryOptionId: item.delivery_option_id
+      }));
       updateCartQuantity();
 
       // --- ADDED MESSAGE LOGIC START ---

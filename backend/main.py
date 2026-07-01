@@ -33,6 +33,7 @@ from repository.receipt_repository import get_receipt
 
 from routes.profile_routes import router as profile_router
 from routes.products_route import router as products_router
+from routes.cart_routes import router as cart_router
 
 
 @asynccontextmanager
@@ -51,6 +52,7 @@ app = FastAPI(lifespan=lifespan)
 router = APIRouter()
 app.include_router(products_router)
 app.include_router(profile_router)
+app.include_router(cart_router)
 
 signup_sessions = {}
 pending_password_changes = {}

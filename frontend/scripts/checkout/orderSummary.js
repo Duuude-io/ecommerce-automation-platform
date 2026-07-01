@@ -1,8 +1,11 @@
 import { cart } from '../../data/cart-class.js';
+import { deleteCartItem } from '../../data/cartApi.js';
 import { products, getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
+
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
+
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
@@ -207,9 +210,16 @@ export function renderOrderSummary() {
 
   document.querySelectorAll('.js-delete-link')
     .forEach((link) => {
-      link.addEventListener(('click'), () => {
+      link.addEventListener(('click'), async () => {
         const productId = link.dataset.productId;
-        cart.removeFromCart(productId);
+
+        const response = await deleteCartItem(productId);
+
+        cart.cartItems = response.items.map(item => ({
+          productId: item.product_id,
+          quantity: item.quantity,
+          deliveryOptionId: item.delivery_option_id
+        }));
 
         renderCheckoutHeader();
         renderOrderSummary();
