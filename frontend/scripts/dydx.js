@@ -154,3 +154,21 @@ if (searchInput) {
     if (event.key === 'Enter') performSearch();
   });
 }
+
+const menuBtn = document.querySelector(".js-menu-btn");
+const sidebar = document.querySelector(".js-sidebar");
+const overlay = document.querySelector(".js-sidebar-overlay");
+const closeBtn = document.querySelector(".js-close-btn");
+
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.add("open");
+  overlay.classList.add("show");
+});
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+}
+
+closeBtn.addEventListener("click", closeSidebar);
+overlay.addEventListener("click", closeSidebar);

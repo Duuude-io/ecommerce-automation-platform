@@ -13,7 +13,6 @@ from repository.user_repository import create_user, update_user, get_user_by_id,
 
 import json
 import uuid
-from pathlib import Path
 from models.order import Order
 from models.user import User, LoginRequest, OTPRequest, VerifyOTPRequest, IdentifierRequest, SignupRequest, ChangePasswordRequest
 
@@ -26,12 +25,14 @@ from automation.events import Events
 from contextlib import asynccontextmanager
 from automation_db import init_db
 from automation_db import get_conn, release_conn, RealDictCursor
+
 from repository.order_repository import create_order, add_order_items, get_user_orders, create_order_in_db, cancel_order_in_db
 from repository.otp_repository import create_otp, get_otp, delete_otp, cleanup_expired_otps
 from repository.cart_repository import get_or_create_cart, get_cart_items
 from repository.receipt_repository import get_receipt
 
 from routes.profile_routes import router as profile_router
+from routes.products_route import router as products_router
 
 
 @asynccontextmanager
@@ -47,8 +48,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
 router = APIRouter()
+app.include_router(products_router)
 app.include_router(profile_router)
 
 signup_sessions = {}
@@ -56,12 +57,6 @@ pending_password_changes = {}
 
 OTP_EXPIRY = 300  # 5 minutes
 PASSWORD_CHANGE_EXPIRY = 600  # 10 minutes
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-
-PRODUCTS_FILE = DATA_DIR / "products.json"
 
 
 # Allow frontend access
@@ -996,15 +991,6 @@ def add_email(data: dict, current_user: dict = Depends(get_current_user)):
 @app.get("/")
 def root():
     return {"message": " Backend API is running"}
-
-
-with open(PRODUCTS_FILE, "r") as f:
-    PRODUCTS = json.load(f)
-
-
-@app.get("/products")
-def get_products():
-    return PRODUCTS
 
 
 def generate_order_number():

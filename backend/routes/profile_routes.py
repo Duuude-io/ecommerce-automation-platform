@@ -8,6 +8,8 @@ from repository.profile_repository import get_user_payments, add_payment_method,
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
 
+# Payments Router
+
 
 @router.get("/payments")
 def get_payments(current_user=Depends(get_current_user)):
@@ -44,8 +46,39 @@ def delete_payment(
     delete_payment_method(user["id"], payment_id)
 
     return {
-        "message": "Payment deleted successfully"
+        "message": "Payment method deleted successfully"
     }
+
+
+@router.patch("/payments/{payment_id}/default")
+def make_default_payment(
+    payment_id: str,
+    current_user=Depends(get_current_user)
+):
+    user = current_user["user"]
+
+    set_default_payment(user["id"], payment_id)
+
+    return {
+        "message": "Default payment updated successfully"
+    }
+
+
+@router.patch("/payments/{payment_id}")
+def update_payment(
+    payment_id: str,
+    payment: dict,
+    current_user=Depends(get_current_user)
+):
+    user = current_user["user"]
+
+    update_payment_method(user["id"], payment_id, payment)
+
+    return {
+        "message": "Payment updated successfully"
+    }
+
+    # Addresses Router
 
 
 @router.get("/addresses")
@@ -114,46 +147,3 @@ def update_address_route(
     update_address(user["id"], address_id, address)
 
     return {"message": "Address updated"}
-
-
-@router.patch("/payments/{payment_id}/default")
-def make_default_payment(
-    payment_id: str,
-    current_user=Depends(get_current_user)
-):
-    user = current_user["user"]
-
-    set_default_payment(user["id"], payment_id)
-
-    return {
-        "message": "Default payment updated successfully"
-    }
-
-
-@router.patch("/payments/{payment_id}")
-def update_payment(
-    payment_id: str,
-    payment: dict,
-    current_user=Depends(get_current_user)
-):
-    user = current_user["user"]
-
-    update_payment_method(user["id"], payment_id, payment)
-
-    return {
-        "message": "Payment updated successfully"
-    }
-
-
-@router.delete("/payments/{payment_id}")
-def delete_payment(
-    payment_id: str,
-    current_user=Depends(get_current_user)
-):
-    user = current_user["user"]
-
-    delete_payment_method(user["id"], payment_id)
-
-    return {
-        "message": "Payment method deleted successfully"
-    }

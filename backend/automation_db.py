@@ -1,7 +1,6 @@
 
 import os
 from dotenv import load_dotenv
-import psycopg2
 from psycopg2.extras import RealDictCursor
 from psycopg2.pool import ThreadedConnectionPool
 
@@ -26,6 +25,47 @@ def get_conn():
 
 def release_conn(conn):
     db_pool.putconn(conn)
+
+
+def init_products_table():
+    conn = get_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS products (
+                    id TEXT PRIMARY KEY,
+                    sku TEXT UNIQUE NOT NULL,
+                    name TEXT NOT NULL,
+                    brand TEXT,
+                    category TEXT,
+                    image TEXT,
+
+                    images JSONB DEFAULT '[]'::jsonb,
+                    rating JSONB DEFAULT '{}'::jsonb,
+
+                    price_cents INTEGER NOT NULL,
+                    original_price_cents INTEGER,
+                    discount_percent INTEGER DEFAULT 0,
+                    stock INTEGER DEFAULT 0,
+
+                    description TEXT,
+
+                    specs JSONB DEFAULT '{}'::jsonb,
+
+                    featured BOOLEAN DEFAULT FALSE,
+                    created_at BIGINT,
+
+                    size_chart_link TEXT,
+                    instructions_link TEXT,
+                    warranty_link TEXT,
+
+                    keywords JSONB DEFAULT '[]'::jsonb
+                )
+            """)
+
+        print(" ⚙️      products table ready   ")
+    finally:
+        release_conn(conn)
 
 
 def init_logs_table():
@@ -280,6 +320,7 @@ def init_cart_items_table():
 
 def init_db():
 
+    init_products_table()
     init_logs_table()
     init_users_table()
     init_sessions_table()

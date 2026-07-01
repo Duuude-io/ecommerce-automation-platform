@@ -1,0 +1,1488 @@
+[
+  {
+    "id": "a7b4ad2f-fad5-4ee6-baa6-a7517ff68312",
+    "sku": "CLO-0001",
+    "name": "Black and Gray Athletic Cotton Socks - 6 Pairs",
+    "brand": "DyDx Active",
+    "category": "clothing",
+    "image": "images/products/athletic-cotton-socks-6-pairs.jpg",
+    "images": [
+      "images/products/athletic-cotton-socks-6-pairs.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 3020
+    },
+    "priceCents": 1090,
+    "originalPriceCents": 1160,
+    "discountPercent": 6,
+    "stock": 23,
+    "description": "Black and Gray Athletic Cotton Socks - 6 Pairs designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Cotton Blend",
+      "color": "Black/Gray",
+      "pack": "6 Pairs"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "socks",
+      "sports",
+      "apparel"
+    ]
+  },
+  {
+    "id": "349bdc96-831c-4496-a47d-bfc9e5fa8b25",
+    "sku": "SPT-0002",
+    "name": "Intermediate Size Basketball",
+    "brand": "DyDx Sport",
+    "category": "sports",
+    "image": "images/products/intermediate-composite-basketball.jpg",
+    "images": [
+      "images/products/intermediate-composite-basketball.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 437
+    },
+    "priceCents": 2095,
+    "originalPriceCents": 2328,
+    "discountPercent": 10,
+    "stock": 120,
+    "description": "Intermediate Size Basketball designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Composite Leather",
+      "size": "Intermediate",
+      "color": "Orange"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "sports",
+      "basketballs"
+    ]
+  },
+  {
+    "id": "9ce282f9-9cf4-4e4c-81a3-58b83816294b",
+    "sku": "CLO-0003",
+    "name": "Adults Plain Cotton T-Shirt - 2 Pack",
+    "brand": "DyDx Essentials",
+    "category": "clothing",
+    "image": "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
+    "images": [
+      "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 3580
+    },
+    "priceCents": 799,
+    "originalPriceCents": 951,
+    "discountPercent": 16,
+    "stock": 167,
+    "description": "Adults Plain Cotton T-Shirt - 2 Pack designed for quality, comfort and durability.",
+    "specs": {
+      "material": "100% Cotton",
+      "color": "Teal",
+      "pack": "2 Pack"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "tshirts",
+      "apparel",
+      "mens"
+    ]
+  },
+  {
+    "id": "085151fa-619f-46d4-930a-acb327b1a0d6",
+    "sku": "GEN-0004",
+    "name": "2 Slot Toaster - Black",
+    "brand": "DyDx Home",
+    "category": "appliances",
+    "image": "images/products/black-2-slot-toaster.jpg",
+    "images": [
+      "images/products/black-2-slot-toaster.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 1889
+    },
+    "priceCents": 1899,
+    "originalPriceCents": 2638,
+    "discountPercent": 28,
+    "stock": 111,
+    "description": "2 Slot Toaster - Black designed for quality, comfort and durability.",
+    "specs": {
+      "slots": "2",
+      "color": "Black",
+      "power": "850W"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "toaster",
+      "kitchen",
+      "appliances"
+    ]
+  },
+  {
+    "id": "c308b1b8-69da-46e9-9786-e75a206211c7",
+    "sku": "KIT-0005",
+    "name": "6 Piece White Dinner Plate Set",
+    "brand": "DyDx Home",
+    "category": "kitchen",
+    "image": "images/products/6-piece-white-dinner-plate-set.jpg",
+    "images": [
+      "images/products/6-piece-white-dinner-plate-set.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 1696
+    },
+    "priceCents": 2067,
+    "originalPriceCents": 2552,
+    "discountPercent": 19,
+    "stock": 145,
+    "description": "6 Piece White Dinner Plate Set designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Ceramic",
+      "color": "White",
+      "pieces": "6"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "plates",
+      "kitchen",
+      "dining"
+    ]
+  },
+  {
+    "id": "45cdeeaf-0a85-4307-b24c-cf5410dad24e",
+    "sku": "GEN-0006",
+    "name": "6-Piece Nonstick Carbon Steel Oven Bakeware Set",
+    "brand": "DyDx Kitchen",
+    "category": "cookware",
+    "image": "images/products/6-piece-non-stick-baking-set.webp",
+    "images": [
+      "images/products/6-piece-non-stick-baking-set.webp"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 3039
+    },
+    "priceCents": 3499,
+    "originalPriceCents": 3803,
+    "discountPercent": 8,
+    "stock": 167,
+    "description": "6-Piece Nonstick Carbon Steel Oven Bakeware Set designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Carbon Steel",
+      "coating": "Non-stick",
+      "pieces": "6"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "kitchen",
+      "cookware"
+    ]
+  },
+  {
+    "id": "a7e9be75-0c69-48f2-92e5-dc1456f0b477",
+    "sku": "CLO-0007",
+    "name": "Plain Hooded Fleece Sweatshirt",
+    "brand": "DyDx Essentials",
+    "category": "clothing",
+    "image": "images/products/plain-hooded-fleece-sweatshirt-yellow.jpg",
+    "images": [
+      "images/products/plain-hooded-fleece-sweatshirt-yellow.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 1554
+    },
+    "priceCents": 2400,
+    "originalPriceCents": 2759,
+    "discountPercent": 13,
+    "stock": 125,
+    "description": "Plain Hooded Fleece Sweatshirt designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Fleece",
+      "color": "Yellow",
+      "fit": "Regular"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "hoodies",
+      "sweaters",
+      "apparel"
+    ]
+  },
+  {
+    "id": "4a21bc92-d6f3-4705-9697-e38cd838fb60",
+    "sku": "GEN-0008",
+    "name": "Luxury Towel Set - Graphite Gray",
+    "brand": "DyDx Home",
+    "category": "bathroom",
+    "image": "images/products/luxury-tower-set-6-piece.jpg",
+    "images": [
+      "images/products/luxury-tower-set-6-piece.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 4318
+    },
+    "priceCents": 3599,
+    "originalPriceCents": 3912,
+    "discountPercent": 8,
+    "stock": 148,
+    "description": "Luxury Towel Set - Graphite Gray designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Cotton",
+      "color": "Graphite Gray",
+      "pieces": "6"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bathroom",
+      "towels"
+    ]
+  },
+  {
+    "id": "39022da0-e6ad-4005-b468-d22749dc3372",
+    "sku": "GEN-0009",
+    "name": "Liquid Laundry Detergent, 110 Loads",
+    "brand": "DyDx Clean",
+    "category": "cleaning",
+    "image": "images/products/liquid-laundry-detergent-plain.jpg",
+    "images": [
+      "images/products/liquid-laundry-detergent-plain.jpg"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 257
+    },
+    "priceCents": 2899,
+    "originalPriceCents": 4141,
+    "discountPercent": 30,
+    "stock": 108,
+    "description": "Liquid Laundry Detergent, 110 Loads designed for quality, comfort and durability.",
+    "specs": {
+      "volume": "82.5 Fl Oz",
+      "loads": "110",
+      "type": "Liquid"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bathroom",
+      "cleaning"
+    ]
+  },
+  {
+    "id": "3a74cf5d-bfad-402c-917c-c4d0cf144d0e",
+    "sku": "FTW-0010",
+    "name": "Waterproof Knit Athletic Sneakers - Gray",
+    "brand": "DyDx Sport",
+    "category": "footwear",
+    "image": "images/products/knit-athletic-sneakers-gray.jpg",
+    "images": [
+      "images/products/knit-athletic-sneakers-gray.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 4191
+    },
+    "priceCents": 3390,
+    "originalPriceCents": 4238,
+    "discountPercent": 20,
+    "stock": 69,
+    "description": "Waterproof Knit Athletic Sneakers - Gray designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Knit + Rubber",
+      "color": "Gray",
+      "feature": "Waterproof"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "shoes",
+      "running shoes",
+      "footwear"
+    ]
+  },
+  {
+    "id": "4b022797-ff95-4872-b09e-302c89af1a59",
+    "sku": "CLO-0011",
+    "name": "Women's Chiffon Beachwear Cover Up - Black",
+    "brand": "DyDx Fashion",
+    "category": "clothing",
+    "image": "images/products/women-chiffon-beachwear-coverup-black.jpg",
+    "images": [
+      "images/products/women-chiffon-beachwear-coverup-black.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 2799
+    },
+    "priceCents": 2070,
+    "originalPriceCents": 2379,
+    "discountPercent": 13,
+    "stock": 66,
+    "description": "Women's Chiffon Beachwear Cover Up - Black designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Chiffon",
+      "color": "Black",
+      "fit": "Relaxed"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "robe",
+      "swimsuit",
+      "swimming",
+      "bathing",
+      "apparel"
+    ]
+  },
+  {
+    "id": "4e5727b0-a15b-48bb-92a3-199bd3246ffc",
+    "sku": "GEN-0012",
+    "name": "Round Sunglasses",
+    "brand": "DyDx Style",
+    "category": "accessories",
+    "image": "images/products/round-sunglasses-black.jpg",
+    "images": [
+      "images/products/round-sunglasses-black.jpg"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 3244
+    },
+    "priceCents": 1560,
+    "originalPriceCents": 1773,
+    "discountPercent": 12,
+    "stock": 89,
+    "description": "Round Sunglasses designed for quality, comfort and durability.",
+    "specs": {
+      "frame": "Round",
+      "color": "Black",
+      "lens": "UV Protection"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "accessories",
+      "shades"
+    ]
+  },
+  {
+    "id": "86c898c6-1d7e-458b-951b-7ae3223b1eb6",
+    "sku": "FTW-0013",
+    "name": "Women's Two Strap Buckle Sandals - Tan",
+    "brand": "DyDx Fashion",
+    "category": "footwear",
+    "image": "images/products/women-beach-sandals.jpg",
+    "images": [
+      "images/products/women-beach-sandals.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 1368
+    },
+    "priceCents": 2499,
+    "originalPriceCents": 2746,
+    "discountPercent": 9,
+    "stock": 111,
+    "description": "Women's Two Strap Buckle Sandals - Tan designed for quality, comfort and durability.",
+    "specs": {
+      "color": "Tan",
+      "closure": "Buckle",
+      "style": "Casual"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "footwear",
+      "sandals",
+      "womens",
+      "beach",
+      "summer"
+    ]
+  },
+  {
+    "id": "3dd589d2-8364-4288-ab0a-9fa2fcafcc85",
+    "sku": "HOM-0014",
+    "name": "Blackout Curtains Set 4-Pack - Beige",
+    "brand": "DyDx Home",
+    "category": "home",
+    "image": "images/products/blackout-curtain-set-beige.webp",
+    "images": [
+      "images/products/blackout-curtain-set-beige.webp"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 1269
+    },
+    "priceCents": 4599,
+    "originalPriceCents": 6388,
+    "discountPercent": 28,
+    "stock": 133,
+    "description": "Blackout Curtains Set 4-Pack - Beige designed for quality, comfort and durability.",
+    "specs": {
+      "color": "Beige",
+      "pack": "4",
+      "feature": "Blackout"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bedroom",
+      "curtains",
+      "home"
+    ]
+  },
+  {
+    "id": "16d059b7-e4d0-4863-95ea-01c1f6a0194b",
+    "sku": "CLO-0015",
+    "name": "Men's Slim-Fit Summer Shorts",
+    "brand": "DyDx Essentials",
+    "category": "clothing",
+    "image": "images/products/men-slim-fit-summer-shorts-gray.jpg",
+    "images": [
+      "images/products/men-slim-fit-summer-shorts-gray.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 2561
+    },
+    "priceCents": 1699,
+    "originalPriceCents": 1976,
+    "discountPercent": 14,
+    "stock": 133,
+    "description": "Men's Slim-Fit Summer Shorts designed for quality, comfort and durability.",
+    "specs": {
+      "fit": "Slim",
+      "color": "Gray",
+      "season": "Summer"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "shorts",
+      "apparel",
+      "mens"
+    ]
+  },
+  {
+    "id": "fc71bc66-d53a-4599-a2b0-f1da725d2403",
+    "sku": "GEN-0016",
+    "name": "Electric Glass and Steel Hot Water Kettle - 1.7L",
+    "brand": "DyDx Kitchen",
+    "category": "appliances",
+    "image": "images/products/electric-glass-and-steel-hot-water-kettle.webp",
+    "images": [
+      "images/products/electric-glass-and-steel-hot-water-kettle.webp"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 4168
+    },
+    "priceCents": 3074,
+    "originalPriceCents": 3533,
+    "discountPercent": 13,
+    "stock": 196,
+    "description": "Electric Glass and Steel Hot Water Kettle - 1.7L designed for quality, comfort and durability.",
+    "specs": {
+      "capacity": "1.7L",
+      "material": "Glass + Steel",
+      "power": "1500W"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "water boiler",
+      "appliances",
+      "kitchen"
+    ]
+  },
+  {
+    "id": "40e82aee-f6db-4117-949a-2a8840199240",
+    "sku": "GEN-0017",
+    "name": "Ultra Soft Tissue 2-Ply - 18 Box",
+    "brand": "DyDx Clean",
+    "category": "household",
+    "image": "images/products/facial-tissue-2-ply-18-boxes.jpg",
+    "images": [
+      "images/products/facial-tissue-2-ply-18-boxes.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 4689
+    },
+    "priceCents": 2374,
+    "originalPriceCents": 2553,
+    "discountPercent": 7,
+    "stock": 144,
+    "description": "Ultra Soft Tissue 2-Ply - 18 Box designed for quality, comfort and durability.",
+    "specs": {
+      "ply": "2",
+      "boxes": "18",
+      "texture": "Ultra Soft"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "kleenex",
+      "tissues",
+      "kitchen",
+      "napkins"
+    ]
+  },
+  {
+    "id": "1ca66abc-7477-48df-9464-161fe70e5be6",
+    "sku": "GEN-0018",
+    "name": "Straw Lifeguard Sun Hat",
+    "brand": "DyDx Style",
+    "category": "accessories",
+    "image": "images/products/straw-sunhat.webp",
+    "images": [
+      "images/products/straw-sunhat.webp"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 1952
+    },
+    "priceCents": 2200,
+    "originalPriceCents": 3014,
+    "discountPercent": 27,
+    "stock": 136,
+    "description": "Straw Lifeguard Sun Hat designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Straw",
+      "style": "Lifeguard",
+      "season": "Summer"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "hats",
+      "straw hats",
+      "summer",
+      "apparel"
+    ]
+  },
+  {
+    "id": "d7387d12-d044-40e9-b673-79fe78531ad9",
+    "sku": "GEN-0019",
+    "name": "Sterling Silver Sky Flower Stud Earrings",
+    "brand": "DyDx Jewelry",
+    "category": "accessories",
+    "image": "images/products/sky-flower-stud-earrings.webp",
+    "images": [
+      "images/products/sky-flower-stud-earrings.webp"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 978
+    },
+    "priceCents": 1799,
+    "originalPriceCents": 2726,
+    "discountPercent": 34,
+    "stock": 178,
+    "description": "Sterling Silver Sky Flower Stud Earrings designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Sterling Silver",
+      "style": "Stud",
+      "design": "Flower"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "jewelry",
+      "accessories",
+      "womens"
+    ]
+  },
+  {
+    "id": "4f0b14c2-1d7c-4c5c-a0be-1d794335fd7b",
+    "sku": "CLO-0020",
+    "name": "Women's Stretch Popover Hoodie",
+    "brand": "DyDx Fashion",
+    "category": "clothing",
+    "image": "images/products/women-stretch-popover-hoodie-black.jpg",
+    "images": [
+      "images/products/women-stretch-popover-hoodie-black.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 4825
+    },
+    "priceCents": 1374,
+    "originalPriceCents": 1527,
+    "discountPercent": 10,
+    "stock": 147,
+    "description": "Women's Stretch Popover Hoodie designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Stretch Fleece",
+      "color": "Black",
+      "fit": "Regular"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "hooded",
+      "hoodies",
+      "sweaters",
+      "womens",
+      "apparel"
+    ]
+  },
+  {
+    "id": "251660e4-e100-4f1d-a06f-fc711d6dfd58",
+    "sku": "GEN-0021",
+    "name": "Bathroom Bath Rug Mat 20 x 31 Inch - Grey",
+    "brand": "DyDx Home",
+    "category": "bathroom",
+    "image": "images/products/bathroom-rug.jpg",
+    "images": [
+      "images/products/bathroom-rug.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 58
+    },
+    "priceCents": 1250,
+    "originalPriceCents": 1812,
+    "discountPercent": 31,
+    "stock": 71,
+    "description": "Bathroom Bath Rug Mat 20 x 31 Inch - Grey designed for quality, comfort and durability.",
+    "specs": {
+      "size": "20x31 Inch",
+      "color": "Grey",
+      "material": "Microfiber"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bathmat",
+      "bathroom",
+      "home"
+    ]
+  },
+  {
+    "id": "3295e2e9-e5d8-4858-bd1f-2ffd92913aef",
+    "sku": "FTW-0022",
+    "name": "Women's Knit Ballet Flat",
+    "brand": "DyDx Fashion",
+    "category": "footwear",
+    "image": "images/products/women-knit-ballet-flat-black.jpg",
+    "images": [
+      "images/products/women-knit-ballet-flat-black.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 4792
+    },
+    "priceCents": 2640,
+    "originalPriceCents": 2870,
+    "discountPercent": 8,
+    "stock": 132,
+    "description": "Women's Knit Ballet Flat designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Knit Fabric",
+      "color": "Black",
+      "style": "Ballet Flat"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "shoes",
+      "flats",
+      "womens",
+      "footwear"
+    ]
+  },
+  {
+    "id": "acf011cb-15c9-4029-b145-ed699c875568",
+    "sku": "CLO-0023",
+    "name": "Men's Regular-Fit Quick-Dry Golf Polo Shirt",
+    "brand": "DyDx Sport",
+    "category": "clothing",
+    "image": "images/products/men-golf-polo-t-shirt-blue.jpg",
+    "images": [
+      "images/products/men-golf-polo-t-shirt-blue.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 945
+    },
+    "priceCents": 1599,
+    "originalPriceCents": 1974,
+    "discountPercent": 19,
+    "stock": 79,
+    "description": "Men's Regular-Fit Quick-Dry Golf Polo Shirt designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Polyester Blend",
+      "fit": "Regular Fit",
+      "color": "Blue"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "tshirts",
+      "shirts",
+      "apparel",
+      "mens"
+    ]
+  },
+  {
+    "id": "f05498ee-86b6-4afc-a431-9b3ae0e1f8d7",
+    "sku": "HOM-0024",
+    "name": "Trash Can with Foot Pedal - Brushed Stainless Steel",
+    "brand": "DyDx Home",
+    "category": "home",
+    "image": "images/products/trash-can-with-foot-pedal-50-liter.jpg",
+    "images": [
+      "images/products/trash-can-with-foot-pedal-50-liter.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 2781
+    },
+    "priceCents": 8300,
+    "originalPriceCents": 10375,
+    "discountPercent": 20,
+    "stock": 68,
+    "description": "Trash Can with Foot Pedal - Brushed Stainless Steel designed for quality, comfort and durability.",
+    "specs": {
+      "capacity": "50L",
+      "material": "Stainless Steel",
+      "feature": "Foot Pedal"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "garbage",
+      "bins",
+      "cans",
+      "kitchen"
+    ]
+  },
+  {
+    "id": "0bbd5eab-df8d-47fe-bff5-29c1183d51ad",
+    "sku": "HOM-0025",
+    "name": "Duvet Cover Set with Zipper Closure",
+    "brand": "DyDx Home",
+    "category": "home",
+    "image": "images/products/duvet-cover-set-blue-twin.jpg",
+    "images": [
+      "images/products/duvet-cover-set-blue-twin.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 4184
+    },
+    "priceCents": 2399,
+    "originalPriceCents": 2636,
+    "discountPercent": 9,
+    "stock": 67,
+    "description": "Duvet Cover Set with Zipper Closure designed for quality, comfort and durability.",
+    "specs": {
+      "color": "Blue",
+      "size": "Twin",
+      "closure": "Zipper"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bedroom",
+      "bed sheets",
+      "sheets",
+      "covers",
+      "home"
+    ]
+  },
+  {
+    "id": "7b4d2257-cfe7-40a7-81c4-cb38bbb64293",
+    "sku": "CLO-0026",
+    "name": "Women's Chunky Cable Beanie - Gray",
+    "brand": "DyDx Fashion",
+    "category": "clothing",
+    "image": "images/products/women-chunky-beanie-gray.webp",
+    "images": [
+      "images/products/women-chunky-beanie-gray.webp"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 3484
+    },
+    "priceCents": 1250,
+    "originalPriceCents": 1404,
+    "discountPercent": 11,
+    "stock": 191,
+    "description": "Women's Chunky Cable Beanie - Gray designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Acrylic Knit",
+      "color": "Gray",
+      "style": "Beanie"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "hats",
+      "winter hats",
+      "beanies",
+      "tuques",
+      "apparel",
+      "womens"
+    ]
+  },
+  {
+    "id": "8cb31728-4930-43e8-b600-8c16667ec5ed",
+    "sku": "CLO-0027",
+    "name": "Men's Classic-fit Pleated Chino Pants",
+    "brand": "DyDx Essentials",
+    "category": "clothing",
+    "image": "images/products/men-chino-pants-beige.jpg",
+    "images": [
+      "images/products/men-chino-pants-beige.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 2668
+    },
+    "priceCents": 2290,
+    "originalPriceCents": 3225,
+    "discountPercent": 29,
+    "stock": 25,
+    "description": "Men's Classic-fit Pleated Chino Pants designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Cotton Blend",
+      "fit": "Classic Fit",
+      "color": "Beige"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "pants",
+      "apparel",
+      "mens"
+    ]
+  },
+  {
+    "id": "be72bfa5-93ce-44a7-83e2-2fa213ec9b0b",
+    "sku": "FTW-0028",
+    "name": "Men's Athletic Sneaker",
+    "brand": "DyDx Sport",
+    "category": "footwear",
+    "image": "images/products/men-athletic-shoes-green.jpg",
+    "images": [
+      "images/products/men-athletic-shoes-green.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 639
+    },
+    "priceCents": 3890,
+    "originalPriceCents": 4863,
+    "discountPercent": 20,
+    "stock": 51,
+    "description": "Men's Athletic Sneaker designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Mesh + Rubber",
+      "color": "Green",
+      "closure": "Lace-up"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "shoes",
+      "running shoes",
+      "footwear",
+      "mens"
+    ]
+  },
+  {
+    "id": "c7653bc8-3486-47a8-ae21-fe54d28d37e9",
+    "sku": "GEN-0029",
+    "name": "Men's Navigator Sunglasses Pilot",
+    "brand": "DyDx Style",
+    "category": "accessories",
+    "image": "images/products/men-navigator-sunglasses-brown.jpg",
+    "images": [
+      "images/products/men-navigator-sunglasses-brown.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 3734
+    },
+    "priceCents": 1690,
+    "originalPriceCents": 2380,
+    "discountPercent": 29,
+    "stock": 168,
+    "description": "Men's Navigator Sunglasses Pilot designed for quality, comfort and durability.",
+    "specs": {
+      "frame": "Navigator",
+      "color": "Brown",
+      "lens": "UV Protection"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "sunglasses",
+      "glasses",
+      "accessories",
+      "shades"
+    ]
+  },
+  {
+    "id": "e4d33c31-ef85-4b80-9bda-7496b43082fa",
+    "sku": "GEN-0030",
+    "name": "Non-Stick Cookware Set, Pots, Pans and Utensils - 15 Pieces",
+    "brand": "DyDx Kitchen",
+    "category": "cookware",
+    "image": "images/products/non-stick-cooking-set-15-pieces.webp",
+    "images": [
+      "images/products/non-stick-cooking-set-15-pieces.webp"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 4091
+    },
+    "priceCents": 6797,
+    "originalPriceCents": 7231,
+    "discountPercent": 6,
+    "stock": 38,
+    "description": "Non-Stick Cookware Set, Pots, Pans and Utensils - 15 Pieces designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Aluminum",
+      "coating": "Non-stick",
+      "pieces": "15"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "cooking set",
+      "kitchen"
+    ]
+  },
+  {
+    "id": "472f165a-bfbe-4154-8e7b-1211cfd31261",
+    "sku": "HOM-0031",
+    "name": "Vanity Mirror with Heavy Base - Chrome",
+    "brand": "DyDx Home",
+    "category": "home",
+    "image": "images/products/vanity-mirror-silver.jpg",
+    "images": [
+      "images/products/vanity-mirror-silver.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 1944
+    },
+    "priceCents": 1649,
+    "originalPriceCents": 2537,
+    "discountPercent": 35,
+    "stock": 80,
+    "description": "Vanity Mirror with Heavy Base - Chrome designed for quality, comfort and durability.",
+    "specs": {
+      "finish": "Chrome",
+      "base": "Heavy",
+      "type": "Vanity Mirror"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bathroom",
+      "washroom",
+      "mirrors",
+      "home"
+    ]
+  },
+  {
+    "id": "aca46dfe-bf30-4666-88e0-347a4f76b3e5",
+    "sku": "CLO-0032",
+    "name": "Women's Fleece Jogger Sweatpant",
+    "brand": "DyDx Fashion",
+    "category": "clothing",
+    "image": "images/products/women-french-terry-fleece-jogger-camo.jpg",
+    "images": [
+      "images/products/women-french-terry-fleece-jogger-camo.jpg"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 4155
+    },
+    "priceCents": 2400,
+    "originalPriceCents": 2759,
+    "discountPercent": 13,
+    "stock": 180,
+    "description": "Women's Fleece Jogger Sweatpant designed for quality, comfort and durability.",
+    "specs": {
+      "material": "French Terry Fleece",
+      "fit": "Jogger",
+      "pattern": "Camo"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "pants",
+      "sweatpants",
+      "jogging",
+      "apparel",
+      "womens"
+    ]
+  },
+  {
+    "id": "a6b97f43-a79a-4428-a6aa-0d32495e8097",
+    "sku": "GEN-0033",
+    "name": "Double Oval Twist French Wire Earrings - Gold",
+    "brand": "DyDx Jewelry",
+    "category": "accessories",
+    "image": "images/products/double-elongated-twist-french-wire-earrings.webp",
+    "images": [
+      "images/products/double-elongated-twist-french-wire-earrings.webp"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 655
+    },
+    "priceCents": 2400,
+    "originalPriceCents": 2667,
+    "discountPercent": 10,
+    "stock": 122,
+    "description": "Double Oval Twist French Wire Earrings - Gold designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Gold Plated",
+      "style": "French Wire",
+      "design": "Double Oval Twist"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "accessories",
+      "womens"
+    ]
+  },
+  {
+    "id": "46093556-8e6b-49c0-a413-bf81f1d90669",
+    "sku": "KIT-0034",
+    "name": "Round Airtight Food Storage Containers - 5 Piece",
+    "brand": "DyDx Kitchen",
+    "category": "kitchen",
+    "image": "images/products/round-airtight-food-storage-containers.jpg",
+    "images": [
+      "images/products/round-airtight-food-storage-containers.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 1854
+    },
+    "priceCents": 2899,
+    "originalPriceCents": 3814,
+    "discountPercent": 24,
+    "stock": 151,
+    "description": "Round Airtight Food Storage Containers - 5 Piece designed for quality, comfort and durability.",
+    "specs": {
+      "shape": "Round",
+      "feature": "Airtight",
+      "pieces": "5"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "boxes",
+      "food containers",
+      "kitchen"
+    ]
+  },
+  {
+    "id": "727f49bd-4165-46f7-92c6-7daab72db48d",
+    "sku": "GEN-0035",
+    "name": "Coffeemaker with Glass Carafe and Reusable Filter - 25 Oz",
+    "brand": "DyDx Kitchen",
+    "category": "appliances",
+    "image": "images/products/coffeemaker-with-glass-carafe-black.jpg",
+    "images": [
+      "images/products/coffeemaker-with-glass-carafe-black.jpg"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 1262
+    },
+    "priceCents": 2250,
+    "originalPriceCents": 2778,
+    "discountPercent": 19,
+    "stock": 96,
+    "description": "Coffeemaker with Glass Carafe and Reusable Filter - 25 Oz designed for quality, comfort and durability.",
+    "specs": {
+      "capacity": "25 Oz",
+      "color": "Black",
+      "filter": "Reusable"
+    },
+    "featured": true,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "coffeemakers",
+      "kitchen",
+      "appliances"
+    ]
+  },
+  {
+    "id": "9a0c6dc1-d798-40ea-9598-1651506fcd1b",
+    "sku": "HOM-0036",
+    "name": "Blackout Curtains Set 42 x 84-Inch - Black, 2 Panels",
+    "brand": "DyDx Home",
+    "category": "home",
+    "image": "images/products/blackout-curtains-black.jpg",
+    "images": [
+      "images/products/blackout-curtains-black.jpg"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 4727
+    },
+    "priceCents": 3099,
+    "originalPriceCents": 3297,
+    "discountPercent": 6,
+    "stock": 81,
+    "description": "Blackout Curtains Set 42 x 84-Inch - Black, 2 Panels designed for quality, comfort and durability.",
+    "specs": {
+      "size": "42x84 Inch",
+      "color": "Black",
+      "panels": "2"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bedroom",
+      "home"
+    ]
+  },
+  {
+    "id": "c0d82fb9-a0c7-485d-99e3-838f05e020a0",
+    "sku": "GEN-0037",
+    "name": "100% Cotton Bath Towels - 2 Pack, Light Teal",
+    "brand": "DyDx Home",
+    "category": "bathroom",
+    "image": "images/products/cotton-bath-towels-teal.webp",
+    "images": [
+      "images/products/cotton-bath-towels-teal.webp"
+    ],
+    "rating": {
+      "stars": 5,
+      "count": 3552
+    },
+    "priceCents": 2110,
+    "originalPriceCents": 2638,
+    "discountPercent": 20,
+    "stock": 52,
+    "description": "100% Cotton Bath Towels - 2 Pack, Light Teal designed for quality, comfort and durability.",
+    "specs": {
+      "material": "100% Cotton",
+      "color": "Light Teal",
+      "pack": "2"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "bathroom",
+      "home",
+      "towels"
+    ]
+  },
+  {
+    "id": "0c08ec31-2fe1-4333-bed1-a69b259c7cdd",
+    "sku": "FTW-0038",
+    "name": "Waterproof Knit Athletic Sneakers - Pink",
+    "brand": "DyDx Sport",
+    "category": "footwear",
+    "image": "images/products/knit-athletic-sneakers-pink.webp",
+    "images": [
+      "images/products/knit-athletic-sneakers-pink.webp"
+    ],
+    "rating": {
+      "stars": 4,
+      "count": 4398
+    },
+    "priceCents": 3390,
+    "originalPriceCents": 4644,
+    "discountPercent": 27,
+    "stock": 75,
+    "description": "Waterproof Knit Athletic Sneakers - Pink designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Knit + Rubber",
+      "color": "Pink",
+      "feature": "Waterproof"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "shoes",
+      "running shoes",
+      "footwear",
+      "womens"
+    ]
+  },
+  {
+    "id": "528ea451-1ff1-447d-b239-e4a08c5f867a",
+    "sku": "GEN-0039",
+    "name": "Countertop Blender - 64oz, 1400 Watts",
+    "brand": "DyDx Kitchen",
+    "category": "appliances",
+    "image": "images/products/countertop-blender-64-oz.jpg",
+    "images": [
+      "images/products/countertop-blender-64-oz.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 4953
+    },
+    "priceCents": 10747,
+    "originalPriceCents": 16534,
+    "discountPercent": 35,
+    "stock": 35,
+    "description": "Countertop Blender - 64oz, 1400 Watts designed for quality, comfort and durability.",
+    "specs": {
+      "capacity": "64oz",
+      "power": "1400W",
+      "type": "Countertop"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "food blenders",
+      "kitchen",
+      "appliances"
+    ]
+  },
+  {
+    "id": "b832dbbb-3698-42aa-af73-cc95cfe94e62",
+    "sku": "GEN-0040",
+    "name": "10-Piece Mixing Bowl Set with Lids - Floral",
+    "brand": "DyDx Kitchen",
+    "category": "cookware",
+    "image": "images/products/floral-mixing-bowl-set.jpg",
+    "images": [
+      "images/products/floral-mixing-bowl-set.jpg"
+    ],
+    "rating": {
+      "stars": 3.5,
+      "count": 1004
+    },
+    "priceCents": 3899,
+    "originalPriceCents": 4814,
+    "discountPercent": 19,
+    "stock": 105,
+    "description": "10-Piece Mixing Bowl Set with Lids - Floral designed for quality, comfort and durability.",
+    "specs": {
+      "pieces": "10",
+      "feature": "With Lids",
+      "design": "Floral"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "mixing bowls",
+      "baking",
+      "cookware",
+      "kitchen"
+    ]
+  },
+  {
+    "id": "404024ad-7162-4da1-875f-875e065de303",
+    "sku": "GEN-0041",
+    "name": "2-Ply Kitchen Paper Towels - 30 Pack",
+    "brand": "DyDx Clean",
+    "category": "household",
+    "image": "images/products/kitchen-paper-towels-30-pack.jpg",
+    "images": [
+      "images/products/kitchen-paper-towels-30-pack.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 4078
+    },
+    "priceCents": 5799,
+    "originalPriceCents": 6373,
+    "discountPercent": 9,
+    "stock": 91,
+    "description": "2-Ply Kitchen Paper Towels - 30 Pack designed for quality, comfort and durability.",
+    "specs": {
+      "ply": "2",
+      "pack": "30",
+      "type": "Paper Towels"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "kitchen",
+      "kitchen towels",
+      "tissues"
+    ]
+  },
+  {
+    "id": "36b90b97-d5e4-4bae-ab35-045bd1e29d4f",
+    "sku": "CLO-0042",
+    "name": "Men's Full-Zip Hooded Fleece Sweatshirt",
+    "brand": "DyDx Essentials",
+    "category": "clothing",
+    "image": "images/products/men-cozy-fleece-zip-up-hoodie-red.jpg",
+    "images": [
+      "images/products/men-cozy-fleece-zip-up-hoodie-red.jpg"
+    ],
+    "rating": {
+      "stars": 4.5,
+      "count": 3022
+    },
+    "priceCents": 2400,
+    "originalPriceCents": 3636,
+    "discountPercent": 34,
+    "stock": 48,
+    "description": "Men's Full-Zip Hooded Fleece Sweatshirt designed for quality, comfort and durability.",
+    "specs": {
+      "material": "Fleece",
+      "color": "Red",
+      "closure": "Full Zip"
+    },
+    "featured": false,
+    "createdAt": 1782846408,
+    "sizeChartLink": "images/clothing-size-chart.png",
+    "instructionsLink": "",
+    "warrantyLink": "",
+    "keywords": [
+      "sweaters",
+      "hoodies",
+      "apparel",
+      "mens"
+    ]
+  }
+]

@@ -15,19 +15,59 @@ export function getProduct(productId) {
 
 export class Product {
   id;
-  image;
+  sku;
   name;
+  brand;
+  category;
+  image;
+  images;
   rating;
   priceCents;
+  originalPriceCents;
+  discountPercent;
+  stock;
+  description;
+  specs;
+  featured;
+  createdAt;
+  sizeChartLink;
+  instructionsLink;
+  warrantyLink;
   keywords;
 
-  constructor(productDetails) {
-    this.id = productDetails.id;
-    this.image = productDetails.image;
-    this.name = productDetails.name;
-    this.rating = productDetails.rating;
-    this.priceCents = productDetails.priceCents;
-    this.keywords = productDetails.keywords;
+
+  constructor(data) {
+    this.id = data.id;
+    this.sku = data.sku || `SKU-${data.id.slice(0, 8)}`;
+    this.name = data.name;
+    this.brand = data.brand || "";
+    this.category = data.category || "general";
+
+    this.image = data.image || "";
+    this.images =
+      data.images || (data.image ? [data.image] : []);
+    this.rating = data.rating || {
+      stars: 0,
+      count: 0
+    };
+
+    this.priceCents = data.priceCents;
+
+    this.originalPriceCents =
+      data.originalPriceCents ?? data.priceCents;
+    this.createdAt =
+      data.createdAt ?? new Date().toISOString();
+
+    this.discountPercent = data.discountPercent ?? 0;
+    this.stock = data.stock ?? 0;
+    this.description = data.description || "";
+    this.specs = data.specs || {};
+    this.featured = data.featured ?? false;
+
+    this.sizeChartLink = data.sizeChartLink || "";
+    this.instructionsLink = data.instructionsLink || "";
+    this.warrantyLink = data.warrantyLink || "";
+    this.keywords = data.keywords || [];
   }
 
   getStarsUrl() {
@@ -39,49 +79,38 @@ export class Product {
   }
 
   extraInfoHTML() {
-    return '';
+    let html = '';
+
+    if (this.sizeChartLink) {
+      html += `
+        <a href="${this.sizeChartLink}" target="_blank">
+          Size chart
+        </a>
+      `;
+    }
+
+    if (this.instructionsLink) {
+      html += `
+        <a href="${this.instructionsLink}" target="_blank">
+          Instructions
+        </a>
+      `;
+    }
+
+    if (this.warrantyLink) {
+      html += `
+        <a href="${this.warrantyLink}" target="_blank">
+          Warranty
+        </a>
+      `;
+    }
+
+    return html;
   }
 }
 
-export class Clothing extends Product {
-  sizeChartLink;
 
-  constructor(productDetails) {
-    super(productDetails);
-    this.sizeChartLink = productDetails.sizeChartLink;
-  }
 
-  extraInfoHTML() {
-    // super.extraInfoHTML();
-    return `
-      <a href="${this.sizeChartLink}" target="_blank">
-        Size chart
-      </a>
-    `;
-  }
-}
-
-export class Appliance extends Product {
-  instructionsLink;
-  warrantyLink;
-
-  constructor(productDetails) {
-    super(productDetails);
-    this.instructionsLink = productDetails.instructionsLink;
-    this.warrantyLink = productDetails.warrantyLink;
-  }
-
-  extraInfoHTML() {
-    return `
-      <a href="${this.instructionsLink}" target="_blank">
-        Instructions
-      </a>
-      <a href="${this.warrantyLink}" target="_blank">
-        Warranty
-      </a>
-    `;
-  }
-}
 
 /*
 const date = new Date();
@@ -124,14 +153,6 @@ export function loadProductsFetch() {
   }).then((productsData) => {
     products = productsData.map((productDetails) => {
 
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      }
-
-      if (productDetails.type === 'appliance') {
-        return new Appliance(productDetails);
-      }
-
       return new Product(productDetails);
     });
 
@@ -153,9 +174,6 @@ export function loadProducts(fun) {
 
   xhr.addEventListener('load', () => {
     products = JSON.parse(xhr.response).map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      }
       return new Product(productDetails);
     });
 
